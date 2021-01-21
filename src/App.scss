@@ -1,4 +1,52 @@
 @import "scss-common.scss";
-body {
-  position: relative;
+@import "form.css";
+
+h2.title {
+  font-size: 28px;
+  margin-bottom: 30px;
+  margin-top: 20px;
+  font-weight: 500;
+}
+h2.title.center {
+  width: 100%;
+  text-align: center;
+}
+.ant-layout {
+  background: #fff;
+}
+.ant-layout-sider {
+  width: auto !important;
+  max-width: 100% !important;
+  flex: none !important;
+  background-color: #fff;
+}
+.nav-top-box {
+  @include flex();
+  border-bottom: 1px solid #e6f7ff;
+  border-right: 1px solid #e6f7ff;
+  height: 50px;
+  a {
+    flex: 1;
+    text-align: center;
+    border-right: 1px solid #e6f7ff;
+    :last-child {
+      border-right: none;
+    }
+  }
+}
+
+.left-nav-menu {
+  width: 250px;
+  height: calc(100vh - 50px);
+}
+
+.content-box {
+  padding: 30px;
+}
+
+@media all and (max-width: $mobile-wid) {
+  .ant-layout-sider {
+    position: fixed;
+    left: -100%;
+  }
 }

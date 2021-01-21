@@ -18,17 +18,17 @@ const createStoreWithMiddleware = applyMiddleware(
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider
+    {/* <Provider
       store={createStoreWithMiddleware(
         Reducer,
         window.__REDUX_DEVTOOLS_EXTENSION__ &&
           window.__REDUX_DEVTOOLS_EXTENSION__()
       )}
-    >
-      <Router>
-        <App />
-      </Router>
-    </Provider>
+    > */}
+    <Router>
+      <App />
+    </Router>
+    {/* </Provider> */}
   </React.StrictMode>,
   document.getElementById("root")
 );
