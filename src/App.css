@@ -44,9 +44,6 @@ h2.title.center {
   width: 250px;
   height: calc(100vh - 50px); }
 
-.content-box {
-  padding: 30px; }
-
 @media all and (max-width: 640px) {
   .ant-layout-sider {
     position: fixed;

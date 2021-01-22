@@ -17,7 +17,19 @@ function Join() {
       let createdUser = await firebase
         .auth()
         .createUserWithEmailAndPassword(data.email, data.password);
-      console.log(createdUser);
+        console.log(createdUser)
+        /*
+        await createdUser.user.updateProfile({
+          displayName: data.name,
+          partName: data.part
+        })
+        //Firebase 데이터베이스에 저장해주기 
+        await firebase.database().ref("user").child(createdUser.user.uid).set({
+            name: user.name,
+            part: user.part
+        })
+        */  
+
       setLoading(false);
     } catch (error) {
       setErrorFromSubmit(error.message);
@@ -26,6 +38,7 @@ function Join() {
       }, 3000);
     }
   };
+  
 
   watch("name");
   watch("email");

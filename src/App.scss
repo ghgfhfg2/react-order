@@ -40,10 +40,6 @@ h2.title.center {
   height: calc(100vh - 50px);
 }
 
-.content-box {
-  padding: 30px;
-}
-
 @media all and (max-width: $mobile-wid) {
   .ant-layout-sider {
     position: fixed;
