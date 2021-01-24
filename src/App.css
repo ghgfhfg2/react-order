@@ -4,6 +4,26 @@
   display: none; }
 
 /* 인풋 */
+.content-box {
+  width: 100%;
+  padding: 0 20px; }
+
+.center-box {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center; }
+
+.flex-box {
+  width: 100%;
+  display: flex; }
+
+.flex-box.j-center {
+  justify-content: center; }
+
+.flex-box.a-center {
+  align-items: center; }
+
 h2.title {
   font-size: 28px;
   margin-bottom: 30px;
@@ -14,6 +34,10 @@ h2.title.center {
   width: 100%;
   text-align: center; }
 
+@media (max-width: 640px) {
+  .ant-layout-sider.nav-wrap {
+    min-width: 0 !important; } }
+
 .ant-layout {
   background: #fff; }
 
@@ -21,7 +45,8 @@ h2.title.center {
   width: auto !important;
   max-width: 100% !important;
   flex: none !important;
-  background-color: #fff; }
+  background-color: #fff;
+  z-index: 100; }
 
 .nav-top-box {
   display: flex;
@@ -37,14 +62,59 @@ h2.title.center {
   text-align: center;
   border-right: 1px solid #e6f7ff; }
 
-.nav-top-box a :last-child {
+.nav-top-box a:last-child {
   border-right: none; }
 
 .left-nav-menu {
   width: 250px;
   height: calc(100vh - 50px); }
 
-@media all and (max-width: 640px) {
-  .ant-layout-sider {
+@media (max-width: 640px) {
+  .left-nav-menu {
+    transition: all 0.2s;
     position: fixed;
-    left: -100%; } }
+    left: -100%;
+    top: 0; }
+  .left-nav-menu.on {
+    left: 0;
+    z-index: 100;
+    background-color: #fff; } }
+
+.left-nav-menu ul {
+  height: 100%; }
+
+.left-nav-menu li.ant-menu-item {
+  margin: 0; }
+
+.ant-menu-inline .ant-menu-item:not(:last-child) {
+  margin-bottom: 0; }
+
+.btn-m-close {
+  width: 35px;
+  height: 35px;
+  position: fixed;
+  display: none;
+  color: #fff;
+  cursor: pointer; }
+
+@media (max-width: 640px) {
+  .btn-m-close {
+    display: inline-block;
+    position: fixed;
+    z-index: 100;
+    left: 250px;
+    top: 10px; } }
+
+.btn-m-menu {
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  color: #0e62b1;
+  display: none; }
+
+@media (max-width: 640px) {
+  .btn-m-menu {
+    display: inline-block;
+    position: fixed;
+    left: 20px;
+    top: 20px; } }
