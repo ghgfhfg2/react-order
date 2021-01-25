@@ -6,7 +6,7 @@
 /* 인풋 */
 .content-box {
   width: 100%;
-  padding: 0 20px; }
+  padding: 20px 30px; }
 
 .center-box {
   width: 100%;
@@ -34,9 +34,20 @@ h2.title.center {
   width: 100%;
   text-align: center; }
 
-@media (max-width: 640px) {
-  .ant-layout-sider.nav-wrap {
-    min-width: 0 !important; } }
+h3.title {
+  font-size: 17px;
+  padding-left: 10px;
+  position: relative; }
+
+h3.title::before {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 17px;
+  background-color: #1890ff;
+  position: absolute;
+  left: 0;
+  top: 5px; }
 
 .ant-layout {
   background: #fff; }
@@ -118,3 +129,21 @@ h2.title.center {
     position: fixed;
     left: 20px;
     top: 20px; } }
+
+/* 관리자 상품등록 */
+.admin-prod-form.ant-form-horizontal .ant-form-item-label {
+  width: 80px; }
+
+.admin-prod-form .ant-input {
+  max-width: 50%; }
+
+.admin-prod-form .ant-input.sm-input {
+  max-width: 150px; }
+
+@media (max-width: 640px) {
+  .content-box {
+    padding: 80px 15px 20px 15px; }
+  .ant-layout-sider.nav-wrap {
+    min-width: 0 !important; }
+  .admin-prod-form .ant-input {
+    max-width: 100%; } }
