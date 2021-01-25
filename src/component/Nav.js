@@ -79,7 +79,9 @@ function Nav() {
           selectedKeys={[current]}
           mode="inline"
         >
-          <Menu.Item key="1">메뉴판</Menu.Item>
+          <Menu.Item key="1">
+            <Link to="/menu">메뉴판</Link>
+          </Menu.Item>
           <Menu.Item key="2">장바구니</Menu.Item>
           <SubMenu key="sub1" title="관리자">
             <Menu.Item key="3">

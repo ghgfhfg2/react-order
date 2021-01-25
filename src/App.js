@@ -5,6 +5,7 @@ import "./App.css";
 import LandingPage from "./component/LandingPage";
 import Join from "./component/Join";
 import Login from "./component/Login";
+import Menu from "./component/Menu";
 import Admin from "./component/Admin/Admin";
 import AdminProd from "./component/Admin/AdminProd";
 import AdminOrder from "./component/Admin/AdminOrder";
@@ -57,6 +58,7 @@ function App(props) {
               <Route exact path="/" component={LandingPage} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/join" component={Join} />
+              <Route exact path="/menu" component={Menu} />
               <Route exact path="/admin" component={Admin} />
               <Route exact path="/admin/prod" component={AdminProd} />
               <Route exact path="/admin/order" component={AdminOrder} />
