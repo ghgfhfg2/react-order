@@ -6,6 +6,7 @@ import LandingPage from "./component/LandingPage";
 import Join from "./component/Join";
 import Login from "./component/Login";
 import Menu from "./component/Menu";
+import MyOrder from "./component/MyOrder";
 import Admin from "./component/Admin/Admin";
 import AdminProd from "./component/Admin/AdminProd";
 import AdminOrder from "./component/Admin/AdminOrder";
@@ -16,16 +17,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser, clearUser } from "./redux/actions/user_action";
 
 const { Sider, Content } = Layout;
-
 function App(props) {
   let history = useHistory();
   let dispatch = useDispatch();
   const isLoading = useSelector((state) => state.user.isLoading);
-
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
+      console.log(history)
+      console.log(user)
       if (user) {
-        history.push("/");
         dispatch(setUser(user));
       } else {
         history.push("/login");
@@ -59,6 +59,7 @@ function App(props) {
               <Route exact path="/login" component={Login} />
               <Route exact path="/join" component={Join} />
               <Route exact path="/menu" component={Menu} />
+              <Route exact path="/myorder" component={MyOrder} />
               <Route exact path="/admin" component={Admin} />
               <Route exact path="/admin/prod" component={AdminProd} />
               <Route exact path="/admin/order" component={AdminOrder} />

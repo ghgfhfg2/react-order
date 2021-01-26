@@ -23,14 +23,14 @@ export const FileLabel2 = styled.label`
 `;
 export const ModalPopup = styled.div`
   width: 100%;
-  max-width: 500px;
+  max-width: 350px;
   padding: 20px;
   border: 1px solid #ddd;
   position: fixed;
   z-index: 100;
   border-radius: 10px;
   background: #fff;
-  transform: translate(-90%, 30px);
+  transform: translate(-50px, -120%);
   left: ${(props) => props.posx}px;
   top: ${(props) => props.posy}px;
 `;
@@ -54,6 +54,7 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
     let values = {
       name: e.target.name.value,
       price: e.target.price.value,
+      kal: e.target.kal.value,
       category: e.target.category.value,
     };
     if (isNaN(values.price)) {
@@ -121,7 +122,8 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
     return (
       <>
         <ModalPopup posx={posx} posy={posy}>
-          <form className="admin-prod-form" onSubmit={onSubmitProd2}>
+          <form className="admin-modify-form" onSubmit={onSubmitProd2}>
+            <div>
             <input
               style={{ display: "none" }}
               type="file"
@@ -136,42 +138,81 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
               type="radio"
               id="cate1"
               name="category"
-              value="a"
-              checked={radioValue === "a"}
+              value="커피"
+              checked={radioValue === "커피"}
               onChange={radioChange}
             />
-            <label htmlFor="cate1"></label>
+            <label htmlFor="cate1">커피</label>
             <input
               type="radio"
               id="cate2"
               name="category"
-              value="b"
-              checked={radioValue === "b"}
+              value="라떼"
+              checked={radioValue === "라떼"}
               onChange={radioChange}
             />
-            <label htmlFor="cate2"></label>
+            <label htmlFor="cate2">라떼</label>
             <input
               type="radio"
               id="cate3"
               name="category"
-              value="c"
-              checked={radioValue === "c"}
+              value="에이드"
+              checked={radioValue === "에이드"}
               onChange={radioChange}
             />
-            <label htmlFor="cate3"></label>
-            <input type="text" name="name" defaultValue={ProdItem.name} />
-            <input type="text" name="price" defaultValue={ProdItem.price} />
+            <label htmlFor="cate3">에이드</label>
+            <input
+              type="radio"
+              id="cate4"
+              name="category"
+              value="차"
+              checked={radioValue === "차"}
+              onChange={radioChange}
+            />
+            <label htmlFor="cate4">차</label>
+            <input
+              type="radio"
+              id="cate5"
+              name="category"
+              value="프로틴"
+              checked={radioValue === "프로틴"}
+              onChange={radioChange}
+            />
+            <label htmlFor="cate5">에이드</label>
+            <input
+              type="radio"
+              id="cate6"
+              name="category"
+              value="스낵"
+              checked={radioValue === "스낵"}
+              onChange={radioChange}
+            />
+            <label htmlFor="cate6">스낵</label>
+            <input
+              type="radio"
+              id="cate7"
+              name="category"
+              value="주스"
+              checked={radioValue === "주스"}
+              onChange={radioChange}
+            />
+            <label htmlFor="cate7">주스</label>
+            </div>
+            <label htmlFor="_name">이름</label>
+            <input type="text" id="_name" name="name" defaultValue={ProdItem.name} />
+            <label htmlFor="_price">가격</label>
+            <input type="text" id="_price" name="price" defaultValue={ProdItem.price} />
+            <label htmlFor="_kal">칼로리</label>
+            <input type="text" id="_kal" name="kal" defaultValue={ProdItem.kal} />
             <div style={{ marginTop: "10px" }}>
+              <Button htmlType="submit" type="primary" style={{ marginRight: "7px" }}>
+                수정하기
+              </Button>
               <Button
                 onClick={onCancel}
                 type="default"
-                size="large"
-                style={{ marginRight: "7px" }}
               >
                 취소
-              </Button>
-              <Button htmlType="submit" type="primary" size="large">
-                수정하기
               </Button>
             </div>
           </form>

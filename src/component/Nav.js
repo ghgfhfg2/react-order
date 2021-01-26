@@ -82,7 +82,9 @@ function Nav() {
           <Menu.Item key="1">
             <Link to="/menu">메뉴판</Link>
           </Menu.Item>
-          <Menu.Item key="2">장바구니</Menu.Item>
+          <Menu.Item key="2">
+            <Link to="/myorder">주문내역</Link>
+          </Menu.Item>
           <SubMenu key="sub1" title="관리자">
             <Menu.Item key="3">
               <Link to="/admin/prod">상품관리</Link>

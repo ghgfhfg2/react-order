@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import firebase from "../firebase";
 import { Button } from "antd";
 import { ProdList } from "./Admin/AdminProd";
-import OrderModal from "./OrderModal";
+import OderModalPopup from "./OrderModal";
 
 function Menu() {
   const [ProdItem, setProdItem] = useState([]);
@@ -17,6 +17,8 @@ function Menu() {
           array.push({
             uid: item.key,
             name: item.val().name,
+            kal: item.val().kal,
+            hot: item.val().hot,
             category: item.val().category,
             image: item.val().image,
             price: item.val().price,
@@ -26,11 +28,19 @@ function Menu() {
       });
   }, []);
 
+  const [PosX, setPosX] = useState(0);
+  const [PosY, setPosY] = useState(0);
   const [OnModal, setOnModal] = useState(false);
-
-  const orderHandler = () => {
+  const [OrderItem, setOrderItem] = useState()
+  const orderHandler = (e, item) => {
+    setOrderItem(item)
+    setPosX(e.clientX);
+    setPosY(e.clientY);
     setOnModal(true);
   };
+  const onFinished = () => {
+    setOnModal(false)
+  }
   return (
     <>
       <h3 className="title">메뉴판</h3>
@@ -38,23 +48,26 @@ function Menu() {
         {ProdItem.map((item, index) => (
           <div className="list" key={index}>
             <div className="img">
+              <span className="kal">{item.kal}kal</span>
               <img src={item.image} alt="" />
             </div>
             <div className="admin-box">
-              <div className="txt">
+             <div className="txt">
                 <span>{item.name}</span>
-                <span>{item.price}</span>
-                <span>{item.category}</span>
+                <div className="flex-box between">
+                <span>{item.hot}</span>
+                <span>{item.price}원</span>
+                </div>
               </div>
               <div className="admin">
-                <Button onClick={orderHandler}>주문하기</Button>
-                <Button>장바구니</Button>
+                <Button onClick={(e) => orderHandler(e, item)}>주문하기</Button>
               </div>
             </div>
           </div>
         ))}
       </ProdList>
-      {OnModal && <OrderModal />}
+      {OnModal && <OderModalPopup onFinished={onFinished} posx={PosX}
+          posy={PosY} OrderItem={OrderItem} />}
     </>
   );
 }

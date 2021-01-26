@@ -17,7 +17,6 @@ function Join() {
       let createdUser = await firebase
         .auth()
         .createUserWithEmailAndPassword(data.email, data.password);
-      console.log(createdUser);
 
       await createdUser.user.updateProfile({
         displayName: data.name,

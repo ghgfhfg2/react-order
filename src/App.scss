@@ -19,6 +19,9 @@
   &.a-center {
     align-items: center;
   }
+  &.between{
+    justify-content: space-between;
+  }
 }
 h2.title {
   font-size: 28px;
@@ -118,6 +121,8 @@ h3.title {
 .admin-prod-form.ant-form-horizontal .ant-form-item-label{width:80px}
 .admin-prod-form .ant-input{max-width: 50%;}
 .admin-prod-form .ant-input.sm-input{max-width: 150px;}
+
+.admin-modify-form{display: flex;flex-direction: column;width:100%}
 
 // 모바일 //
 @include mobile() {

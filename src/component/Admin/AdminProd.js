@@ -11,53 +11,56 @@ export const ProdList = styled.div`
   flex-wrap: wrap;
   .list {
     margin: 5px;
-    width: calc(25% - 10px);
-    border: 1px solid #ddd;
+    width: calc(12.5% - 10px);    
     display: flex;
-    align-items: center;
+    flex-direction:column;
     justify-content: space-between;
     .img {
-      height: 90px;
-      width: 90px;
-      overflow: hidden;
+      height: 0;
+      border-top-left-radius:7px;
+      border-top-right-radius:7px;
+      overflow:hidden;
+      width: 100%;
+      padding-bottom:75%;
+      overflow: hidden;position:relative;
       img {
-        width: 100%;
-        height: 100%;
+        height:100%;
+        position:absolute;left:50%;top:50%;
+        transform:translate(-50%,-50%);
       }
+      .kal{position: absolute;left: 0;top: 0;background: rgba(255,255,255,0.85);display: inline-block;z-index: 1;padding: 3px 6px;font-size: 12px;border-bottom-right-radius: 5px;}
     }
     .txt {
-      display: flex;
-      flex-direction: column;
-      padding-right: 10px;
-      text-align: right;
+      display: flex;width:100%;
+      flex-direction: column;margin-bottom:5px;
     }
     .admin {
       display: flex;
-      flex-direction: column;
-      padding-right: 10px;
       button {
-        margin: 2px 0;
+        margin: 2px;
       }
     }
     .admin-box {
-      display: flex;
-      align-items: center;
+      display: flex;flex-direction:column;
+      align-items: center;padding:7px;
+      border: 1px solid #ddd;border-top:none;
+      border-bottom-left-radius: 7px;
+      border-bottom-right-radius: 7px;
     }
   }
   @media all and (max-width: 1400px) {
     .list {
-      width: calc(33.33% - 10px);
+      width: calc(20% - 10px);
     }
   }
   @media all and (max-width: 1024px) {
     .list {
-      width: calc(50% - 10px);
+      width: calc(33.33% - 10px);
     }
   }
   @media all and (max-width: 640px) {
     .list {
-      width: 100%;
-      margin: 5px 0;
+      width: calc(50% - 10px);
     }
   }
 `;
@@ -76,6 +79,8 @@ function AdminProd() {
           array.push({
             uid: item.key,
             name: item.val().name,
+            kal: item.val().kal,
+            hot: item.val().hot,
             category: item.val().category,
             image: item.val().image,
             price: item.val().price,
@@ -178,9 +183,13 @@ function AdminProd() {
           rules={[{ required: true, message: "카테고리를 선택해 주세요" }]}
         >
           <Radio.Group>
-            <Radio.Button value="a">item 1</Radio.Button>
-            <Radio.Button value="b">item 2</Radio.Button>
-            <Radio.Button value="c">item 3</Radio.Button>
+            <Radio.Button value="커피">커피</Radio.Button>
+            <Radio.Button value="라떼">라떼</Radio.Button>
+            <Radio.Button value="에이드">에이드</Radio.Button>
+            <Radio.Button value="차">차</Radio.Button>
+            <Radio.Button value="프로틴">프로틴</Radio.Button>
+            <Radio.Button value="스낵">스낵</Radio.Button>
+            <Radio.Button value="주스">주스</Radio.Button>
           </Radio.Group>
         </Form.Item>
         <Form.Item
@@ -194,6 +203,29 @@ function AdminProd() {
           ]}
         >
           <Input />
+        </Form.Item>
+        <Form.Item
+          name="hot"
+          label="온도"
+          rules={[{ required: true, message: "온도를 선택해 주세요" }]}
+        >
+          <Radio.Group>
+            <Radio.Button value="hot & ice">hot & ice</Radio.Button>
+            <Radio.Button value="hot only">hot only</Radio.Button>
+            <Radio.Button value="ice only">ice only</Radio.Button>
+          </Radio.Group>
+        </Form.Item>
+        <Form.Item
+          name="kal"
+          label="칼로리"
+          rules={[
+            {
+              required: true,
+              message: "칼로리를 입력해 주세요",
+            },
+          ]}
+        >
+          <Input className="sm-input" />
         </Form.Item>
         <Form.Item
           name="price"
@@ -211,17 +243,20 @@ function AdminProd() {
           등록하기
         </Button>
       </Form>
-      <ProdList>
+      <ProdList style={{marginTop:"20px"}}>
         {ProdItem.map((item, index) => (
           <div className="list" key={index}>
             <div className="img">
+              <span className="kal">{item.kal}kal</span>
               <img src={item.image} alt="" />
             </div>
             <div className="admin-box">
               <div className="txt">
                 <span>{item.name}</span>
-                <span>{item.price}</span>
-                <span>{item.category}</span>
+                <div className="flex-box between">
+                <span>{item.hot}</span>
+                <span>{item.price}원</span>
+                </div>
               </div>
               <div className="admin">
                 <Button onClick={(e) => onProdModify(e, item.uid, item.image)}>
