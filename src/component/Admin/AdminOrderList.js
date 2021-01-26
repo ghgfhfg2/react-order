@@ -1,74 +1,18 @@
 import { Button } from "antd";
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
 import firebase from "../../firebase";
 import { Popover } from "antd";
 import { commaNumber } from "../CommonFunc";
+import { OrderBox } from "./AdminOrder";
 
-export const OrderBox = styled.div`
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  .list {
-    .from {
-      border-bottom: 1px solid #ddd;
-      height: 30px;
-    }
-    diplay: flex;
-    flex-direction: column;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    width: calc(33.33% - 10px);
-    margin: 5px;
-    .from {
-      margin-bottom: 5px;
-    }
-    .info-box {
-      height: 28px;
-      .info {
-        margin-right: 7px;
-      }
-      .ant-btn {
-        height: 28px;
-        padding: 0 7px;
-        line-height: 1;
-        span {
-          height: 100%;
-          line-height: 28px;
-          font-size: 12px;
-        }
-      }
-    }
-    & > div {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      padding: 0 4px;
-    }
-  }
-  @media all and (max-width: 1024px) {
-    .list {
-      width: calc(50% - 10px);
-    }
-  }
-  @media all and (max-width: 640px) {
-    .list {
-      width: 100%;
-      margin: 5px 0;
-    }
-  }
-`;
-
-function AdminOrder() {
+function AdminOrderList() {
   const [OrderList, setOrderList] = useState([]);
   useEffect(() => {
     firebase
       .database()
       .ref("order")
       .orderByChild("order_state")
-      .equalTo(0)
+      .equalTo(1)
       .on("value", (snapshot) => {
         let array = [];
         snapshot.forEach(function (item) {
@@ -89,17 +33,11 @@ function AdminOrder() {
         setOrderList(array);
       });
   }, []);
-  const stateChange = (key) => {
-    if (window.confirm("완료하시겠습니까?")) {
-      firebase.database().ref("order").child(key).update({
-        order_state: 1,
-      });
-    }
-  };
 
   return (
     <>
-      <h3 className="title">주문관리</h3>
+      <h3 className="title">완료내역</h3>
+
       <OrderBox>
         {OrderList.map((list, index) => (
           <div className="list" key={index}>
@@ -121,16 +59,6 @@ function AdminOrder() {
               </div>
               <span>{commaNumber(list.price)}원</span>
             </div>
-            <div className="state">
-              <span>{list.order_time}</span>
-              <Button
-                onClick={() => {
-                  stateChange(list.key);
-                }}
-              >
-                완료
-              </Button>
-            </div>
           </div>
         ))}
       </OrderBox>
@@ -138,4 +66,4 @@ function AdminOrder() {
   );
 }
 
-export default AdminOrder;
+export default AdminOrderList;

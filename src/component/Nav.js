@@ -92,6 +92,9 @@ function Nav() {
             <Menu.Item key="4">
               <Link to="/admin/order">주문관리</Link>
             </Menu.Item>
+            <Menu.Item key="5">
+              <Link to="/admin/order_list">완료내역</Link>
+            </Menu.Item>
           </SubMenu>
         </Menu>
       </div>

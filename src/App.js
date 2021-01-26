@@ -10,6 +10,7 @@ import MyOrder from "./component/MyOrder";
 import Admin from "./component/Admin/Admin";
 import AdminProd from "./component/Admin/AdminProd";
 import AdminOrder from "./component/Admin/AdminOrder";
+import AdminOrderList from "./component/Admin/AdminOrderList";
 import Loading from "./component/Loading";
 import { Layout } from "antd";
 import firebase from "./firebase";
@@ -23,8 +24,6 @@ function App(props) {
   const isLoading = useSelector((state) => state.user.isLoading);
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
-      console.log(history)
-      console.log(user)
       if (user) {
         dispatch(setUser(user));
       } else {
@@ -63,6 +62,11 @@ function App(props) {
               <Route exact path="/admin" component={Admin} />
               <Route exact path="/admin/prod" component={AdminProd} />
               <Route exact path="/admin/order" component={AdminOrder} />
+              <Route
+                exact
+                path="/admin/order_list"
+                component={AdminOrderList}
+              />
             </Switch>
           </Content>
         </Layout>

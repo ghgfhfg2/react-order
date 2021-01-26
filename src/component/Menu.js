@@ -3,6 +3,7 @@ import firebase from "../firebase";
 import { Button } from "antd";
 import { ProdList } from "./Admin/AdminProd";
 import OderModalPopup from "./OrderModal";
+import { commaNumber } from "./CommonFunc";
 
 function Menu() {
   const [ProdItem, setProdItem] = useState([]);
@@ -31,16 +32,16 @@ function Menu() {
   const [PosX, setPosX] = useState(0);
   const [PosY, setPosY] = useState(0);
   const [OnModal, setOnModal] = useState(false);
-  const [OrderItem, setOrderItem] = useState()
+  const [OrderItem, setOrderItem] = useState();
   const orderHandler = (e, item) => {
-    setOrderItem(item)
+    setOrderItem(item);
     setPosX(e.clientX);
     setPosY(e.clientY);
     setOnModal(true);
   };
   const onFinished = () => {
-    setOnModal(false)
-  }
+    setOnModal(false);
+  };
   return (
     <>
       <h3 className="title">메뉴판</h3>
@@ -52,11 +53,11 @@ function Menu() {
               <img src={item.image} alt="" />
             </div>
             <div className="admin-box">
-             <div className="txt">
+              <div className="txt">
                 <span>{item.name}</span>
                 <div className="flex-box between">
-                <span>{item.hot}</span>
-                <span>{item.price}원</span>
+                  <span>{item.hot}</span>
+                  <span>{commaNumber(item.price)}원</span>
                 </div>
               </div>
               <div className="admin">
@@ -66,8 +67,14 @@ function Menu() {
           </div>
         ))}
       </ProdList>
-      {OnModal && <OderModalPopup onFinished={onFinished} posx={PosX}
-          posy={PosY} OrderItem={OrderItem} />}
+      {OnModal && (
+        <OderModalPopup
+          onFinished={onFinished}
+          posx={PosX}
+          posy={PosY}
+          OrderItem={OrderItem}
+        />
+      )}
     </>
   );
 }
