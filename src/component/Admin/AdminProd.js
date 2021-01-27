@@ -10,11 +10,11 @@ export const ProdList = styled.div`
   display: flex;
   flex-wrap: wrap;
   .list {
-    margin: 5px;
-    width: calc(12.5% - 10px);    
-    display: flex;
-    flex-direction:column;
-    justify-content: space-between;
+    margin: 10px 8px;width: calc(12.5% - 16px);display: flex;
+    flex-direction:column;justify-content: space-between;border-radius: 7px;
+    box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.25);overflow: hidden;
+    transition:all 0.2s;
+    &:hover{box-shadow: 0px 0px 7px 1px rgba(0,0,0,0.3);}
     .img {
       height: 0;
       border-top-left-radius:7px;
@@ -33,7 +33,10 @@ export const ProdList = styled.div`
     .txt {
       display: flex;width:100%;
       flex-direction: column;margin-bottom:5px;
+      .name{font-weight:bold;font-size:15px}
     }
+    .hot{font-size:13px;}
+    .price{font-size:13px;color:#1672c9;}
     .admin {
       display: flex;
       button {
@@ -43,9 +46,6 @@ export const ProdList = styled.div`
     .admin-box {
       display: flex;flex-direction:column;
       align-items: center;padding:7px;
-      border: 1px solid #ddd;border-top:none;
-      border-bottom-left-radius: 7px;
-      border-bottom-right-radius: 7px;
     }
   }
   @media all and (max-width: 1400px) {
@@ -69,6 +69,8 @@ function AdminProd() {
   const [ItemChange, setItemChange] = useState(0);
   const [ProdItem, setProdItem] = useState([]);
   useEffect(() => {
+    let mounted = true;
+    if(mounted){
     firebase
       .database()
       .ref("products")
@@ -88,6 +90,10 @@ function AdminProd() {
         });
         setProdItem(array);
       });
+    }
+      return function cleanup() {
+        mounted = false
+      }
   }, [ItemChange]);
 
   const [ImgFile, setImgFile] = useState();
@@ -213,6 +219,7 @@ function AdminProd() {
             <Radio.Button value="hot & ice">hot & ice</Radio.Button>
             <Radio.Button value="hot only">hot only</Radio.Button>
             <Radio.Button value="ice only">ice only</Radio.Button>
+            <Radio.Button value="etc">etc</Radio.Button>
           </Radio.Group>
         </Form.Item>
         <Form.Item
@@ -252,10 +259,10 @@ function AdminProd() {
             </div>
             <div className="admin-box">
               <div className="txt">
-                <span>{item.name}</span>
+                <span className="name">{item.name}</span>
                 <div className="flex-box between">
-                <span>{item.hot}</span>
-                <span>{item.price}원</span>
+                <span className="hot">{item.hot}</span>
+                <span className="price">{item.price}원</span>
                 </div>
               </div>
               <div className="admin">

@@ -64,16 +64,14 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
   if (OrderItem.hot === "hot & ice") {
     hotRadio = (
       <>
-        <label htmlFor="hot">hot</label>
         <input
           type="radio"
-          checked
           name="hot"
           id="hot"
           value="hot"
           onChange={radioChange}
         />
-        <label htmlFor="ice">ice</label>
+        <label className="radio_hot" htmlFor="hot">hot</label>
         <input
           type="radio"
           id="ice"
@@ -81,13 +79,13 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
           value="ice"
           onChange={radioChange}
         />
+        <label className="radio_ice" htmlFor="ice">ice</label>
       </>
     );
   }
   if (OrderItem.hot === "hot only") {
     hotRadio = (
       <>
-        <label htmlFor="hot">hot only</label>
         <input
           type="radio"
           checked
@@ -96,13 +94,13 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
           value="hot"
           onChange={radioChange}
         />
+        <label className="radio_hot" htmlFor="hot">hot only</label>
       </>
     );
   }
   if (OrderItem.hot === "ice only") {
     hotRadio = (
       <>
-        <label htmlFor="ice">ice only</label>
         <input
           type="radio"
           checked
@@ -111,6 +109,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
           value="ice"
           onChange={radioChange}
         />
+        <label className="radio_ice" htmlFor="ice">ice only</label>
       </>
     );
   }
@@ -120,6 +119,10 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
     const nowTime = moment().format("YYYY-MM-DD HH:mm:ss|dddd");
     const timeStamp = new Date().getTime();
     e.preventDefault();
+    if(!radioValue){
+      alert("온도를 선택해주세요");
+      return;
+    }
     let values = {
       order_uid: userInfo.uid,
       order_email: userInfo.email,
@@ -129,7 +132,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
       order_etc: e.target.etc.value,
       order_state: 0,
       prod_name: OrderItem.name,
-      price: parseInt(OrderItem.price),
+      price: OrderItem.price*e.target.amount.value,
       amount: parseInt(e.target.amount.value),
       kal: parseInt(OrderItem.kal),
       hot: e.target.hot.value,
@@ -145,6 +148,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
           ...values,
         });
       alert("주문에 성공했습니다.");
+      onFinished();
     } catch (error) {
       alert(error);
     }
@@ -152,9 +156,9 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
 
   return (
     <>
-      <OderModalPopup posx={posx} posy={posy}>
-        <form className="admin-prod-form" onSubmit={onSubmitOrder}>
-          {OrderItem.name}
+      <OderModalPopup posx={posx} posy={posy} style={{padding:"12px 15px 15px 15px"}}>
+        <form className="order-form-box" onSubmit={onSubmitOrder}>
+          <h4>{OrderItem.name}</h4>
           <div className="flex-box a-center">
             <span className="tit">수량</span>
             <Button
@@ -170,7 +174,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
             ></Button>
           </div>
           <div className="flex-box a-center">
-            <span className="tit">수량</span>
+            <span className="tit"></span>
             {hotRadio}
           </div>
           <div className="flex-box a-center">

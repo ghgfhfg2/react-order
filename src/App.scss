@@ -9,6 +9,14 @@
   height: 100vh;
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+.ic-loading{
+  position: fixed;left: calc(50% - 20px);top:calc(50% - 20px);z-index: 10;
+}
+.ic-loading svg{
+  width:40px;height: 40px;
+  color: #1890ff;  
 }
 .flex-box {
   width: 100%;
@@ -115,14 +123,53 @@ h3.title {
     top: 20px;
   }
 }
+.order-btn{width:100%;height:38px;position: absolute;bottom: 0;left: 0;border:none;background-color: #1672c9;color: #fff;cursor: pointer;
+  transition: all 0.2s;outline:none;
+  &:hover{background-color: #156ab9;}
+}
 
+.order-form-box{
+  h4{text-align: center;margin-bottom: 10px;font-size: 15px;font-weight: bold;}
+  .tit{width:35px;font-weight: 500;font-size: 13px;}
+  > .flex-box{margin-bottom: 10px;}
+  input[type=radio]{display:none}
+  input[type=radio] + label{display: inline-block;width:50px;height:32px;line-height: 32px;cursor: pointer;text-align: center;border-radius: 4px;border:1px solid #ddd;}  
+  .radio_hot{margin-right: 5px;}
+  input[type=radio]:checked + label{font-weight: bold;color: #fff;}
+  input[type=radio]:checked + .radio_hot{background-color: #f02424;border-color: #f02424;}
+  input[type=radio]:checked + .radio_ice{background-color: #1890ff;border-color: #1890ff;}
+}
+
+@keyframes neon_blue {
+  from {
+    box-shadow: 0 0 1px #fff, 0 0 2px #fff, 0 0 4px #228DFF, 0 0 5px #228DFF, 0 0 8px #228DFF
+  }
+  to {
+    box-shadow:  0 0 1px #fff, 0 0 2px #228DFF, 0 0 2px #228DFF, 0 0 3px #228DFF
+  }
+}
 
 /* 관리자 상품등록 */
 .admin-prod-form.ant-form-horizontal .ant-form-item-label{width:80px}
 .admin-prod-form .ant-input{max-width: 50%;}
 .admin-prod-form .ant-input.sm-input{max-width: 150px;}
 
-.admin-modify-form{display: flex;flex-direction: column;width:100%}
+
+.admin-modify-form{display: flex;flex-direction: column;width:100%;
+  input[type=text]{border:1px solid #ddd;border-radius: 3px;padding:5px 10px}
+  .input-box{margin-bottom: 10px;
+    .tit{width:50px;display: inline-block;}
+  }
+  input[type=radio]{display: none;}
+  input[type=radio] + label{display: inline-block;padding: 5px;border:1px solid #ddd;margin-left: -1px;position: relative;cursor: pointer;}
+  input[type=radio]:checked + label{border-color: #1890ff;z-index: 1;}
+  .btn-box{width: 100%;display: flex;justify-content: center;margin-top: 5px;}
+  
+}
+
+.ant-table-column-sorters{padding: 8px;}
+.ant-table-cell{padding: 8px 10px !important;}
+
 
 // 모바일 //
 @include mobile() {

@@ -36,6 +36,7 @@ export const ModalPopup = styled.div`
 `;
 function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
   const [radioValue, setradioValue] = useState();
+  const [radioValue2, setradioValue2] = useState();
   const [ProdItem, setProdItem] = useState([]);
   useEffect(() => {
     firebase
@@ -46,6 +47,7 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
       .then((snapshot) => {
         setProdItem(snapshot.val());
         setradioValue(snapshot.val().category);
+        setradioValue2(snapshot.val().hot);
       });
   }, [puid]);
 
@@ -56,6 +58,7 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
       price: e.target.price.value,
       kal: e.target.kal.value,
       category: e.target.category.value,
+      hot: e.target.hot.value,
     };
     if (isNaN(values.price)) {
       alert("가격은 숫자만 입력해 주세요");
@@ -114,6 +117,9 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
   const radioChange = (e) => {
     setradioValue(e.target.value);
   };
+  const radioChange2 = (e) => {
+    setradioValue2(e.target.value);
+  };
   const onCancel = () => {
     onFinished();
   };
@@ -123,7 +129,7 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
       <>
         <ModalPopup posx={posx} posy={posy}>
           <form className="admin-modify-form" onSubmit={onSubmitProd2}>
-            <div>
+            <div className="input-box">
             <input
               style={{ display: "none" }}
               type="file"
@@ -134,6 +140,46 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
               {ProdImg2 && <img src={`${ProdImg2}`} alt="" />}
               {!ProdImg2 && <img src={`${ProdItem.image}`} alt="" />}
             </FileLabel2>
+            </div>
+            <div className="input-box">
+                <input
+                type="radio"
+                id="hot1"
+                name="hot"
+                value="hot & ice"
+                checked={radioValue2 === "hot & ice"}
+                onChange={radioChange2}
+                />
+                <label htmlFor="hot1">hot & ice</label>
+                <input
+                type="radio"
+                id="hot2"
+                name="hot"
+                value="hot only"
+                checked={radioValue2 === "hot only"}
+                onChange={radioChange2}
+                />
+                <label htmlFor="hot2">hot only</label>
+                <input
+                type="radio"
+                id="hot3"
+                name="hot"
+                value="ice only"
+                checked={radioValue2 === "ice only"}
+                onChange={radioChange2}
+                />
+                <label htmlFor="hot3">ice only</label>
+                <input
+                type="radio"
+                id="hot4"
+                name="hot"
+                value="etc"
+                checked={radioValue2 === "etc"}
+                onChange={radioChange2}
+                />
+                <label htmlFor="hot4">etc</label>
+            </div>
+            <div className="input-box">
             <input
               type="radio"
               id="cate1"
@@ -198,13 +244,19 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
             />
             <label htmlFor="cate7">주스</label>
             </div>
-            <label htmlFor="_name">이름</label>
+            <div className="input-box">
+            <label className="tit" htmlFor="_name">이름</label>
             <input type="text" id="_name" name="name" defaultValue={ProdItem.name} />
-            <label htmlFor="_price">가격</label>
+            </div>
+            <div className="input-box">
+            <label className="tit" htmlFor="_price">가격</label>
             <input type="text" id="_price" name="price" defaultValue={ProdItem.price} />
-            <label htmlFor="_kal">칼로리</label>
+            </div>
+            <div className="input-box">
+            <label className="tit" htmlFor="_kal">칼로리</label>
             <input type="text" id="_kal" name="kal" defaultValue={ProdItem.kal} />
-            <div style={{ marginTop: "10px" }}>
+            </div>
+            <div className="btn-box">
               <Button htmlType="submit" type="primary" style={{ marginRight: "7px" }}>
                 수정하기
               </Button>

@@ -1,13 +1,12 @@
-import { Button } from "antd";
 import React, { useState, useEffect } from "react";
 import firebase from "../../firebase";
-import { Popover } from "antd";
-import { commaNumber } from "../CommonFunc";
-import { OrderBox } from "./AdminOrder";
+import { Table } from "antd";
 
 function AdminOrderList() {
   const [OrderList, setOrderList] = useState([]);
   useEffect(() => {
+    let mounted = true;
+    if(mounted){
     firebase
       .database()
       .ref("order")
@@ -32,36 +31,74 @@ function AdminOrderList() {
         });
         setOrderList(array);
       });
+    }
+    return function cleanup() {
+      mounted = false
+    }
   }, []);
 
+  const columns = [
+    {
+      title: '주문자',
+      dataIndex: 'order_name',
+      key: 'order_name',
+      sorter: {
+        compare: (a, b) => a.order_name - b.order_name,
+        multiple: 1,
+      },
+      align:'center'
+    },
+    {
+      title: '상품명',
+      dataIndex: 'prod_name',
+      key: 'prod_name',
+      align:'center'
+    },
+    {
+      title: '수량',
+      dataIndex: 'amount',
+      key: 'amount',
+      align:'center'
+    },
+    {
+      title: '온도',
+      dataIndex: 'hot',
+      key: 'hot',
+      align:'center'
+    },
+    {
+      title: '코멘트',
+      dataIndex: 'etc',
+      key: 'etc',
+      align:'center'
+    },
+    {
+      title: '주문시간',
+      dataIndex: 'order_time',
+      key: 'order_time',
+      sorter: {
+        compare: (a, b) => a.timestamp - b.timestamp,
+        multiple: 3,
+      },
+      align:'center'
+    },
+    {
+      title: '가격',
+      dataIndex: 'price',
+      key: 'price',
+      sorter: {
+        compare: (a, b) => a.price - b.price,
+        multiple: 4,
+      },
+      align:'center'
+    },
+  ];
   return (
     <>
       <h3 className="title">완료내역</h3>
-
-      <OrderBox>
-        {OrderList.map((list, index) => (
-          <div className="list" key={index}>
-            <span style={{ display: "none" }}>{list.key}</span>
-            <div className="from">
-              <span>{list.order_name}</span>
-              <span>{list.order_part}</span>
-            </div>
-            <div className="prod">
-              <div className="info-box">
-                <span className="info">{list.prod_name}</span>
-                <span className="info">{list.hot}</span>
-                <span className="info">{list.amount}</span>
-                {list.order_etc && (
-                  <Popover content={list.order_etc} trigger="click">
-                    <Button type="default">기타</Button>
-                  </Popover>
-                )}
-              </div>
-              <span>{commaNumber(list.price)}원</span>
-            </div>
-          </div>
-        ))}
-      </OrderBox>
+      <Table dataSource={OrderList} columns={columns} pagination={false} 
+      />
+     
     </>
   );
 }

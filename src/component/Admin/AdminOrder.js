@@ -10,6 +10,20 @@ export const OrderBox = styled.div`
   display: flex;
   flex-wrap: wrap;
   .list {
+    .ic-hot,.ic-ice{display:inline-block;width:12px;height:12px;border-radius:50%;opacity:0.4;margin-right:10px;position:relative;top:1px}
+    .ic-hot{background:#f02424}
+    .ic-ice{background:#1890ff}
+    color:#888;
+    &.state_0{
+      .ic-hot,.ic-ice{opacity:1}
+      color:#555;
+      border-color:#e6f7ff;
+      animation: neon_blue 1.5s ease-in-out infinite alternate;
+      .info{
+        color:#111;
+        font-weight:500;
+      }
+    }
     .from {
       border-bottom: 1px solid #ddd;
       height: 30px;
@@ -24,7 +38,9 @@ export const OrderBox = styled.div`
     .from {
       margin-bottom: 5px;
     }
+    .date{font-size:12px}
     .info-box {
+      display:flex;align-items:center;
       height: 28px;
       .info {
         margin-right: 7px;
@@ -64,6 +80,8 @@ export const OrderBox = styled.div`
 function AdminOrder() {
   const [OrderList, setOrderList] = useState([]);
   useEffect(() => {
+    let mounted = true;
+    if(mounted){
     firebase
       .database()
       .ref("order")
@@ -88,6 +106,10 @@ function AdminOrder() {
         });
         setOrderList(array);
       });
+    }
+    return function cleanup() {
+      mounted = false
+    }
   }, []);
   const stateChange = (key) => {
     if (window.confirm("완료하시겠습니까?")) {
@@ -102,7 +124,7 @@ function AdminOrder() {
       <h3 className="title">주문관리</h3>
       <OrderBox>
         {OrderList.map((list, index) => (
-          <div className="list" key={index}>
+          <div className={`list state_${list.order_state}`} key={index}>
             <span style={{ display: "none" }}>{list.key}</span>
             <div className="from">
               <span>{list.order_name}</span>
@@ -111,8 +133,10 @@ function AdminOrder() {
             <div className="prod">
               <div className="info-box">
                 <span className="info">{list.prod_name}</span>
-                <span className="info">{list.hot}</span>
-                <span className="info">{list.amount}</span>
+                {list.hot === "hot" ? <span className="ic-hot"></span> :
+                list.hot === "ice" ? <span className="ic-ice"></span> : ""
+                }
+                <span className="info">{list.amount}개</span>
                 {list.order_etc && (
                   <Popover content={list.order_etc} trigger="click">
                     <Button type="default">기타</Button>
@@ -122,13 +146,16 @@ function AdminOrder() {
               <span>{commaNumber(list.price)}원</span>
             </div>
             <div className="state">
-              <span>{list.order_time}</span>
+            <span className="date">
+                {list.order_time.split("|")[0]}&nbsp;
+                ({list.order_time.split("|")[1]})
+              </span>
               <Button
                 onClick={() => {
                   stateChange(list.key);
                 }}
               >
-                완료
+                완료처리
               </Button>
             </div>
           </div>
