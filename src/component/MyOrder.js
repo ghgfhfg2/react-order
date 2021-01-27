@@ -11,95 +11,86 @@ function MyOrder() {
   const userInfo = useSelector((state) => state.user.currentUser);
   const [OrderList, setOrderList] = useState([]);
 
-  const [Skip, setSkip] = useState(0)  
-  const [Limit, setLimit] = useState(20)  
   useEffect(() => {
-      let skip = Skip + Limit
-      let mounted = true;
-    if(mounted){
-    firebase
-      .database()
-      .ref("order")
-      .orderByChild("order_uid")
-      .equalTo(userInfo.uid)
-      .limitToFirst(skip)
-      .on("value", (snapshot) => {
-        let array = [];
-        snapshot.forEach(function (item) {
-          array.push({
-            ...item.val(),
-            key: item.key,
+    let mounted = true;
+    if (mounted) {
+      firebase
+        .database()
+        .ref("order")
+        .orderByChild("order_uid")
+        .equalTo(userInfo.uid)
+        .limitToFirst(30)
+        .on("value", (snapshot) => {
+          let array = [];
+          snapshot.forEach(function (item) {
+            array.push({
+              ...item.val(),
+              key: item.key,
+            });
           });
+          // eslint-disable-next-line array-callback-return
+          array.sort((a, b) => {
+            if (a.timestamp < b.timestamp) {
+              return 1;
+            }
+            if (a.timestamp > b.timestamp) {
+              return -1;
+            }
+          });
+          setOrderList(array);
         });
-        // eslint-disable-next-line array-callback-return
-        array.sort((a, b) => {
-          if (a.timestamp < b.timestamp) {
-            return 1;
-          }
-          if (a.timestamp > b.timestamp) {
-            return -1;
-          }
-        });
-        setOrderList(array);
-      });
     }
-      return function cleanup() {
-        mounted = false
-      }
-  }, [Skip]);
+    return function cleanup() {
+      mounted = false;
+    };
+  }, []);
 
-  const moreListHandler = () => {
-    setSkip(pre => pre + Limit)
-  }
-
-  if(OrderList.length){
-  return (
-    <>
-      <h3 className="title">주문내역</h3>
-      <OrderBox>
-        {OrderList.map((list, index) => (
-          <div className={`list state_${list.order_state}`} key={index}>
-            <span style={{ display: "none" }}>{list.key}</span>
-            <div className="prod">
-              <div className="info-box">
-                <span className="info">{list.prod_name}</span>
-                {list.hot === "hot" ? <span className="ic-hot"></span> :
-                list.hot === "ice" ? <span className="ic-ice"></span> : ""
-                }
-                <span className="info">{list.amount}개</span>
-                {list.order_etc && (
-                  <Popover content={list.order_etc} trigger="click">
-                    <Button type="default">기타</Button>
-                  </Popover>
-                )}
+  if (OrderList.length) {
+    return (
+      <>
+        <h3 className="title">주문내역</h3>
+        <OrderBox>
+          {OrderList.map((list, index) => (
+            <div className={`list state_${list.order_state}`} key={index}>
+              <span style={{ display: "none" }}>{list.key}</span>
+              <div className="prod">
+                <div className="info-box">
+                  <span className="info">{list.prod_name}</span>
+                  {list.hot === "hot" ? (
+                    <span className="ic-hot"></span>
+                  ) : list.hot === "ice" ? (
+                    <span className="ic-ice"></span>
+                  ) : (
+                    ""
+                  )}
+                  <span className="info">{list.amount}개</span>
+                  {list.order_etc && (
+                    <Popover content={list.order_etc} trigger="click">
+                      <Button type="default">기타</Button>
+                    </Popover>
+                  )}
+                </div>
+                <span>{commaNumber(list.price)}원</span>
               </div>
-              <span>{commaNumber(list.price)}원</span>
+              <div className="state">
+                <span className="date">
+                  {list.order_time.split("|")[0]}&nbsp; (
+                  {list.order_time.split("|")[1]})
+                </span>
+                <span>{list.order_state === 0 ? "대기중" : "완료"}</span>
+              </div>
             </div>
-            <div className="state">
-            <span className="date">
-                {list.order_time.split("|")[0]}&nbsp;
-                ({list.order_time.split("|")[1]})
-              </span>
-              <span>{list.order_state === 0 ? "대기중" : "완료"}</span>
-            </div>
-          </div>
-        ))}
-      </OrderBox>
-      <div style={{textAlign:"center",marginTop:"20px"}}>
-      {OrderList.length >= Skip ?
-      <Button onClick={moreListHandler}>더보기</Button>
-      :<p>{`더 불러올 내역이 없습니다.`}</p>
-        }
-        </div>
-    </>
-  )
-}else{
-    return(
-    <>
+          ))}
+        </OrderBox>
+      </>
+    );
+  } else {
+    return (
+      <>
         <Loading />
-    </>
-    )
-}
+      </>
+    );
+  }
 }
 
 export default MyOrder;

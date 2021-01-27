@@ -15,9 +15,13 @@ export const OderModalPopup = styled.div`
   z-index: 100;
   border-radius: 10px;
   background: #fff;
-  transform: translate(-40%, 30px);
+  transform: translate(-40%, -50%);
   left: ${(props) => props.posx}px;
   top: ${(props) => props.posy}px;
+  @media all and (max-width: 640px) {
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
   .num {
     width: 40px;
     text-align: center;
@@ -32,6 +36,9 @@ export const OderModalPopup = styled.div`
     margin-top: 10px;
     display: flex;
     justify-content: center;
+    button {
+      width: 100px;
+    }
   }
 `;
 
@@ -71,7 +78,9 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
           value="hot"
           onChange={radioChange}
         />
-        <label className="radio_hot" htmlFor="hot">hot</label>
+        <label className="radio_hot" htmlFor="hot">
+          hot
+        </label>
         <input
           type="radio"
           id="ice"
@@ -79,7 +88,9 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
           value="ice"
           onChange={radioChange}
         />
-        <label className="radio_ice" htmlFor="ice">ice</label>
+        <label className="radio_ice" htmlFor="ice">
+          ice
+        </label>
       </>
     );
   }
@@ -94,7 +105,9 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
           value="hot"
           onChange={radioChange}
         />
-        <label className="radio_hot" htmlFor="hot">hot only</label>
+        <label className="radio_hot" htmlFor="hot">
+          hot only
+        </label>
       </>
     );
   }
@@ -109,7 +122,9 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
           value="ice"
           onChange={radioChange}
         />
-        <label className="radio_ice" htmlFor="ice">ice only</label>
+        <label className="radio_ice" htmlFor="ice">
+          ice only
+        </label>
       </>
     );
   }
@@ -119,7 +134,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
     const nowTime = moment().format("YYYY-MM-DD HH:mm:ss|dddd");
     const timeStamp = new Date().getTime();
     e.preventDefault();
-    if(!radioValue){
+    if (!radioValue) {
       alert("온도를 선택해주세요");
       return;
     }
@@ -132,7 +147,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
       order_etc: e.target.etc.value,
       order_state: 0,
       prod_name: OrderItem.name,
-      price: OrderItem.price*e.target.amount.value,
+      price: OrderItem.price * e.target.amount.value,
       amount: parseInt(e.target.amount.value),
       kal: parseInt(OrderItem.kal),
       hot: e.target.hot.value,
@@ -156,7 +171,11 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
 
   return (
     <>
-      <OderModalPopup posx={posx} posy={posy} style={{padding:"12px 15px 15px 15px"}}>
+      <OderModalPopup
+        posx={posx}
+        posy={posy}
+        style={{ padding: "12px 15px 15px 15px" }}
+      >
         <form className="order-form-box" onSubmit={onSubmitOrder}>
           <h4>{OrderItem.name}</h4>
           <div className="flex-box a-center">

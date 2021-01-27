@@ -10,18 +10,35 @@ export const OrderBox = styled.div`
   display: flex;
   flex-wrap: wrap;
   .list {
-    .ic-hot,.ic-ice{display:inline-block;width:12px;height:12px;border-radius:50%;opacity:0.4;margin-right:10px;position:relative;top:1px}
-    .ic-hot{background:#f02424}
-    .ic-ice{background:#1890ff}
-    color:#888;
-    &.state_0{
-      .ic-hot,.ic-ice{opacity:1}
-      color:#555;
-      border-color:#e6f7ff;
+    .ic-hot,
+    .ic-ice {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      opacity: 0.4;
+      margin-right: 10px;
+      position: relative;
+      top: 1px;
+    }
+    .ic-hot {
+      background: #f02424;
+    }
+    .ic-ice {
+      background: #1890ff;
+    }
+    color: #888;
+    &.state_0 {
+      .ic-hot,
+      .ic-ice {
+        opacity: 0.85;
+      }
+      color: #555;
+      border-color: #e6f7ff;
       animation: neon_blue 1.5s ease-in-out infinite alternate;
-      .info{
-        color:#111;
-        font-weight:500;
+      .info {
+        color: #111;
+        font-weight: 500;
       }
     }
     .from {
@@ -38,9 +55,12 @@ export const OrderBox = styled.div`
     .from {
       margin-bottom: 5px;
     }
-    .date{font-size:12px}
+    .date {
+      font-size: 12px;
+    }
     .info-box {
-      display:flex;align-items:center;
+      display: flex;
+      align-items: center;
       height: 28px;
       .info {
         margin-right: 7px;
@@ -81,35 +101,35 @@ function AdminOrder() {
   const [OrderList, setOrderList] = useState([]);
   useEffect(() => {
     let mounted = true;
-    if(mounted){
-    firebase
-      .database()
-      .ref("order")
-      .orderByChild("order_state")
-      .equalTo(0)
-      .on("value", (snapshot) => {
-        let array = [];
-        snapshot.forEach(function (item) {
-          array.push({
-            ...item.val(),
-            key: item.key,
+    if (mounted) {
+      firebase
+        .database()
+        .ref("order")
+        .orderByChild("order_state")
+        .equalTo(0)
+        .on("value", (snapshot) => {
+          let array = [];
+          snapshot.forEach(function (item) {
+            array.push({
+              ...item.val(),
+              key: item.key,
+            });
           });
+          // eslint-disable-next-line array-callback-return
+          array.sort((a, b) => {
+            if (a.timestamp > b.timestamp) {
+              return 1;
+            }
+            if (a.timestamp < b.timestamp) {
+              return -1;
+            }
+          });
+          setOrderList(array);
         });
-        // eslint-disable-next-line array-callback-return
-        array.sort((a, b) => {
-          if (a.timestamp > b.timestamp) {
-            return 1;
-          }
-          if (a.timestamp < b.timestamp) {
-            return -1;
-          }
-        });
-        setOrderList(array);
-      });
     }
     return function cleanup() {
-      mounted = false
-    }
+      mounted = false;
+    };
   }, []);
   const stateChange = (key) => {
     if (window.confirm("완료하시겠습니까?")) {
@@ -133,9 +153,13 @@ function AdminOrder() {
             <div className="prod">
               <div className="info-box">
                 <span className="info">{list.prod_name}</span>
-                {list.hot === "hot" ? <span className="ic-hot"></span> :
-                list.hot === "ice" ? <span className="ic-ice"></span> : ""
-                }
+                {list.hot === "hot" ? (
+                  <span className="ic-hot"></span>
+                ) : list.hot === "ice" ? (
+                  <span className="ic-ice"></span>
+                ) : (
+                  ""
+                )}
                 <span className="info">{list.amount}개</span>
                 {list.order_etc && (
                   <Popover content={list.order_etc} trigger="click">
@@ -146,9 +170,9 @@ function AdminOrder() {
               <span>{commaNumber(list.price)}원</span>
             </div>
             <div className="state">
-            <span className="date">
-                {list.order_time.split("|")[0]}&nbsp;
-                ({list.order_time.split("|")[1]})
+              <span className="date">
+                {list.order_time.split("|")[0]}&nbsp; (
+                {list.order_time.split("|")[1]})
               </span>
               <Button
                 onClick={() => {

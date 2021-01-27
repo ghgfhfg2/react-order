@@ -175,10 +175,10 @@ h3.title::before {
 .order-form-box > .flex-box {
   margin-bottom: 10px; }
 
-.order-form-box input[type=radio] {
+.order-form-box input[type="radio"] {
   display: none; }
 
-.order-form-box input[type=radio] + label {
+.order-form-box input[type="radio"] + label {
   display: inline-block;
   width: 50px;
   height: 32px;
@@ -191,23 +191,23 @@ h3.title::before {
 .order-form-box .radio_hot {
   margin-right: 5px; }
 
-.order-form-box input[type=radio]:checked + label {
+.order-form-box input[type="radio"]:checked + label {
   font-weight: bold;
   color: #fff; }
 
-.order-form-box input[type=radio]:checked + .radio_hot {
+.order-form-box input[type="radio"]:checked + .radio_hot {
   background-color: #f02424;
   border-color: #f02424; }
 
-.order-form-box input[type=radio]:checked + .radio_ice {
+.order-form-box input[type="radio"]:checked + .radio_ice {
   background-color: #1890ff;
   border-color: #1890ff; }
 
 @keyframes neon_blue {
   from {
-    box-shadow: 0 0 1px #fff, 0 0 2px #fff, 0 0 4px #228DFF, 0 0 5px #228DFF, 0 0 8px #228DFF; }
+    box-shadow: 0 0 1px #fff, 0 0 2px #fff, 0 0 4px #228dff, 0 0 5px #228dff, 0 0 8px #228dff; }
   to {
-    box-shadow: 0 0 1px #fff, 0 0 2px #228DFF, 0 0 2px #228DFF, 0 0 3px #228DFF; } }
+    box-shadow: 0 0 1px #fff, 0 0 2px #228dff, 0 0 2px #228dff, 0 0 3px #228dff; } }
 
 /* 관리자 상품등록 */
 .admin-prod-form.ant-form-horizontal .ant-form-item-label {
@@ -224,7 +224,7 @@ h3.title::before {
   flex-direction: column;
   width: 100%; }
 
-.admin-modify-form input[type=text] {
+.admin-modify-form input[type="text"] {
   border: 1px solid #ddd;
   border-radius: 3px;
   padding: 5px 10px; }
@@ -236,10 +236,10 @@ h3.title::before {
   width: 50px;
   display: inline-block; }
 
-.admin-modify-form input[type=radio] {
+.admin-modify-form input[type="radio"] {
   display: none; }
 
-.admin-modify-form input[type=radio] + label {
+.admin-modify-form input[type="radio"] + label {
   display: inline-block;
   padding: 5px;
   border: 1px solid #ddd;
@@ -247,7 +247,7 @@ h3.title::before {
   position: relative;
   cursor: pointer; }
 
-.admin-modify-form input[type=radio]:checked + label {
+.admin-modify-form input[type="radio"]:checked + label {
   border-color: #1890ff;
   z-index: 1; }
 
@@ -262,6 +262,28 @@ h3.title::before {
 
 .ant-table-cell {
   padding: 8px 10px !important; }
+
+.menuCategory .ant-radio-group {
+  width: 100%;
+  max-width: 1000px;
+  margin: 10px 0 15px 0;
+  display: flex; }
+
+.menuCategory .ant-radio-group .ant-radio-button-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center; }
+
+.menuCategory .ant-radio-group .ant-radio-button-wrapper span {
+  text-align: center; }
+
+@media all and (max-width: 1024px) {
+  .menuCategory .ant-radio-group {
+    flex-wrap: wrap; }
+  .menuCategory .ant-radio-group .ant-radio-button-wrapper {
+    width: 25%;
+    flex: auto;
+    margin-top: -1px; } }
 
 @media (max-width: 640px) {
   .content-box {

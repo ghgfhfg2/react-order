@@ -80,7 +80,7 @@ function Nav() {
           mode="inline"
         >
           <Menu.Item key="1">
-            <Link to="/menu">메뉴판</Link>
+            <Link to="/">메뉴판</Link>
           </Menu.Item>
           <Menu.Item key="2">
             <Link to="/myorder">주문내역</Link>

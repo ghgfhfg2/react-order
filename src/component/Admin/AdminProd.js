@@ -10,33 +10,63 @@ export const ProdList = styled.div`
   display: flex;
   flex-wrap: wrap;
   .list {
-    margin: 10px 8px;width: calc(12.5% - 16px);display: flex;
-    flex-direction:column;justify-content: space-between;border-radius: 7px;
-    box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.25);overflow: hidden;
-    transition:all 0.2s;
-    &:hover{box-shadow: 0px 0px 7px 1px rgba(0,0,0,0.3);}
+    margin: 10px 8px;
+    width: calc(12.5% - 16px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 7px;
+    box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    transition: all 0.2s;
+    &:hover {
+      box-shadow: 0px 0px 7px 1px rgba(0, 0, 0, 0.3);
+    }
     .img {
       height: 0;
-      border-top-left-radius:7px;
-      border-top-right-radius:7px;
-      overflow:hidden;
+      border-top-left-radius: 7px;
+      border-top-right-radius: 7px;
+      overflow: hidden;
       width: 100%;
-      padding-bottom:75%;
-      overflow: hidden;position:relative;
+      padding-bottom: 75%;
+      overflow: hidden;
+      position: relative;
       img {
-        height:100%;
-        position:absolute;left:50%;top:50%;
-        transform:translate(-50%,-50%);
+        height: 100%;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
       }
-      .kal{position: absolute;left: 0;top: 0;background: rgba(255,255,255,0.85);display: inline-block;z-index: 1;padding: 3px 6px;font-size: 12px;border-bottom-right-radius: 5px;}
+      .kal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        background: rgba(255, 255, 255, 0.85);
+        display: inline-block;
+        z-index: 1;
+        padding: 3px 6px;
+        font-size: 12px;
+        border-bottom-right-radius: 5px;
+      }
     }
     .txt {
-      display: flex;width:100%;
-      flex-direction: column;margin-bottom:5px;
-      .name{font-weight:bold;font-size:15px}
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+      margin-bottom: 5px;
+      .name {
+        font-weight: bold;
+        font-size: 15px;
+      }
     }
-    .hot{font-size:13px;}
-    .price{font-size:13px;color:#1672c9;}
+    .hot {
+      font-size: 13px;
+    }
+    .price {
+      font-size: 13px;
+      color: #1672c9;
+    }
     .admin {
       display: flex;
       button {
@@ -44,23 +74,25 @@ export const ProdList = styled.div`
       }
     }
     .admin-box {
-      display: flex;flex-direction:column;
-      align-items: center;padding:7px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 7px;
     }
   }
   @media all and (max-width: 1400px) {
     .list {
-      width: calc(20% - 10px);
+      width: calc(20% - 16px);
     }
   }
   @media all and (max-width: 1024px) {
     .list {
-      width: calc(33.33% - 10px);
+      width: calc(33.33% - 16px);
     }
   }
   @media all and (max-width: 640px) {
     .list {
-      width: calc(50% - 10px);
+      width: calc(50% - 16px);
     }
   }
 `;
@@ -70,30 +102,30 @@ function AdminProd() {
   const [ProdItem, setProdItem] = useState([]);
   useEffect(() => {
     let mounted = true;
-    if(mounted){
-    firebase
-      .database()
-      .ref("products")
-      .once("value")
-      .then((snapshot) => {
-        let array = [];
-        snapshot.forEach(function (item) {
-          array.push({
-            uid: item.key,
-            name: item.val().name,
-            kal: item.val().kal,
-            hot: item.val().hot,
-            category: item.val().category,
-            image: item.val().image,
-            price: item.val().price,
+    if (mounted) {
+      firebase
+        .database()
+        .ref("products")
+        .once("value")
+        .then((snapshot) => {
+          let array = [];
+          snapshot.forEach(function (item) {
+            array.push({
+              uid: item.key,
+              name: item.val().name,
+              kal: item.val().kal,
+              hot: item.val().hot,
+              category: item.val().category,
+              image: item.val().image,
+              price: item.val().price,
+            });
           });
+          setProdItem(array);
         });
-        setProdItem(array);
-      });
     }
-      return function cleanup() {
-        mounted = false
-      }
+    return function cleanup() {
+      mounted = false;
+    };
   }, [ItemChange]);
 
   const [ImgFile, setImgFile] = useState();
@@ -250,7 +282,7 @@ function AdminProd() {
           등록하기
         </Button>
       </Form>
-      <ProdList style={{marginTop:"20px"}}>
+      <ProdList style={{ marginTop: "20px" }}>
         {ProdItem.map((item, index) => (
           <div className="list" key={index}>
             <div className="img">
@@ -261,8 +293,8 @@ function AdminProd() {
               <div className="txt">
                 <span className="name">{item.name}</span>
                 <div className="flex-box between">
-                <span className="hot">{item.hot}</span>
-                <span className="price">{item.price}원</span>
+                  <span className="hot">{item.hot}</span>
+                  <span className="price">{item.price}원</span>
                 </div>
               </div>
               <div className="admin">

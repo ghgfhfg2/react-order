@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
 import Nav from "./component/Nav";
 import "./App.css";
-import LandingPage from "./component/LandingPage";
 import Join from "./component/Join";
 import Login from "./component/Login";
 import Menu from "./component/Menu";
@@ -54,10 +53,9 @@ function App(props) {
           </Sider>
           <Content className="content-box">
             <Switch>
-              <Route exact path="/" component={LandingPage} />
+              <Route exact path="/" component={Menu} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/join" component={Join} />
-              <Route exact path="/menu" component={Menu} />
               <Route exact path="/myorder" component={MyOrder} />
               <Route exact path="/admin" component={Admin} />
               <Route exact path="/admin/prod" component={AdminProd} />
