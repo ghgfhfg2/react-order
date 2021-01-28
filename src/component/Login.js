@@ -23,24 +23,48 @@ function Login() {
   };
   const [errorFromSubmit, setErrorFromSubmit] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const [InputEmail, setInputEmail] = useState(false);
+  const [InputPw, setInputPw] = useState(false);
+  const onInputEmail = (e) => {
+    setInputEmail(e.target.value);
+  };
+  const onInputPw = (e) => {
+    setInputPw(e.target.value);
+  };
   return (
     <>
-        <div className="join-form-wrap">
-          <h2 className="title center">로그인</h2>
-          <form className="join-form" onSubmit={handleSubmit(onSubmit)}>
+      <div className="join-form-wrap">
+        <form className="join-form" onSubmit={handleSubmit(onSubmit)}>
+          <div className="input-box">
             <input
               name="email"
               type="email"
-              placeholder="이메일"
+              id="email"
+              onChange={onInputEmail}
               ref={register({ required: true, pattern: /^\S+@\S+$/i })}
             />
-
+            <label
+              htmlFor="email"
+              className={"place-holder " + (InputEmail && "on")}
+            >
+              <span>이메일</span>
+            </label>
+          </div>
+          <div className="input-box">
             <input
               type="password"
-              placeholder="비밀번호"
+              onChange={onInputPw}
               name="password"
+              id="password"
               ref={register({ required: true, minLength: 4 })}
             />
+            <label
+              htmlFor="password"
+              className={"place-holder " + (InputPw && "on")}
+            >
+              <span>비밀번호</span>
+            </label>
             {errors.password && errors.password.type === "required" && (
               <p>비밀번호를 입력해 주세요</p>
             )}
@@ -48,9 +72,10 @@ function Login() {
               <p>비밀번호는 4글자 이상이어야 합니다.</p>
             )}
             {errorFromSubmit && <p>{errorFromSubmit}</p>}
-            <input type="submit" value="로그인" disabled={loading} />
-          </form>
-        </div>
+          </div>
+          <input type="submit" value="로그인" disabled={loading} />
+        </form>
+      </div>
     </>
   );
 }

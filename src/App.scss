@@ -1,8 +1,19 @@
 @import "scss-common.scss";
 @import "form.css";
+.ant-layout-header {
+  background: #fff;
+}
 .content-box {
   width: 100%;
-  padding: 20px 30px;
+  max-width: 1400px;
+  display: flex;
+  margin: 0 auto;
+}
+.ant-layout-content {
+  padding: 30px;
+  @include mobile() {
+    padding: 20px 15px;
+  }
 }
 .center-box {
   width: 100%;
@@ -63,6 +74,7 @@ h3.title {
 
 .ant-layout {
   background: #fff;
+  height: 100vh;
 }
 .ant-layout-sider {
   width: auto !important;
@@ -71,15 +83,33 @@ h3.title {
   background-color: #fff;
   z-index: 100;
 }
+.header-box {
+  display: flex;
+  height: 100px;
+  border-bottom: 1px solid #e1e1e1;
+  align-items: center;
+  justify-content: center;
+  .top-logo {
+    width: 180px;
+  }
+  @include mobile() {
+    height: 70px;
+    .top-logo {
+      width: 120px;
+    }
+  }
+}
 .nav-top-box {
+  background-color: #fff;
+  position: relative;
+  z-index: 100;
   @include flex();
-  border-bottom: 1px solid #e6f7ff;
-  border-right: 1px solid #e6f7ff;
+  border-bottom: 1px solid #e1e1e1;
   height: 50px;
   a {
     flex: 1;
     text-align: center;
-    border-right: 1px solid #e6f7ff;
+    border-right: 1px solid #e1e1e1;
     &:last-child {
       border-right: none;
     }
@@ -88,7 +118,9 @@ h3.title {
 
 .left-nav-menu {
   width: 250px;
-  height: calc(100vh - 50px);
+  height: 100%;
+  border: 1px solid #e1e1e1;
+  border-width: 0 1px;
   @include mobile() {
     transition: all 0.2s;
     position: fixed;
@@ -102,7 +134,11 @@ h3.title {
   }
 }
 .left-nav-menu ul {
-  height: 100%;
+  height: calc(100% - 50px);
+  background-color: #fff;
+  z-index: 100;
+  border: none;
+  position: relative;
 }
 .left-nav-menu li.ant-menu-item {
   margin: 0;
@@ -120,7 +156,7 @@ h3.title {
   @include mobile() {
     display: inline-block;
     position: fixed;
-    z-index: 100;
+    z-index: 1000;
     left: 250px;
     top: 10px;
   }
@@ -211,7 +247,9 @@ h3.title {
 }
 
 /* 관리자 상품등록 */
-.admin-prod-form{margin-bottom: 30px;}
+.admin-prod-form {
+  margin-bottom: 30px;
+}
 .admin-prod-form.ant-form-horizontal .ant-form-item-label {
   width: 80px;
 }
@@ -293,19 +331,58 @@ h3.title {
 }
 
 // 주문
-.order-check-box{
+.order-check-box {
   display: flex;
-  .check{margin-right: 10px;
-    input{margin-right: 3px;}
+  .check {
+    margin-right: 10px;
+    input {
+      margin-right: 3px;
+    }
   }
 }
 
+//폼 커스텀
+.join-form-wrap {
+  .input-box {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  input {
+    outline-color: #1672c9;
+  }
+  input + .place-holder {
+    line-height: 1;
+    margin: 0;
+    display: inline-block;
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    padding: 0 4px;
+    color: #999;
+    transition: all 0.2s;
+  }
+  input:focus + .place-holder,
+  input + .place-holder.on {
+    color: #156ab9;
+    font-size: 12px;
+    top: -12px;
+    padding-bottom: 2px;
+    z-index: 10;
+    span {
+      position: relative;
+      z-index: 2;
+    }
+    &::after {
+      @include after(100%, 4px);
+      background: #fff;
+      left: 0;
+      bottom: 0;
+    }
+  }
+}
 
 // 모바일 //
 @include mobile() {
-  .content-box {
-    padding: 80px 15px 20px 15px;
-  }
   .ant-layout-sider.nav-wrap {
     min-width: 0 !important;
   }
@@ -314,63 +391,91 @@ h3.title {
   }
 }
 
-
-
-//애니메이션 
-.ani-fadeup{
+//애니메이션
+.ani-fadeup {
   animation: fade_up 0.6s both;
 }
-.ani-faderight{
+.ani-faderight {
   animation: fade_right 0.6s both;
 }
-.ani-fadein{
+.ani-fadein {
   animation: fade_in 0.4s both;
-  &.du-1{animation-duration: 0.2s;}
+  &.du-1 {
+    animation-duration: 0.2s;
+  }
 }
-.ani-down{
+.ani-down {
   animation: ani_down 0.3s both;
 }
-.delay-0{animation-delay: 0s !important;}
-.delay-1{animation-delay: 0.1s !important;}
-.delay-2{animation-delay: 0.2s !important;}
-.delay-3{animation-delay: 0.3s !important;}
-.delay-4{animation-delay: 0.4s !important;}
-.delay-5{animation-delay: 0.5s !important;}
-.delay-6{animation-delay: 0.6s !important;}
-.delay-7{animation-delay: 0.7s !important;}
-.delay-8{animation-delay: 0.8s !important;}
-.delay-9{animation-delay: 0.9s !important;}
-.delay-10{animation-delay: 1s !important;}
+.delay-0 {
+  animation-delay: 0s !important;
+}
+.delay-1 {
+  animation-delay: 0.1s !important;
+}
+.delay-2 {
+  animation-delay: 0.2s !important;
+}
+.delay-3 {
+  animation-delay: 0.3s !important;
+}
+.delay-4 {
+  animation-delay: 0.4s !important;
+}
+.delay-5 {
+  animation-delay: 0.5s !important;
+}
+.delay-6 {
+  animation-delay: 0.6s !important;
+}
+.delay-7 {
+  animation-delay: 0.7s !important;
+}
+.delay-8 {
+  animation-delay: 0.8s !important;
+}
+.delay-9 {
+  animation-delay: 0.9s !important;
+}
+.delay-10 {
+  animation-delay: 1s !important;
+}
 
 @keyframes ani_down {
-  from{
-    opacity: 0;transform: translateY(-100%);
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
   }
-  to{
-    opacity: 1;transform: translateY(0);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 @keyframes fade_up {
-  from{
-    opacity: 0;transform: translateY(30px);
+  from {
+    opacity: 0;
+    transform: translateY(30px);
   }
-  to{
-    opacity: 1;transform: translateY(0);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 @keyframes fade_right {
-  from{
-    opacity: 0;transform: translateX(-30px);
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
   }
-  to{
-    opacity: 1;transform: translateX(0);
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 @keyframes fade_in {
-  from{
+  from {
     opacity: 0;
   }
-  to{
+  to {
     opacity: 1;
   }
 }

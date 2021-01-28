@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
 import ImgUpload from "./ImgUpload";
-import { Form, Button, Input, Radio, Checkbox, Row, Divider, Switch } from "antd";
+import {
+  Form,
+  Button,
+  Input,
+  Radio,
+  Checkbox,
+  Row,
+  Divider,
+  Switch,
+} from "antd";
 import firebase from "../../firebase";
 import styled from "styled-components";
 import ModifyModal from "./ModifyModal";
@@ -12,7 +21,7 @@ export const ProdList = styled.div`
   .list {
     animation-delay: 1s;
     margin: 10px 8px;
-    width: calc(12.5% - 16px);
+    width: calc(16.66% - 16px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -102,11 +111,11 @@ function AdminProd() {
   const [ItemChange, setItemChange] = useState(0);
   const [ProdItem, setProdItem] = useState([]);
 
-//정렬 라디오버튼
-const [CateRadio, setCateRadio] = useState("all");
-const itemSort = (e) => {
-  setCateRadio(e.target.value);
-};  
+  //정렬 라디오버튼
+  const [CateRadio, setCateRadio] = useState("all");
+  const itemSort = (e) => {
+    setCateRadio(e.target.value);
+  };
   useEffect(() => {
     let mounted = true;
     if (mounted) {
@@ -139,7 +148,7 @@ const itemSort = (e) => {
     return function cleanup() {
       mounted = false;
     };
-  }, [ItemChange,CateRadio]);
+  }, [ItemChange, CateRadio]);
 
   const [ImgFile, setImgFile] = useState();
   const onImgFile = (e) => {
@@ -148,7 +157,6 @@ const itemSort = (e) => {
 
   // submit
   const onSubmitProd = async (values) => {
-
     if (isNaN(values.price)) {
       alert("가격은 숫자만 입력해 주세요");
       return;
@@ -213,117 +221,128 @@ const itemSort = (e) => {
     setOnModal(false);
     setItemChange((pre) => pre + 1);
   };
-  
-  const [ProdRegist, setProdRegist] = useState(true)
+
+  const [ProdRegist, setProdRegist] = useState(true);
   const ProdRegistToggle = () => {
-    setProdRegist(!ProdRegist)
-  }
+    setProdRegist(!ProdRegist);
+  };
 
   return (
     <>
-      <div className="flex-box a-center" style={{marginBottom:"10px"}}>
-      <h3 className="title" style={{margin:"0 10px 0 0"}}>상품등록</h3>
-      <Switch 
-         onChange={ProdRegistToggle}
-         checkedChildren="off" unCheckedChildren="on" defaultChecked
-      />
+      <div className="flex-box a-center" style={{ marginBottom: "10px" }}>
+        <h3 className="title" style={{ margin: "0 10px 0 0" }}>
+          상품등록
+        </h3>
+        <Switch
+          onChange={ProdRegistToggle}
+          checkedChildren="off"
+          unCheckedChildren="on"
+          defaultChecked
+        />
       </div>
-      {ProdRegist &&
-      <Form className="admin-prod-form" onFinish={onSubmitProd}>
-        <div
-          className="ant-row ant-form-item ant-form-item-has-success"
-          style={{ alignItems: "center" }}
-        >
-          <div className="ant-col ant-form-item-label">
-            <label htmlFor="category" className="ant-form-item-required">
-              이미지
-            </label>
+      {ProdRegist && (
+        <Form className="admin-prod-form" onFinish={onSubmitProd}>
+          <div
+            className="ant-row ant-form-item ant-form-item-has-success"
+            style={{ alignItems: "center" }}
+          >
+            <div className="ant-col ant-form-item-label">
+              <label htmlFor="category" className="ant-form-item-required">
+                이미지
+              </label>
+            </div>
+            <ImgUpload onImgFile={onImgFile} />
           </div>
-          <ImgUpload onImgFile={onImgFile} />
-        </div>
-        <Form.Item
-          name="category"
-          label="카테고리"
-          rules={[{ required: true, message: "카테고리를 선택해 주세요" }]}
-        >
-          <Radio.Group>
-            <Radio.Button value="커피">커피</Radio.Button>
-            <Radio.Button value="라떼">라떼</Radio.Button>
-            <Radio.Button value="에이드">에이드</Radio.Button>
-            <Radio.Button value="차">차</Radio.Button>
-            <Radio.Button value="프로틴">프로틴</Radio.Button>
-            <Radio.Button value="스낵">스낵</Radio.Button>
-            <Radio.Button value="주스">주스</Radio.Button>
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item
-          name="name"
-          label="상품명"
-          rules={[
-            {
-              required: true,
-              message: "상품명을 입력해 주세요",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          name="hot"
-          label="온도"
-          rules={[{ required: true, message: "온도를 선택해 주세요" }]}
-        >
-          <Radio.Group>
-            <Radio.Button value="hot & ice">hot & ice</Radio.Button>
-            <Radio.Button value="hot only">hot only</Radio.Button>
-            <Radio.Button value="ice only">ice only</Radio.Button>
-            <Radio.Button value="etc">etc</Radio.Button>
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item
-          name="kal"
-          label="칼로리"
-          rules={[
-            {
-              required: true,
-              message: "칼로리를 입력해 주세요",
-            },
-          ]}
-        >
-          <Input className="sm-input" />
-        </Form.Item>
-        <Form.Item
-          name="price"
-          label="가격"
-          rules={[
-            {
-              required: true,
-              message: "가격을 입력해 주세요",
-            },
-          ]}
-        >
-          <Input className="sm-input" type="text" />
-        </Form.Item>
+          <Form.Item
+            name="category"
+            label="카테고리"
+            rules={[{ required: true, message: "카테고리를 선택해 주세요" }]}
+          >
+            <Radio.Group>
+              <Radio.Button value="커피">커피</Radio.Button>
+              <Radio.Button value="라떼">라떼</Radio.Button>
+              <Radio.Button value="에이드">에이드</Radio.Button>
+              <Radio.Button value="차">차</Radio.Button>
+              <Radio.Button value="프로틴">프로틴</Radio.Button>
+              <Radio.Button value="스낵">스낵</Radio.Button>
+              <Radio.Button value="주스">주스</Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+          <Form.Item
+            name="name"
+            label="상품명"
+            rules={[
+              {
+                required: true,
+                message: "상품명을 입력해 주세요",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="hot"
+            label="온도"
+            rules={[{ required: true, message: "온도를 선택해 주세요" }]}
+          >
+            <Radio.Group>
+              <Radio.Button value="hot & ice">hot & ice</Radio.Button>
+              <Radio.Button value="hot only">hot only</Radio.Button>
+              <Radio.Button value="ice only">ice only</Radio.Button>
+              <Radio.Button value="etc">etc</Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+          <Form.Item
+            name="kal"
+            label="칼로리"
+            rules={[
+              {
+                required: true,
+                message: "칼로리를 입력해 주세요",
+              },
+            ]}
+          >
+            <Input className="sm-input" />
+          </Form.Item>
+          <Form.Item
+            name="price"
+            label="가격"
+            rules={[
+              {
+                required: true,
+                message: "가격을 입력해 주세요",
+              },
+            ]}
+          >
+            <Input className="sm-input" type="text" />
+          </Form.Item>
 
-        <Form.Item name="add" label="추가">
-          <Checkbox.Group>
-            <Row>
-                <Checkbox value="버블" style={{ lineHeight: '32px' }}>
+          <Form.Item name="add" label="추가">
+            <Checkbox.Group>
+              <Row>
+                <Checkbox value="버블" style={{ lineHeight: "32px" }}>
                   버블
                 </Checkbox>
-                <Checkbox value="샷" style={{ lineHeight: '32px' }}>
+                <Checkbox value="샷" style={{ lineHeight: "32px" }}>
                   샷
                 </Checkbox>
-            </Row>
-          </Checkbox.Group>
-        </Form.Item>
-        <div style={{width:"100%",maxWidth:"250px",textAlign:"center"}}>
-        <Button htmlType="submit" style={{width:"100%"}} type="primary" size="large">
-          등록하기
-        </Button>
-        </div>
-      </Form>
-      }
+              </Row>
+            </Checkbox.Group>
+          </Form.Item>
+          <div
+            style={{ width: "100%", maxWidth: "250px", textAlign: "center" }}
+          >
+            <Button
+              htmlType="submit"
+              style={{ width: "100%" }}
+              type="primary"
+              size="large"
+            >
+              등록하기
+            </Button>
+          </div>
+        </Form>
+      )}
       <Divider />
       <h3 className="title">상품리스트</h3>
       <div className="menuCategory">

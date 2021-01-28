@@ -15,8 +15,9 @@ import { Layout } from "antd";
 import firebase from "./firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, clearUser } from "./redux/actions/user_action";
+import Logo from "./img/logo.svg";
 
-const { Sider, Content } = Layout;
+const { Sider, Content, Header } = Layout;
 function App(props) {
   let history = useHistory();
   let dispatch = useDispatch();
@@ -36,12 +37,21 @@ function App(props) {
     return (
       <>
         <Layout>
-          <Sider className="nav-wrap">
-            <Nav />
-          </Sider>
-          <Content className="content-box">
-            <Loading />
-          </Content>
+          <Header className="header-box">
+            <a href="/">
+              <img className="top-logo" src={Logo} alt="" />
+            </a>
+          </Header>
+          <Layout>
+            <div className="content-box">
+              <Sider className="nav-wrap">
+                <Nav />
+              </Sider>
+              <Content>
+                <Loading />
+              </Content>
+            </div>
+          </Layout>
         </Layout>
       </>
     );
@@ -49,25 +59,34 @@ function App(props) {
     return (
       <>
         <Layout>
-          <Sider className="nav-wrap">
-            <Nav />
-          </Sider>
-          <Content className="content-box">
-            <Switch>
-              <Route exact path="/" component={Menu} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/join" component={Join} />
-              <Route exact path="/myorder" component={MyOrder} />
-              <Route exact path="/admin" component={Admin} />
-              <Route exact path="/admin/prod" component={AdminProd} />
-              <Route exact path="/admin/order" component={AdminOrder} />
-              <Route
-                exact
-                path="/admin/order_list"
-                component={AdminOrderList}
-              />
-            </Switch>
-          </Content>
+          <Header className="header-box">
+            <a href="/">
+              <img className="top-logo" src={Logo} alt="" />
+            </a>
+          </Header>
+          <Layout>
+            <div className="content-box">
+              <Sider className="nav-wrap">
+                <Nav />
+              </Sider>
+              <Content>
+                <Switch>
+                  <Route exact path="/" component={Menu} />
+                  <Route exact path="/login" component={Login} />
+                  <Route exact path="/join" component={Join} />
+                  <Route exact path="/myorder" component={MyOrder} />
+                  <Route exact path="/admin" component={Admin} />
+                  <Route exact path="/admin/prod" component={AdminProd} />
+                  <Route exact path="/admin/order" component={AdminOrder} />
+                  <Route
+                    exact
+                    path="/admin/order_list"
+                    component={AdminOrderList}
+                  />
+                </Switch>
+              </Content>
+            </div>
+          </Layout>
         </Layout>
       </>
     );
