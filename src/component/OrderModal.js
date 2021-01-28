@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Input } from "antd";
+import { Button, Input, Checkbox } from "antd";
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
@@ -67,8 +67,15 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
   const radioChange = (e) => {
     setradioValue(e.target.value);
   };
+
+
+const [AddCheck, setAddCheck] = useState()
+function onChange(checkedValues) {
+  setAddCheck(checkedValues)
+}
+
   let hotRadio;
-  if (OrderItem.hot === "hot & ice") {
+  if (OrderItem.hot === "hot & ice") {      
     hotRadio = (
       <>
         <input
@@ -99,7 +106,6 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
       <>
         <input
           type="radio"
-          checked
           id="hot"
           name="hot"
           value="hot"
@@ -116,7 +122,6 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
       <>
         <input
           type="radio"
-          checked
           id="ice"
           name="hot"
           value="ice"
@@ -134,6 +139,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
     const nowTime = moment().format("YYYY-MM-DD HH:mm:ss|dddd");
     const timeStamp = new Date().getTime();
     e.preventDefault();
+
     if (!radioValue) {
       alert("온도를 선택해주세요");
       return;
@@ -151,6 +157,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
       amount: parseInt(e.target.amount.value),
       kal: parseInt(OrderItem.kal),
       hot: e.target.hot.value,
+      add:AddCheck,
       category: OrderItem.category,
       timestamp: timeStamp,
     };
@@ -197,6 +204,22 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
             <span className="tit"></span>
             {hotRadio}
           </div>
+          {OrderItem.add &&           
+          <div className="flex-box a-center">
+            <span className="tit">추가</span>
+            <div className="order-check-box">
+              <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
+              {
+                OrderItem.add.map((el,index) => (
+                  <>
+                    <Checkbox key={index} value={el}>{el}</Checkbox>
+                  </>
+                ))
+              }
+              </Checkbox.Group>
+            </div>
+          </div>          
+          }
           <div className="flex-box a-center">
             <span className="tit">기타</span>
             <Input name="etc" type="text" />

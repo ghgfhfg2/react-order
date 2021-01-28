@@ -210,6 +210,9 @@ h3.title::before {
     box-shadow: 0 0 1px #fff, 0 0 2px #228dff, 0 0 2px #228dff, 0 0 3px #228dff; } }
 
 /* 관리자 상품등록 */
+.admin-prod-form {
+  margin-bottom: 30px; }
+
 .admin-prod-form.ant-form-horizontal .ant-form-item-label {
   width: 80px; }
 
@@ -284,6 +287,15 @@ h3.title::before {
     width: 25%;
     flex: auto;
     margin-top: -1px; } }
+
+.order-check-box {
+  display: flex; }
+
+.order-check-box .check {
+  margin-right: 10px; }
+
+.order-check-box .check input {
+  margin-right: 3px; }
 
 @media (max-width: 640px) {
   .content-box {

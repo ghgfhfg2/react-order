@@ -211,6 +211,7 @@ h3.title {
 }
 
 /* 관리자 상품등록 */
+.admin-prod-form{margin-bottom: 30px;}
 .admin-prod-form.ant-form-horizontal .ant-form-item-label {
   width: 80px;
 }
@@ -290,6 +291,15 @@ h3.title {
     }
   }
 }
+
+// 주문
+.order-check-box{
+  display: flex;
+  .check{margin-right: 10px;
+    input{margin-right: 3px;}
+  }
+}
+
 
 // 모바일 //
 @include mobile() {
