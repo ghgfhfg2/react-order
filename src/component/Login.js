@@ -25,7 +25,6 @@ function Login() {
   const [loading, setLoading] = useState(false);
   return (
     <>
-      <div className="center-box">
         <div className="join-form-wrap">
           <h2 className="title center">로그인</h2>
           <form className="join-form" onSubmit={handleSubmit(onSubmit)}>
@@ -52,7 +51,6 @@ function Login() {
             <input type="submit" value="로그인" disabled={loading} />
           </form>
         </div>
-      </div>
     </>
   );
 }

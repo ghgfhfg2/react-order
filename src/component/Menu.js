@@ -85,7 +85,7 @@ function Menu() {
         </div>
         <ProdList>
           {ProdItem.map((item, index) => (
-            <div className="list" key={index}>
+            <div className={`ani-fadein list delay-${index}`} key={index}>
               <div className="img">
                 <span className="kal">{item.kal}kal</span>
                 <img src={item.image} alt="" />

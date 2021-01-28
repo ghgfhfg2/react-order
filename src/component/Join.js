@@ -26,8 +26,9 @@ function Join() {
       await firebase.database().ref("users").child(createdUser.user.uid).set({
         name: createdUser.user.displayName,
         part: createdUser.user.photoURL,
+        email: data.email,
+        role:0
       });
-
       setLoading(false);
     } catch (error) {
       setErrorFromSubmit(error.message);
@@ -43,7 +44,6 @@ function Join() {
   watch("password2");
   return (
     <>
-      <div className="center-box">
         <div className="join-form-wrap">
           <h2 className="title center">회원가입</h2>
           <form className="join-form" onSubmit={handleSubmit(onSubmit)}>
@@ -116,7 +116,6 @@ function Join() {
             <input type="submit" value="회원가입" disabled={loading} />
           </form>
         </div>
-      </div>
     </>
   );
 }

@@ -205,7 +205,7 @@ h3.title::before {
 
 @keyframes neon_blue {
   from {
-    box-shadow: 0 0 1px #fff, 0 0 2px #fff, 0 0 4px #228dff, 0 0 5px #228dff, 0 0 8px #228dff; }
+    box-shadow: 0 0 1px #fff, 0 0 2px #fff, 0 0 4px #228dff, 0 0 5px #228dff, 0 0 8px #228dff; }
   to {
     box-shadow: 0 0 1px #fff, 0 0 2px #228dff, 0 0 2px #228dff, 0 0 3px #228dff; } }
 
@@ -292,3 +292,81 @@ h3.title::before {
     min-width: 0 !important; }
   .admin-prod-form .ant-input {
     max-width: 100%; } }
+
+.ani-fadeup {
+  animation: fade_up 0.6s both; }
+
+.ani-faderight {
+  animation: fade_right 0.6s both; }
+
+.ani-fadein {
+  animation: fade_in 0.4s both; }
+
+.ani-fadein.du-1 {
+  animation-duration: 0.2s; }
+
+.ani-down {
+  animation: ani_down 0.3s both; }
+
+.delay-0 {
+  animation-delay: 0s !important; }
+
+.delay-1 {
+  animation-delay: 0.1s !important; }
+
+.delay-2 {
+  animation-delay: 0.2s !important; }
+
+.delay-3 {
+  animation-delay: 0.3s !important; }
+
+.delay-4 {
+  animation-delay: 0.4s !important; }
+
+.delay-5 {
+  animation-delay: 0.5s !important; }
+
+.delay-6 {
+  animation-delay: 0.6s !important; }
+
+.delay-7 {
+  animation-delay: 0.7s !important; }
+
+.delay-8 {
+  animation-delay: 0.8s !important; }
+
+.delay-9 {
+  animation-delay: 0.9s !important; }
+
+.delay-10 {
+  animation-delay: 1s !important; }
+
+@keyframes ani_down {
+  from {
+    opacity: 0;
+    transform: translateY(-100%); }
+  to {
+    opacity: 1;
+    transform: translateY(0); } }
+
+@keyframes fade_up {
+  from {
+    opacity: 0;
+    transform: translateY(30px); }
+  to {
+    opacity: 1;
+    transform: translateY(0); } }
+
+@keyframes fade_right {
+  from {
+    opacity: 0;
+    transform: translateX(-30px); }
+  to {
+    opacity: 1;
+    transform: translateX(0); } }
+
+@keyframes fade_in {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }

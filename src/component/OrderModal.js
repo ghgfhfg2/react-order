@@ -154,6 +154,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
       category: OrderItem.category,
       timestamp: timeStamp,
     };
+
     try {
       await firebase
         .database()
@@ -171,7 +172,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
 
   return (
     <>
-      <OderModalPopup
+      <OderModalPopup className="ani-fadein du-1"
         posx={posx}
         posy={posy}
         style={{ padding: "12px 15px 15px 15px" }}

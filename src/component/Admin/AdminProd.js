@@ -10,6 +10,7 @@ export const ProdList = styled.div`
   display: flex;
   flex-wrap: wrap;
   .list {
+    animation-delay: 1s;
     margin: 10px 8px;
     width: calc(12.5% - 16px);
     display: flex;
@@ -278,6 +279,16 @@ function AdminProd() {
         >
           <Input className="sm-input" type="text" />
         </Form.Item>
+        <div class="ant-row ant-form-item">
+          <div class="ant-col ant-form-item-label">
+            <label>옵션추가</label>            
+          </div>
+          <div class="ant-form-item-control-input">
+            <div class="ant-form-item-control-input-content">
+            <input class="ant-input sm-input" type="text" id="option_0" value="" />
+          </div>
+          </div>
+        </div>
         <Button htmlType="submit" type="primary" size="large">
           등록하기
         </Button>

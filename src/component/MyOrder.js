@@ -6,10 +6,12 @@ import { commaNumber } from "./CommonFunc";
 import { useSelector } from "react-redux";
 import { OrderBox } from "./Admin/AdminOrder";
 import Loading from "./Loading";
+import { Empty } from 'antd';
 
 function MyOrder() {
   const userInfo = useSelector((state) => state.user.currentUser);
   const [OrderList, setOrderList] = useState([]);
+  const [Nodata, setNodata] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -20,14 +22,14 @@ function MyOrder() {
         .orderByChild("order_uid")
         .equalTo(userInfo.uid)
         .limitToFirst(30)
-        .on("value", (snapshot) => {
+        .on("value", (snapshot) => {          
           let array = [];
           snapshot.forEach(function (item) {
             array.push({
               ...item.val(),
               key: item.key,
             });
-          });
+          });          
           // eslint-disable-next-line array-callback-return
           array.sort((a, b) => {
             if (a.timestamp < b.timestamp) {
@@ -38,6 +40,9 @@ function MyOrder() {
             }
           });
           setOrderList(array);
+          if(array.length === 0){
+              setNodata(true)
+          }
         });
     }
     return function cleanup() {
@@ -84,6 +89,16 @@ function MyOrder() {
         </OrderBox>
       </>
     );
+  }else if(Nodata){
+    return (
+      <>
+        <Empty 
+        description="주문내역이 없습니다."
+        image={Empty.PRESENTED_IMAGE_SIMPLE} 
+        >          
+        </Empty>
+      </>
+    )
   } else {
     return (
       <>
