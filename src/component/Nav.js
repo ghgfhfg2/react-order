@@ -28,6 +28,7 @@ function Nav() {
 
   const handleClick = (e) => {
     setCurrent(e.key);
+    setLeftMenu(!LeftMenu);
   };
 
   const [LeftMenu, setLeftMenu] = useState(false);

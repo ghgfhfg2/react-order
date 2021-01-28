@@ -57,7 +57,6 @@ function MyOrder() {
         <OrderBox>
           {OrderList.map((list, index) => (
             <div className={`list state_${list.order_state}`} key={index}>
-              <span style={{ display: "none" }}>{list.key}</span>
               <div className="prod">
                 <div className="info-box">
                   <span className="info">{list.prod_name}</span>
@@ -69,14 +68,16 @@ function MyOrder() {
                     ""
                   )}
                   <span className="info">{list.amount}개</span>
+                  <div>
                   {
-                  list.add &&
-                  list.add.map((el,index) => (
-                    <>
-                      <span className="info" key={index}>{el}</span>
-                    </>
-                  ))
-                }
+                  list.add[0] &&
+                  <span className="info">{list.add[0]}</span>
+                  }
+                  {
+                  list.add[1] &&
+                  <span className="info">{list.add[1]}</span>
+                  }
+                  </div>
                   {list.order_etc && (
                     <Popover content={list.order_etc} trigger="click">
                       <Button type="default">기타</Button>

@@ -163,11 +163,10 @@ function AdminOrder() {
                 <span className="info">{list.amount}개</span>
                 {
                   list.add &&
-                  list.add.map((el,index) => (
-                    <>
-                      <span className="info" key={index}>{el}</span>
-                    </>
-                  ))
+                  <>
+                  <span className="info">{list.add[0]}</span>
+                  <span className="info">{list.add[1]}</span>
+                  </>
                 }
                 {list.order_etc && (
                   <Popover content={list.order_etc} trigger="click">
