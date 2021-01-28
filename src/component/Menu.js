@@ -32,6 +32,7 @@ function Menu() {
               category: item.val().category,
               image: item.val().image,
               price: item.val().price,
+              add: item.val().add,
             });
           });
           array = array.filter((el) => {

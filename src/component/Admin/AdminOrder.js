@@ -161,6 +161,14 @@ function AdminOrder() {
                   ""
                 )}
                 <span className="info">{list.amount}개</span>
+                {
+                  list.add &&
+                  list.add.map((el,index) => (
+                    <>
+                      <span className="info" key={index}>{el}</span>
+                    </>
+                  ))
+                }
                 {list.order_etc && (
                   <Popover content={list.order_etc} trigger="click">
                     <Button type="default">기타</Button>
