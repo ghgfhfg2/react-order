@@ -70,11 +70,11 @@ function MyOrder() {
                   <span className="info">{list.amount}개</span>
                   <div>
                   {
-                  list.add[0] &&
+                  list.add && list.add[0] &&
                   <span className="info">{list.add[0]}</span>
                   }
                   {
-                  list.add[1] &&
+                  list.add && list.add[1] &&
                   <span className="info">{list.add[1]}</span>
                   }
                   </div>

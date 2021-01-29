@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
 import Nav from "./component/Nav";
 import "./App.css";
@@ -11,10 +11,11 @@ import AdminProd from "./component/Admin/AdminProd";
 import AdminOrder from "./component/Admin/AdminOrder";
 import AdminOrderList from "./component/Admin/AdminOrderList";
 import Loading from "./component/Loading";
-import { Layout } from "antd";
+import { Layout, Button } from "antd";
 import firebase from "./firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, clearUser } from "./redux/actions/user_action";
+import * as antIcon from "react-icons/ai";
 import Logo from "./img/logo.svg";
 
 const { Sider, Content, Header } = Layout;
@@ -33,10 +34,42 @@ function App(props) {
       }
     });
   }, []);
+
+
+// 스크롤 이벤트 핸들러
+const [TopFix, setTopFix] = useState(false)
+const [TopFixLeft, setTopFixLeft] = useState(false)
+const clientHeight = document.documentElement.clientHeight;
+const scrollHeight = document.documentElement.scrollHeight;
+const handleScroll = () => {
+  let scrollTop = document.documentElement.scrollTop;
+  if(scrollTop >= 100){
+    setTopFixLeft(true)
+  }else{
+    setTopFixLeft(false)
+  }
+  if(scrollTop >= 70){
+    setTopFix(true)
+  }else{
+    setTopFix(false)
+  }
+ };
+
+const scrollToTop = (event) => {
+  console.log(event)
+  window.scrollTo(0, 0);
+};
+ 
+ useEffect(() => {
+  window.addEventListener("scroll", handleScroll);
+  return () => {
+    window.removeEventListener("scroll", handleScroll);
+  };
+});  
   if (isLoading) {
     return (
       <>
-        <Layout>
+        <Layout className={(TopFix && "top-fix")}>
           <Header className="header-box">
             <a href="/">
               <img className="top-logo" src={Logo} alt="" />
@@ -44,7 +77,7 @@ function App(props) {
           </Header>
           <Layout>
             <div className="content-box">
-              <Sider className="nav-wrap">
+              <Sider className={"nav-wrap " + (TopFixLeft && "fix")}>
                 <Nav />
               </Sider>
               <Content>
@@ -58,7 +91,7 @@ function App(props) {
   } else {
     return (
       <>
-        <Layout>
+        <Layout className={(TopFix && "top-fix")}>
           <Header className="header-box">
             <a href="/">
               <img className="top-logo" src={Logo} alt="" />
@@ -66,7 +99,7 @@ function App(props) {
           </Header>
           <Layout>
             <div className="content-box">
-              <Sider className="nav-wrap">
+              <Sider className={"nav-wrap " + (TopFixLeft && "fix")}>
                 <Nav />
               </Sider>
               <Content>
@@ -85,6 +118,7 @@ function App(props) {
                   />
                 </Switch>
               </Content>
+              <Button type="primary" shape="circle" className="btn-top-move" icon={<antIcon.AiOutlineArrowUp />} onClick={scrollToTop} />
             </div>
           </Layout>
         </Layout>

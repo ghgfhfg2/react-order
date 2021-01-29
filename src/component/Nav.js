@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Menu } from "antd";
 import * as bsIcon from "react-icons/bs";
+import * as antIcon from "react-icons/ai";
 import firebase from "../firebase";
 import styled from "styled-components";
 const { SubMenu } = Menu;
@@ -82,21 +83,21 @@ function Nav() {
             mode="inline"
           >
             <Menu.Item key="1">
-              <Link to="/">메뉴판</Link>
+              <Link to="/"><antIcon.AiOutlineCoffee />메뉴판</Link>
             </Menu.Item>
             <Menu.Item key="2">
-              <Link to="/myorder">주문내역</Link>
+              <Link to="/myorder"><antIcon.AiOutlineOrderedList />주문내역</Link>
             </Menu.Item>
             {currentUser.uid === "xMIQkuZuh5S7lTjwsBnkcbLi5kF3" && (
-              <SubMenu key="sub1" title="관리자">
+              <SubMenu key="sub1" title="관리자" icon={<antIcon.AiOutlineSetting />}>                
                 <Menu.Item key="3">
-                  <Link to="/admin/prod">상품관리</Link>
+                  <Link to="/admin/prod"><antIcon.AiOutlineAppstoreAdd />상품관리</Link>
                 </Menu.Item>
                 <Menu.Item key="4">
-                  <Link to="/admin/order">주문관리</Link>
+                  <Link to="/admin/order"><antIcon.AiOutlineAlert />주문관리</Link>
                 </Menu.Item>
                 <Menu.Item key="5">
-                  <Link to="/admin/order_list">완료내역</Link>
+                  <Link to="/admin/order_list"><antIcon.AiOutlineFileDone />완료내역</Link>
                 </Menu.Item>
               </SubMenu>
             )}

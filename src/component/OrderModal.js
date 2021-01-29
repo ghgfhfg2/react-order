@@ -207,17 +207,24 @@ function onChange(checkedValues) {
           {OrderItem.add &&           
           <div className="flex-box a-center">
             <span className="tit">추가</span>
+            {OrderItem &&
             <div className="order-check-box">
               <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
               {
-                OrderItem.add.map((el,index) => (
+                OrderItem.add[0] &&
                   <>
-                    <Checkbox key={index} value={el}>{el}</Checkbox>
+                    <Checkbox value={OrderItem.add[0]}>{OrderItem.add[0]}</Checkbox>
                   </>
-                ))
+              }
+              {
+                OrderItem.add[1] &&
+                  <>
+                    <Checkbox value={OrderItem.add[1]}>{OrderItem.add[1]}</Checkbox>
+                  </>
               }
               </Checkbox.Group>
             </div>
+            }
           </div>          
           }
           <div className="flex-box a-center">
