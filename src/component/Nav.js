@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Menu } from "antd";
 import * as bsIcon from "react-icons/bs";
+import * as antIcon from "react-icons/ai";
 import firebase from "../firebase";
 import styled from "styled-components";
 const { SubMenu } = Menu;
@@ -23,11 +24,12 @@ export const BlackBg = styled.div`
 `;
 function Nav() {
   const currentUser = useSelector((state) => state.user.currentUser);
-  
+
   const [current, setCurrent] = useState("1");
 
   const handleClick = (e) => {
     setCurrent(e.key);
+    setLeftMenu(!LeftMenu);
   };
 
   const [LeftMenu, setLeftMenu] = useState(false);
@@ -38,124 +40,129 @@ function Nav() {
   const onLogout = () => {
     firebase.auth().signOut();
   };
-  if(currentUser){
-  return (
-    <>
-      {!LeftMenu && (
-        <bsIcon.BsList className="btn-m-menu" onClick={onMenuHandler} />
-      )}
-      {LeftMenu && (
-        <bsIcon.BsX className="btn-m-close" onClick={onMenuHandler} />
-      )}
-      <div className={"left-nav-menu " + (LeftMenu && "on")}>
-        <div className="nav-top-box">
-          {!currentUser && (
-            <>
-              <Link to="/login">login</Link>
-              <Link to="/join">join</Link>
-            </>
-          )}
-          {currentUser && (
-            <>
-              <div className="flex-box j-center">
-                {currentUser.displayName}님 반갑습니다.
-                <span
-                  onClick={onLogout}
-                  style={{
-                    color: "#1890ff",
-                    cursor: "pointer",
-                    marginLeft: "10px",
-                  }}
-                >
-                  logout
-                </span>
-              </div>
-            </>
-          )}
-        </div>
-        <Menu
-          theme={"light"}
-          onClick={handleClick}
-          defaultOpenKeys={["sub1"]}
-          selectedKeys={[current]}
-          mode="inline"
-        >
-          <Menu.Item key="1">
-            <Link to="/">메뉴판</Link>
-          </Menu.Item>
-          <Menu.Item key="2">
-            <Link to="/myorder">주문내역</Link>
-          </Menu.Item>
-          {currentUser.uid === 'xMIQkuZuh5S7lTjwsBnkcbLi5kF3' &&
-          <SubMenu key="sub1" title="관리자">
-            <Menu.Item key="3">
-              <Link to="/admin/prod">상품관리</Link>
-            </Menu.Item>
-            <Menu.Item key="4">
-              <Link to="/admin/order">주문관리</Link>
-            </Menu.Item>
-            <Menu.Item key="5">
-              <Link to="/admin/order_list">완료내역</Link>
-            </Menu.Item>
-          </SubMenu>
-          }
-        </Menu>
-      </div>
-      <BlackBg className={LeftMenu && "on"} onClick={onMenuHandler} />
-    </>
-  );
-  }else{
+  if (currentUser) {
     return (
       <>
-      {!LeftMenu && (
-        <bsIcon.BsList className="btn-m-menu" onClick={onMenuHandler} />
-      )}
-      {LeftMenu && (
-        <bsIcon.BsX className="btn-m-close" onClick={onMenuHandler} />
-      )}
-      <div className={"left-nav-menu " + (LeftMenu && "on")}>
-        <div className="nav-top-box">
-          {!currentUser && (
-            <>
-              <Link to="/login">login</Link>
-              <Link to="/join">join</Link>
-            </>
-          )}
-          {currentUser && (
-            <>
-              <div className="flex-box j-center">
-                {currentUser.displayName}님 반갑습니다.
-                <span
-                  onClick={onLogout}
-                  style={{
-                    color: "#1890ff",
-                    cursor: "pointer",
-                    marginLeft: "10px",
-                  }}
-                >
-                  logout
-                </span>
-              </div>
-            </>
-          )}
-        </div>
-        <Menu
-          theme={"light"}
-          onClick={handleClick}
-          defaultOpenKeys={["sub1"]}
-          selectedKeys={[current]}
-          mode="inline"
-        >
-          <div style={{
-            height:"100%",
-            display:"flex",alignItems:"center",justifyContent:"center"
-        }}>
-          비회원 사용불가
+        {!LeftMenu && (
+          <bsIcon.BsList className="btn-m-menu" onClick={onMenuHandler} />
+        )}
+        {LeftMenu && (
+          <bsIcon.BsX className="btn-m-close" onClick={onMenuHandler} />
+        )}
+        <div className={"left-nav-menu " + (LeftMenu && "on")}>
+          <div className="nav-top-box">
+            {!currentUser && (
+              <>
+                <Link to="/login">login</Link>
+                <Link to="/join">join</Link>
+              </>
+            )}
+            {currentUser && (
+              <>
+                <div className="flex-box j-center">
+                  {currentUser.displayName}님 반갑습니다.
+                  <span
+                    onClick={onLogout}
+                    style={{
+                      color: "#1890ff",
+                      cursor: "pointer",
+                      marginLeft: "10px",
+                    }}
+                  >
+                    logout
+                  </span>
+                </div>
+              </>
+            )}
           </div>
-        </Menu>
+          <Menu
+            theme={"light"}
+            onClick={handleClick}
+            defaultOpenKeys={["sub1"]}
+            selectedKeys={[current]}
+            mode="inline"
+          >
+            <Menu.Item key="1">
+              <Link to="/"><antIcon.AiOutlineCoffee />메뉴판</Link>
+            </Menu.Item>
+            <Menu.Item key="2">
+              <Link to="/myorder"><antIcon.AiOutlineOrderedList />주문내역</Link>
+            </Menu.Item>
+            {currentUser.uid === "xMIQkuZuh5S7lTjwsBnkcbLi5kF3" && (
+              <SubMenu key="sub1" title="관리자" icon={<antIcon.AiOutlineSetting />}>                
+                <Menu.Item key="3">
+                  <Link to="/admin/prod"><antIcon.AiOutlineAppstoreAdd />상품관리</Link>
+                </Menu.Item>
+                <Menu.Item key="4">
+                  <Link to="/admin/order"><antIcon.AiOutlineAlert />주문관리</Link>
+                </Menu.Item>
+                <Menu.Item key="5">
+                  <Link to="/admin/order_list"><antIcon.AiOutlineFileDone />완료내역</Link>
+                </Menu.Item>
+              </SubMenu>
+            )}
+          </Menu>
+        </div>
+        <BlackBg className={LeftMenu && "on"} onClick={onMenuHandler} />
+      </>
+    );
+  } else {
+    return (
+      <>
+        {!LeftMenu && (
+          <bsIcon.BsList className="btn-m-menu" onClick={onMenuHandler} />
+        )}
+        {LeftMenu && (
+          <bsIcon.BsX className="btn-m-close" onClick={onMenuHandler} />
+        )}
+        <div className={"left-nav-menu " + (LeftMenu && "on")}>
+          <div className="nav-top-box">
+            {!currentUser && (
+              <>
+                <Link to="/login">login</Link>
+                <Link to="/join">join</Link>
+              </>
+            )}
+            {currentUser && (
+              <>
+                <div className="flex-box j-center">
+                  {currentUser.displayName}님 반갑습니다.
+                  <span
+                    onClick={onLogout}
+                    style={{
+                      color: "#1890ff",
+                      cursor: "pointer",
+                      marginLeft: "10px",
+                    }}
+                  >
+                    logout
+                  </span>
+                </div>
+              </>
+            )}
+          </div>
+          <Menu
+            theme={"light"}
+            onClick={handleClick}
+            defaultOpenKeys={["sub1"]}
+            selectedKeys={[current]}
+            mode="inline"
+          >
+            <div
+              style={{
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              비회원 사용불가
+            </div>
+          </Menu>
+          <BlackBg className={LeftMenu && "on"} onClick={onMenuHandler} />
         </div>
       </>
-    )
+    );
   }
 }
 export default Nav;
