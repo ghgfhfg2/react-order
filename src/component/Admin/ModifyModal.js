@@ -30,9 +30,14 @@ export const ModalPopup = styled.div`
   z-index: 100;
   border-radius: 10px;
   background: #fff;
-  transform: translate(-50px, -120%);
+  transform: translate(-50px, -100%);
   left: ${(props) => props.posx}px;
   top: ${(props) => props.posy}px;
+  @media all and (max-width: 640px) {
+    width:80%;max-width:400px;
+    left: 50%;
+    transform: translate(-50%, -100%);
+  }
 `;
 function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
   const [radioValue, setradioValue] = useState();

@@ -19,8 +19,9 @@ export const OderModalPopup = styled.div`
   left: ${(props) => props.posx}px;
   top: ${(props) => props.posy}px;
   @media all and (max-width: 640px) {
+    width:80%;max-width:300px;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -100%);
   }
   .num {
     width: 40px;

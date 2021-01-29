@@ -4,7 +4,7 @@ import { ProdList } from "./Admin/AdminProd";
 import OderModalPopup from "./OrderModal";
 import { commaNumber } from "./CommonFunc";
 import Loading from "./Loading";
-import { Radio, Input } from "antd";
+import { Radio, Input, Empty } from "antd";
 import * as Hangul from 'hangul-js';
 const { Search } = Input;
 
@@ -93,12 +93,9 @@ function Menu() {
     setOnModal(false);
   };
   
-
-
-  if (ProdItem.length) {
-    return (
-      <>
-        <Search 
+  const TopBox = (
+    <>
+    <Search 
         allowClear
         enterButton="검색"
         size="large"
@@ -123,6 +120,13 @@ function Menu() {
             <Radio.Button value="주스">주스</Radio.Button>
           </Radio.Group>
         </div>
+    </>
+  )
+
+  if (ProdItem.length) {
+    return (
+      <>
+        {TopBox}
         <ProdList>
           {ProdItem.map((item, index) => (
             <div className={`ani-fadein list delay-${index}`} key={index}>
@@ -164,37 +168,24 @@ function Menu() {
   } else if(searchInput){
     return (
       <>
-        <Search 
-        allowClear
-        enterButton="검색"
-        size="large"
-        placeholder="실시간 검색(초성가능)" 
-        value={searchInput} 
-        onSearch={onSearch} 
-        onChange={onSearchChange} type="text" />
-        <div className="menuCategory">
-          <Radio.Group
-            className="menuCategory"
-            onChange={itemSort}
-            defaultValue="all"
-            buttonStyle="solid"
-          >
-            <Radio.Button value="all">전체</Radio.Button>
-            <Radio.Button value="커피">커피</Radio.Button>
-            <Radio.Button value="라떼">라떼</Radio.Button>
-            <Radio.Button value="에이드">에이드</Radio.Button>
-            <Radio.Button value="차">차</Radio.Button>
-            <Radio.Button value="프로틴">프로틴</Radio.Button>
-            <Radio.Button value="스낵">스낵</Radio.Button>
-            <Radio.Button value="주스">주스</Radio.Button>
-          </Radio.Group>
+        {TopBox}
+        <div style={{paddingTop:"15px"}}>
+        <Empty 
+          description={
+            <span>
+              검색결과가 없습니다.<br />
+              ※검색어가 제대로 입력된 경우엔 검색버튼을 다시 눌러보세요.
+            </span>
+          }
+          image={Empty.PRESENTED_IMAGE_SIMPLE} 
+        />
         </div>
-        <div>검색결과가 없습니다.</div>
       </>
     )
   } else {
     return (
       <>
+         {TopBox}
         <Loading />
       </>
     );
