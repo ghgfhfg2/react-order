@@ -4,7 +4,8 @@ import { ProdList } from "./Admin/AdminProd";
 import OderModalPopup from "./OrderModal";
 import { commaNumber } from "./CommonFunc";
 import Loading from "./Loading";
-import { Radio } from "antd";
+import { Radio, Input } from "antd";
+import * as Hangul from 'hangul-js';
 
 function Menu() {
   const [ProdItem, setProdItem] = useState([]);
@@ -14,6 +15,15 @@ function Menu() {
   const itemSort = (e) => {
     setCateRadio(e.target.value);
   };
+
+
+  //검색
+  const [searchInput,setSearchInput] = useState('');
+  const onSearchChange = (e) => {
+    setSearchInput(e.target.value)
+  }
+
+
   useEffect(() => {
     let mounted = true;
     if (mounted) {
@@ -41,13 +51,27 @@ function Menu() {
             }
             return el.category === CateRadio;
           });
+
+          if(searchInput != ""){
+            array.forEach(function (item) {
+              var dis = Hangul.disassemble(item.name, true);
+              var cho = dis.reduce(function (prev, elem) {
+                elem = elem[0] ? elem[0] : elem;
+                return prev + elem;
+              }, "");
+              item.diassembled = cho;
+            });
+            array = array.filter(function (item) {
+              return item.diassembled.includes(searchInput)
+            })
+          }
           setProdItem(array);
         });
     }
     return function cleanup() {
       mounted = false;
     };
-  }, [CateRadio]);
+  }, [CateRadio,searchInput]);
 
   const [PosX, setPosX] = useState(0);
   const [PosY, setPosY] = useState(0);
@@ -62,11 +86,13 @@ function Menu() {
   const onFinished = () => {
     setOnModal(false);
   };
+  
+
 
   if (ProdItem.length) {
     return (
       <>
-        <h3 className="title">메뉴판</h3>
+        <Input value={searchInput} onChange={onSearchChange} type="text" />
         <div className="menuCategory">
           <Radio.Group
             className="menuCategory"
@@ -122,6 +148,30 @@ function Menu() {
         )}
       </>
     );
+  } else if(searchInput){
+    return (
+      <>
+        <Input value={searchInput} onChange={onSearchChange} type="text" />
+        <div className="menuCategory">
+          <Radio.Group
+            className="menuCategory"
+            onChange={itemSort}
+            defaultValue="all"
+            buttonStyle="solid"
+          >
+            <Radio.Button value="all">전체</Radio.Button>
+            <Radio.Button value="커피">커피</Radio.Button>
+            <Radio.Button value="라떼">라떼</Radio.Button>
+            <Radio.Button value="에이드">에이드</Radio.Button>
+            <Radio.Button value="차">차</Radio.Button>
+            <Radio.Button value="프로틴">프로틴</Radio.Button>
+            <Radio.Button value="스낵">스낵</Radio.Button>
+            <Radio.Button value="주스">주스</Radio.Button>
+          </Radio.Group>
+        </div>
+        <div>검색결과가 없습니다.</div>
+      </>
+    )
   } else {
     return (
       <>
