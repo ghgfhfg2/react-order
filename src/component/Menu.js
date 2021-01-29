@@ -6,6 +6,7 @@ import { commaNumber } from "./CommonFunc";
 import Loading from "./Loading";
 import { Radio, Input } from "antd";
 import * as Hangul from 'hangul-js';
+const { Search } = Input;
 
 function Menu() {
   const [ProdItem, setProdItem] = useState([]);
@@ -21,6 +22,10 @@ function Menu() {
   const [searchInput,setSearchInput] = useState('');
   const onSearchChange = (e) => {
     setSearchInput(e.target.value)
+  }
+  const [SearchAgain,setSearchAgain] = useState(false)
+  const onSearch = () => {
+    setSearchAgain(!SearchAgain)
   }
 
 
@@ -52,26 +57,27 @@ function Menu() {
             return el.category === CateRadio;
           });
 
-          if(searchInput != ""){
-            array.forEach(function (item) {
-              var dis = Hangul.disassemble(item.name, true);
-              var cho = dis.reduce(function (prev, elem) {
-                elem = elem[0] ? elem[0] : elem;
-                return prev + elem;
-              }, "");
-              item.diassembled = cho;
-            });
-            array = array.filter(function (item) {
-              return item.diassembled.includes(searchInput)
-            })
-          }
+          if(searchInput != ""){              
+              array.forEach(function (item) {
+                var dis = Hangul.disassemble(item.name, true);
+                var cho = dis.reduce(function (prev, elem) {
+                  elem = elem[0] ? elem[0] : elem;
+                  return prev + elem;
+                }, "");
+                item.diassembled = cho;
+              });
+              array = array.filter(function (item) {
+                return item.diassembled.includes(searchInput) || item.name.includes(searchInput)
+              })
+              setProdItem(array);
+            }          
           setProdItem(array);
         });
     }
     return function cleanup() {
       mounted = false;
     };
-  }, [CateRadio,searchInput]);
+  }, [CateRadio,searchInput,SearchAgain]);
 
   const [PosX, setPosX] = useState(0);
   const [PosY, setPosY] = useState(0);
@@ -92,7 +98,14 @@ function Menu() {
   if (ProdItem.length) {
     return (
       <>
-        <Input value={searchInput} onChange={onSearchChange} type="text" />
+        <Search 
+        allowClear
+        enterButton="검색"
+        size="large"
+        placeholder="실시간 검색(초성가능)" 
+        value={searchInput} 
+        onSearch={onSearch} 
+        onChange={onSearchChange} type="text" />
         <div className="menuCategory">
           <Radio.Group
             className="menuCategory"
@@ -151,7 +164,14 @@ function Menu() {
   } else if(searchInput){
     return (
       <>
-        <Input value={searchInput} onChange={onSearchChange} type="text" />
+        <Search 
+        allowClear
+        enterButton="검색"
+        size="large"
+        placeholder="실시간 검색(초성가능)" 
+        value={searchInput} 
+        onSearch={onSearch} 
+        onChange={onSearchChange} type="text" />
         <div className="menuCategory">
           <Radio.Group
             className="menuCategory"

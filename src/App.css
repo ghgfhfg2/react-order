@@ -157,7 +157,7 @@ h3.title::before {
     animation: fade_down 0.2s both; }
   .top-fix .btn-m-menu {
     position: fixed;
-    top: 15px;
+    top: 18px;
     animation: fade_down 0.2s both; } }
 
 .nav-top-box {
