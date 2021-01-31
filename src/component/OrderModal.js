@@ -19,7 +19,8 @@ export const OderModalPopup = styled.div`
   left: ${(props) => props.posx}px;
   top: ${(props) => props.posy}px;
   @media all and (max-width: 640px) {
-    width:80%;max-width:300px;
+    width: 80%;
+    max-width: 300px;
     left: 50%;
     transform: translate(-50%, -100%);
   }
@@ -69,14 +70,13 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
     setradioValue(e.target.value);
   };
 
-
-const [AddCheck, setAddCheck] = useState()
-function onChange(checkedValues) {
-  setAddCheck(checkedValues)
-}
+  const [AddCheck, setAddCheck] = useState();
+  function onChange(checkedValues) {
+    setAddCheck(checkedValues);
+  }
 
   let hotRadio;
-  if (OrderItem.hot === "hot & ice") {      
+  if (OrderItem.hot === "hot & ice") {
     hotRadio = (
       <>
         <input
@@ -158,12 +158,27 @@ function onChange(checkedValues) {
       amount: parseInt(e.target.amount.value),
       kal: parseInt(OrderItem.kal),
       hot: e.target.hot.value,
-      add:AddCheck,
+      add: AddCheck ? AddCheck : null,
       category: OrderItem.category,
       timestamp: timeStamp,
     };
 
     try {
+      await firebase
+        .database()
+        .ref("products")
+        .child(`${OrderItem.uid}/count`)
+        .transaction((pre) => {
+          return pre + 1;
+        });
+      await firebase
+        .database()
+        .ref("users")
+        .child(`${userInfo.uid}/favorite/${OrderItem.name}`)
+        .child("count")
+        .transaction((pre) => {
+          return pre + 1;
+        });
       await firebase
         .database()
         .ref("order")
@@ -180,7 +195,8 @@ function onChange(checkedValues) {
 
   return (
     <>
-      <OderModalPopup className="ani-fadein du-1"
+      <OderModalPopup
+        className="ani-fadein du-1"
         posx={posx}
         posy={posy}
         style={{ padding: "12px 15px 15px 15px" }}
@@ -205,29 +221,31 @@ function onChange(checkedValues) {
             <span className="tit"></span>
             {hotRadio}
           </div>
-          {OrderItem.add &&           
-          <div className="flex-box a-center">
-            <span className="tit">추가</span>
-            {OrderItem &&
-            <div className="order-check-box">
-              <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
-              {
-                OrderItem.add[0] &&
-                  <>
-                    <Checkbox value={OrderItem.add[0]}>{OrderItem.add[0]}</Checkbox>
-                  </>
-              }
-              {
-                OrderItem.add[1] &&
-                  <>
-                    <Checkbox value={OrderItem.add[1]}>{OrderItem.add[1]}</Checkbox>
-                  </>
-              }
-              </Checkbox.Group>
+          {OrderItem.add && (
+            <div className="flex-box a-center">
+              <span className="tit">추가</span>
+              {OrderItem && (
+                <div className="order-check-box">
+                  <Checkbox.Group style={{ width: "100%" }} onChange={onChange}>
+                    {OrderItem.add[0] && (
+                      <>
+                        <Checkbox value={OrderItem.add[0]}>
+                          {OrderItem.add[0]}
+                        </Checkbox>
+                      </>
+                    )}
+                    {OrderItem.add[1] && (
+                      <>
+                        <Checkbox value={OrderItem.add[1]}>
+                          {OrderItem.add[1]}
+                        </Checkbox>
+                      </>
+                    )}
+                  </Checkbox.Group>
+                </div>
+              )}
             </div>
-            }
-          </div>          
-          }
+          )}
           <div className="flex-box a-center">
             <span className="tit">기타</span>
             <Input name="etc" type="text" />

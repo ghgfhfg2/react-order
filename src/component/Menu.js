@@ -5,7 +5,7 @@ import OderModalPopup from "./OrderModal";
 import { commaNumber } from "./CommonFunc";
 import Loading from "./Loading";
 import { Radio, Input, Empty } from "antd";
-import * as Hangul from 'hangul-js';
+import * as Hangul from "hangul-js";
 const { Search } = Input;
 
 function Menu() {
@@ -17,17 +17,15 @@ function Menu() {
     setCateRadio(e.target.value);
   };
 
-
   //검색
-  const [searchInput,setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState("");
   const onSearchChange = (e) => {
-    setSearchInput(e.target.value)
-  }
-  const [SearchAgain,setSearchAgain] = useState(false)
+    setSearchInput(e.target.value);
+  };
+  const [SearchAgain, setSearchAgain] = useState(false);
   const onSearch = () => {
-    setSearchAgain(!SearchAgain)
-  }
-
+    setSearchAgain(!SearchAgain);
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -57,27 +55,30 @@ function Menu() {
             return el.category === CateRadio;
           });
 
-          if(searchInput != ""){              
-              array.forEach(function (item) {
-                var dis = Hangul.disassemble(item.name, true);
-                var cho = dis.reduce(function (prev, elem) {
-                  elem = elem[0] ? elem[0] : elem;
-                  return prev + elem;
-                }, "");
-                item.diassembled = cho;
-              });
-              array = array.filter(function (item) {
-                return item.diassembled.includes(searchInput) || item.name.includes(searchInput)
-              })
-              setProdItem(array);
-            }          
+          if (searchInput !== "") {
+            array.forEach(function (item) {
+              var dis = Hangul.disassemble(item.name, true);
+              var cho = dis.reduce(function (prev, elem) {
+                elem = elem[0] ? elem[0] : elem;
+                return prev + elem;
+              }, "");
+              item.diassembled = cho;
+            });
+            array = array.filter(function (item) {
+              return (
+                item.diassembled.includes(searchInput) ||
+                item.name.includes(searchInput)
+              );
+            });
+            setProdItem(array);
+          }
           setProdItem(array);
         });
     }
     return function cleanup() {
       mounted = false;
     };
-  }, [CateRadio,searchInput,SearchAgain]);
+  }, [CateRadio, searchInput, SearchAgain]);
 
   const [PosX, setPosX] = useState(0);
   const [PosY, setPosY] = useState(0);
@@ -92,36 +93,39 @@ function Menu() {
   const onFinished = () => {
     setOnModal(false);
   };
-  
+
   const TopBox = (
     <>
-    <Search 
+      <Search
+        style={{ marginBottom: "10px" }}
         allowClear
         enterButton="검색"
         size="large"
-        placeholder="실시간 검색(초성가능)" 
-        value={searchInput} 
-        onSearch={onSearch} 
-        onChange={onSearchChange} type="text" />
-        <div className="menuCategory">
-          <Radio.Group
-            className="menuCategory"
-            onChange={itemSort}
-            defaultValue="all"
-            buttonStyle="solid"
-          >
-            <Radio.Button value="all">전체</Radio.Button>
-            <Radio.Button value="커피">커피</Radio.Button>
-            <Radio.Button value="라떼">라떼</Radio.Button>
-            <Radio.Button value="에이드">에이드</Radio.Button>
-            <Radio.Button value="차">차</Radio.Button>
-            <Radio.Button value="프로틴">프로틴</Radio.Button>
-            <Radio.Button value="스낵">스낵</Radio.Button>
-            <Radio.Button value="주스">주스</Radio.Button>
-          </Radio.Group>
-        </div>
+        placeholder="실시간 검색(초성가능)"
+        value={searchInput}
+        onSearch={onSearch}
+        onChange={onSearchChange}
+        type="text"
+      />
+      <div className="menuCategory">
+        <Radio.Group
+          className="menuCategory"
+          onChange={itemSort}
+          defaultValue="all"
+          buttonStyle="solid"
+        >
+          <Radio.Button value="all">전체</Radio.Button>
+          <Radio.Button value="커피">커피</Radio.Button>
+          <Radio.Button value="라떼">라떼</Radio.Button>
+          <Radio.Button value="에이드">에이드</Radio.Button>
+          <Radio.Button value="차">차</Radio.Button>
+          <Radio.Button value="프로틴">프로틴</Radio.Button>
+          <Radio.Button value="스낵">스낵</Radio.Button>
+          <Radio.Button value="주스">주스</Radio.Button>
+        </Radio.Group>
+      </div>
     </>
-  )
+  );
 
   if (ProdItem.length) {
     return (
@@ -165,27 +169,28 @@ function Menu() {
         )}
       </>
     );
-  } else if(searchInput){
+  } else if (searchInput) {
     return (
       <>
         {TopBox}
-        <div style={{paddingTop:"15px"}}>
-        <Empty 
-          description={
-            <span>
-              검색결과가 없습니다.<br />
-              ※검색어가 제대로 입력된 경우엔 검색버튼을 다시 눌러보세요.
-            </span>
-          }
-          image={Empty.PRESENTED_IMAGE_SIMPLE} 
-        />
+        <div style={{ paddingTop: "15px" }}>
+          <Empty
+            description={
+              <span>
+                검색결과가 없습니다.
+                <br />
+                ※검색어가 제대로 입력된 경우엔 검색버튼을 다시 눌러보세요.
+              </span>
+            }
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+          />
         </div>
       </>
-    )
+    );
   } else {
     return (
       <>
-         {TopBox}
+        {TopBox}
         <Loading />
       </>
     );

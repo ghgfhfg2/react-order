@@ -93,7 +93,7 @@ h3.title::before {
 @media all and (min-width: 761px) {
   .ant-layout-sider {
     position: absolute;
-    height: 100%;
+    height: calc(100% - 100px);
     left: 0;
     margin-left: 0; }
   .ant-layout-sider.fix {
@@ -203,7 +203,8 @@ h3.title::before {
   position: relative;
   font-weight: 500; }
 
-.left-nav-menu ul .ant-menu-submenu-title, .left-nav-menu ul li a {
+.left-nav-menu ul .ant-menu-submenu-title,
+.left-nav-menu ul li a {
   display: flex;
   align-items: center; }
 
@@ -313,7 +314,7 @@ h3.title::before {
 
 @keyframes neon_blue {
   from {
-    box-shadow: 0 0 1px #fff, 0 0 2px #fff, 0 0 4px #228dff, 0 0 5px #228dff, 0 0 8px #228dff; }
+    box-shadow: 0 0 1px #fff, 0 0 2px #fff, 0 0 4px #228dff, 0 0 5px #228dff, 0 0 8px #228dff; }
   to {
     box-shadow: 0 0 1px #fff, 0 0 2px #228dff, 0 0 2px #228dff, 0 0 3px #228dff; } }
 
