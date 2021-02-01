@@ -96,7 +96,7 @@ function Nav() {
             </Menu.Item>
             <Menu.Item key="3">
               <Link to="/mymenu">
-                <antIcon.AiOutlineOrderedList />
+                <antIcon.AiOutlineStar />
                 마이메뉴
               </Link>
             </Menu.Item>
