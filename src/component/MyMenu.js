@@ -12,7 +12,7 @@ function MyMenu() {
 
   const [FavorItem, setFavorItem] = useState([]);
   const [ProdItem, setProdItem] = useState([]);
-  const [SortItem, setSortItem] = useState(0);
+  const [SortItem, setSortItem] = useState(false);
 
   let favor = [];
   let favorName = [];
@@ -33,9 +33,8 @@ function MyMenu() {
               });
             });
           });
-        setFavorItem(favor);
-        setSortItem(1);
-        await firebase
+          setFavorItem(favor);
+          await firebase
           .database()
           .ref("products")
           .once("value")
@@ -52,35 +51,39 @@ function MyMenu() {
                 price: item.val().price,
                 add: item.val().add,
               });
-            });
-            array = array.filter((el) => {
-              return favorName.includes(el.name);
-            });
-            console.log(array);
-            console.log(FavorItem);
-            array.map((el, idx) => {
-              console.log(1);
-              return { ...FavorItem[idx], ...el };
-            });
-            array.sort((a, b) => {
-              if (a.count > b.count) {
-                return -1;
-              }
-              if (a.count < b.count) {
-                return 1;
-              }
-              return 0;
-            });
-            console.log(array);
+            }) 
             setProdItem(array);
-          });
+          }); 
+          setSortItem(true);        
+          if(FavorItem && ProdItem){
+            let array = ProdItem.concat()
+              array = array.filter((el) => {
+                return favorName.includes(el.name);
+              });
+              array.map((el, idx) => {
+                return Object.assign(el,FavorItem[idx]);
+              })
+              array.sort((a, b) => {
+                if (a.count > b.count) {
+                  return -1;
+                }
+                if (a.count < b.count) {
+                  return 1;
+                }
+                return 0;
+              });  
+              array = array.slice(0,10)
+              setProdItem(array);                
+        }
       }
       getProdItem();
+
     }
     return function cleanup() {
       mounted = false;
     };
-  }, []);
+  }, [SortItem]);
+
 
   const [PosX, setPosX] = useState(0);
   const [PosY, setPosY] = useState(0);
@@ -99,7 +102,7 @@ function MyMenu() {
   return (
     <>
       <h3 className="title">내가 많이 주문한 메뉴</h3>
-      {ProdItem && (
+      {SortItem ? (        
         <ProdList>
           {ProdItem.map((item, index) => (
             <div className={`ani-fadein list delay-${index}`} key={index}>
@@ -128,7 +131,13 @@ function MyMenu() {
             </div>
           ))}
         </ProdList>
-      )}
+      ) : 
+      (
+        <>
+        <Loading />
+        </>
+      )
+      }
       {OnModal && (
         <OderModalPopup
           onFinished={onFinished}

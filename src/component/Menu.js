@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import firebase from "../firebase";
+import { useSelector } from "react-redux";
 import { ProdList } from "./Admin/AdminProd";
 import OderModalPopup from "./OrderModal";
 import { commaNumber } from "./CommonFunc";
 import Loading from "./Loading";
 import { Radio, Input, Empty } from "antd";
+import * as antIcon from "react-icons/ai";
 import * as Hangul from "hangul-js";
 const { Search } = Input;
 
 function Menu() {
+  const userInfo = useSelector((state) => state.user.currentUser);
   const [ProdItem, setProdItem] = useState([]);
 
   //정렬 라디오버튼
@@ -27,10 +30,37 @@ function Menu() {
     setSearchAgain(!SearchAgain);
   };
 
+
+  //즐찾
+  const [FavorItem, setFavorItem] = useState([]);
+  const [FavorSortItem, setFavorSort] = useState(false);
   useEffect(() => {
     let mounted = true;
     if (mounted) {
-      firebase
+      async function getProdItem() {
+      let favor = []; 
+      let favorName = [];
+      //// 즐찾               
+      await firebase
+      .database()
+      .ref(`users/${userInfo.uid}/favorite`)
+      .orderByChild("add_favor")
+      .equalTo(true)
+      .once("value")
+      .then((snapshot) => {
+        snapshot.forEach(function (item) {
+          favorName.push(item.key);
+          favor.push({
+            name: item.key,
+            add_favor: item.val().add_favor,
+          });
+        });
+        setFavorItem(favor);
+        console.log(favorName)
+      });
+      //// 즐찾
+      
+      await firebase
         .database()
         .ref("products")
         .once("value")
@@ -48,6 +78,19 @@ function Menu() {
               add: item.val().add,
             });
           });
+          setProdItem(array);
+        });   
+        setFavorSort(true); 
+        if(ProdItem.length !== 0){
+        console.log(ProdItem)        
+        let ProdFavor = ProdItem.concat()
+        array = array.filter((el) => {
+          return favorName.includes(el.name);
+        });
+        array = ProdItem.map((el, idx) => {
+          return Object.assign(ProdItem[idx],array[idx]);
+        })
+          console.log(array)
           array = array.filter((el) => {
             if (CateRadio === "all") {
               return el;
@@ -72,13 +115,15 @@ function Menu() {
             });
             setProdItem(array);
           }
-          setProdItem(array);
-        });
-    }
+          setProdItem(array);        
+      }
+      }      
+      getProdItem()
+    }    
     return function cleanup() {
       mounted = false;
     };
-  }, [CateRadio, searchInput, SearchAgain]);
+  }, [CateRadio, searchInput, SearchAgain, FavorSortItem]);
 
   const [PosX, setPosX] = useState(0);
   const [PosY, setPosY] = useState(0);
@@ -93,6 +138,17 @@ function Menu() {
   const onFinished = () => {
     setOnModal(false);
   };
+
+  const addFavor = (item) => {
+    firebase
+      .database()
+      .ref("users")
+      .child(`${userInfo.uid}/favorite/${item.name}`)
+      .child("add_favor")
+      .transaction((pre) => {
+        return !pre;
+      });
+  }
 
   const TopBox = (
     <>
@@ -137,6 +193,7 @@ function Menu() {
               <div className="img">
                 <span className="kal">{item.kal}kal</span>
                 <img src={item.image} alt="" />
+                <antIcon.AiOutlineMeh className="btn-ic-favor" onClick={() => addFavor(item)} />
               </div>
               <div
                 className="admin-box"

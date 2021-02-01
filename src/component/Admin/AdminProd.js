@@ -21,7 +21,7 @@ export const ProdList = styled.div`
   .list {
     animation-delay: 1s;
     margin: 10px 8px;
-    width: calc(16.66% - 16px);
+    width: calc(20% - 16px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
