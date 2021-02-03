@@ -23,12 +23,13 @@ function AdminOrderList() {
         // eslint-disable-next-line array-callback-return
         array.sort((a, b) => {
           if (a.timestamp > b.timestamp) {
-            return 1;
-          }
-          if (a.timestamp < b.timestamp) {
             return -1;
           }
+          if (a.timestamp < b.timestamp) {
+            return 1;
+          }
         });
+        array = array.slice(0,250);
         setOrderList(array);
       });
     }
