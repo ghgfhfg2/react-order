@@ -96,8 +96,45 @@ function AdminOrderList() {
   return (
     <>
       <h3 className="title">완료내역</h3>
-      <Table dataSource={OrderList} columns={columns} pagination={false} 
-      />
+      <table class="fl-table">
+        <thead>
+          <tr>
+            <th scope="col">주문자</th>
+            <th scope="col">상품명</th>
+            <th scope="col">수량</th>
+            <th scope="col">코멘트</th>
+            <th scope="col">주문시간</th>
+            <th scope="col">가격</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+          OrderList.map((list,index) => (
+          <tr key={index}>
+            <td>{list.order_name}</td>
+            <td>{
+              list.hot === 'hot' && "따뜻한 "
+            }
+            {
+              list.hot === 'ice' && "차가운 "
+            }
+            {list.prod_name}
+            {list.hot}
+            </td>
+            <td>{list.amount}</td>
+            <td>{list.order_etc}</td>
+            <td>{list.order_time}</td>
+            <td>{list.price}</td>
+          </tr>
+          ))
+          }
+        </tbody>
+      </table>
+
+
+
+      {/* <Table dataSource={OrderList} columns={columns} pagination={false} 
+      /> */}
      
     </>
   );

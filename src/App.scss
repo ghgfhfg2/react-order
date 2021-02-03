@@ -90,6 +90,7 @@ h3.title {
     left: 0;
     margin-left: 0;
     &.fix {
+      height: 100%;
       top: 0;
       position: fixed;
     }

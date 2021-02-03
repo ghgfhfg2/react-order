@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
 import firebase from "../firebase";
-import { useSelector } from "react-redux";
 import { ProdList } from "./Admin/AdminProd";
 import OderModalPopup from "./OrderModal";
 import { commaNumber } from "./CommonFunc";
 import Loading from "./Loading";
 import { Radio, Input, Empty } from "antd";
-import * as antIcon from "react-icons/ai";
 import * as Hangul from "hangul-js";
 const { Search } = Input;
+const _ = require("lodash");
 
 function Menu() {
-  const userInfo = useSelector((state) => state.user.currentUser);
   const [ProdItem, setProdItem] = useState([]);
 
   //정렬 라디오버튼
@@ -30,100 +28,63 @@ function Menu() {
     setSearchAgain(!SearchAgain);
   };
 
-
   //즐찾
-  const [FavorItem, setFavorItem] = useState([]);
-  const [FavorSortItem, setFavorSort] = useState(false);
   useEffect(() => {
     let mounted = true;
     if (mounted) {
       async function getProdItem() {
-      let favor = []; 
-      let favorName = [];
-      //// 즐찾               
-      await firebase
-      .database()
-      .ref(`users/${userInfo.uid}/favorite`)
-      .orderByChild("add_favor")
-      .equalTo(true)
-      .once("value")
-      .then((snapshot) => {
-        snapshot.forEach(function (item) {
-          favorName.push(item.key);
-          favor.push({
-            name: item.key,
-            add_favor: item.val().add_favor,
-          });
-        });
-        setFavorItem(favor);
-        console.log(favorName)
-      });
-      //// 즐찾
-      
-      await firebase
-        .database()
-        .ref("products")
-        .once("value")
-        .then((snapshot) => {
-          let array = [];
-          snapshot.forEach(function (item) {
-            array.push({
-              uid: item.key,
-              name: item.val().name,
-              kal: item.val().kal,
-              hot: item.val().hot,
-              category: item.val().category,
-              image: item.val().image,
-              price: item.val().price,
-              add: item.val().add,
+        await firebase
+          .database()
+          .ref("products")
+          .once("value")
+          .then((snapshot) => {
+            let array = [];
+            snapshot.forEach(function (item) {
+              array.push({
+                uid: item.key,
+                name: item.val().name,
+                kal: item.val().kal,
+                hot: item.val().hot,
+                category: item.val().category,
+                image: item.val().image,
+                price: item.val().price,
+                add: item.val().add,
+              });
             });
-          });
-          setProdItem(array);
-        });   
-        setFavorSort(true); 
-        if(ProdItem.length !== 0){
-        console.log(ProdItem)        
-        let ProdFavor = ProdItem.concat()
-        array = array.filter((el) => {
-          return favorName.includes(el.name);
-        });
-        array = ProdItem.map((el, idx) => {
-          return Object.assign(ProdItem[idx],array[idx]);
-        })
-          console.log(array)
-          array = array.filter((el) => {
-            if (CateRadio === "all") {
-              return el;
-            }
-            return el.category === CateRadio;
-          });
-
-          if (searchInput !== "") {
-            array.forEach(function (item) {
-              var dis = Hangul.disassemble(item.name, true);
-              var cho = dis.reduce(function (prev, elem) {
-                elem = elem[0] ? elem[0] : elem;
-                return prev + elem;
-              }, "");
-              item.diassembled = cho;
-            });
-            array = array.filter(function (item) {
-              return (
-                item.diassembled.includes(searchInput) ||
-                item.name.includes(searchInput)
-              );
+            array = array.filter((el) => {
+              if (CateRadio === "all") {
+                return el;
+              }
+              return el.category === CateRadio;
             });
             setProdItem(array);
-          }
-          setProdItem(array);        
+          });
+
+        if (searchInput !== "") {
+          let array = _.cloneDeep(ProdItem);
+          array.forEach(function (item) {
+            var dis = Hangul.disassemble(item.name, true);
+            var cho = dis.reduce(function (prev, elem) {
+              elem = elem[0] ? elem[0] : elem;
+              return prev + elem;
+            }, "");
+            item.diassembled = cho;
+          });
+          array = array.filter(function (item) {
+            return (
+              item.diassembled.includes(searchInput) ||
+              item.name.includes(searchInput)
+            );
+          });
+          setProdItem(array);
+        }
       }
-      }      
-      getProdItem()
-    }    
+      getProdItem();
+    }
     return function cleanup() {
       mounted = false;
     };
-  }, [CateRadio, searchInput, SearchAgain, FavorSortItem]);
+  }, [CateRadio, searchInput, SearchAgain]);
 
   const [PosX, setPosX] = useState(0);
   const [PosY, setPosY] = useState(0);
@@ -138,17 +99,6 @@ function Menu() {
   const onFinished = () => {
     setOnModal(false);
   };
-
-  const addFavor = (item) => {
-    firebase
-      .database()
-      .ref("users")
-      .child(`${userInfo.uid}/favorite/${item.name}`)
-      .child("add_favor")
-      .transaction((pre) => {
-        return !pre;
-      });
-  }
 
   const TopBox = (
     <>
@@ -193,7 +143,6 @@ function Menu() {
               <div className="img">
                 <span className="kal">{item.kal}kal</span>
                 <img src={item.image} alt="" />
-                <antIcon.AiOutlineMeh className="btn-ic-favor" onClick={() => addFavor(item)} />
               </div>
               <div
                 className="admin-box"

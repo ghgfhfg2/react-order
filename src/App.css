@@ -97,6 +97,7 @@ h3.title::before {
     left: 0;
     margin-left: 0; }
   .ant-layout-sider.fix {
+    height: 100%;
     top: 0;
     position: fixed; } }
 

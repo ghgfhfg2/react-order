@@ -32,6 +32,7 @@ function Login() {
   const onInputPw = (e) => {
     setInputPw(e.target.value);
   };
+
   return (
     <>
       <div className="join-form-wrap">

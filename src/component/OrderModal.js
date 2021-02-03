@@ -140,11 +140,12 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
     const nowTime = moment().format("YYYY-MM-DD HH:mm:ss|dddd");
     const timeStamp = new Date().getTime();
     e.preventDefault();
-
-    if (!radioValue) {
-      alert("온도를 선택해주세요");
-      return;
-    }
+    if(e.target.hot) {
+      if (!radioValue) {
+        alert("온도를 선택해주세요");
+        return;
+      }
+    };
     let values = {
       order_uid: userInfo.uid,
       order_email: userInfo.email,
@@ -157,7 +158,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
       price: OrderItem.price * e.target.amount.value,
       amount: parseInt(e.target.amount.value),
       kal: parseInt(OrderItem.kal),
-      hot: e.target.hot.value,
+      hot: e.target.hot ? e.target.hot.value : "",
       add: AddCheck ? AddCheck : null,
       category: OrderItem.category,
       timestamp: timeStamp,
