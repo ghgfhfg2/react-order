@@ -101,14 +101,9 @@ export const OrderBox = styled.div`
 
 function AdminOrder() {
   const jumunSrc = src;
-
-  const soundOn = (src) => {
-    const Sound = new Howl({
-      src: [src],
-    });
-    Sound.play();
-    console.log(1);
-  };
+  const Sound = new Howl({
+    src: [jumunSrc],
+  });
 
   const [OrderList, setOrderList] = useState([]);
   useEffect(() => {
@@ -137,7 +132,7 @@ function AdminOrder() {
             }
           });
           setOrderList(array);
-          soundOn(jumunSrc);
+          Sound.play();
         });
     }
     return function cleanup() {
