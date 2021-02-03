@@ -1,9 +1,11 @@
-import { Button } from "antd";
 import React, { useState, useEffect } from "react";
+import { Button } from "antd";
 import styled from "styled-components";
 import firebase from "../../firebase";
 import { Popover } from "antd";
 import { commaNumber } from "../CommonFunc";
+import { Howl } from "howler";
+import src from "../../jumun.mp3";
 
 export const OrderBox = styled.div`
   width: 100%;
@@ -98,6 +100,16 @@ export const OrderBox = styled.div`
 `;
 
 function AdminOrder() {
+  const jumunSrc = src;
+
+  const soundOn = (src) => {
+    const Sound = new Howl({
+      src: [src],
+    });
+    Sound.play();
+    console.log(1);
+  };
+
   const [OrderList, setOrderList] = useState([]);
   useEffect(() => {
     let mounted = true;
@@ -125,12 +137,14 @@ function AdminOrder() {
             }
           });
           setOrderList(array);
+          soundOn(jumunSrc);
         });
     }
     return function cleanup() {
       mounted = false;
     };
   }, []);
+
   const stateChange = (key) => {
     if (window.confirm("완료하시겠습니까?")) {
       firebase.database().ref("order").child(key).update({
@@ -161,13 +175,12 @@ function AdminOrder() {
                   ""
                 )}
                 <span className="info">{list.amount}개</span>
-                {
-                  list.add &&
+                {list.add && (
                   <>
-                  <span className="info">{list.add[0]}</span>
-                  <span className="info">{list.add[1]}</span>
+                    <span className="info">{list.add[0]}</span>
+                    <span className="info">{list.add[1]}</span>
                   </>
-                }
+                )}
                 {list.order_etc && (
                   <Popover content={list.order_etc} trigger="click">
                     <Button type="default">기타</Button>
