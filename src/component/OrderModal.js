@@ -164,7 +164,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
       timestamp: timeStamp,
     };
 
-    try {
+    try {      
       await firebase
         .database()
         .ref("products")
@@ -187,6 +187,12 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
         .set({
           ...values,
         });
+      await firebase
+        .database()
+        .ref("order_count")
+        .transaction((pre) => {
+          return pre + 1;
+      });  
       alert("주문에 성공했습니다.");
       onFinished();
     } catch (error) {
