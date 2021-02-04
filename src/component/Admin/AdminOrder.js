@@ -9,6 +9,9 @@ import src1 from "../../jumun.mp3";
 import src2 from "../../jumun2.mp3";
 import src3 from "../../jumun3.mp3";
 import src4 from "../../jumun4.mp3";
+import src5 from "../../pling.mp3";
+import src6 from "../../dding.mp3";
+import src7 from "../../alert.mp3";
 
 export const OrderBox = styled.div`
   width: 100%;
@@ -191,6 +194,9 @@ function AdminOrder() {
           <Radio.Button value={src2}>주문-남자</Radio.Button>
           <Radio.Button value={src3}>주문-여자아이</Radio.Button>
           <Radio.Button value={src4}>주문-남자아이</Radio.Button>
+          <Radio.Button value={src5}>효과음1</Radio.Button>
+          <Radio.Button value={src6}>효과음2</Radio.Button>
+          <Radio.Button value={src7}>효과음3</Radio.Button>
         </Radio.Group>
       </div>
       <OrderBox>
