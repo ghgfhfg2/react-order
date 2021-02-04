@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Button } from "antd";
 import styled from "styled-components";
 import firebase from "../../firebase";
-import { Popover } from "antd";
+import { Popover, Radio } from "antd";
 import { commaNumber } from "../CommonFunc";
 import { Howl } from "howler";
-import src from "../../jumun.mp3";
+import src1 from "../../jumun.mp3";
+import src2 from "../../jumun2.mp3";
+import src3 from "../../jumun3.mp3";
+import src4 from "../../jumun4.mp3";
 
 export const OrderBox = styled.div`
   width: 100%;
@@ -100,9 +103,24 @@ export const OrderBox = styled.div`
 `;
 
 function AdminOrder() {
-  const jumunSrc = src;
+  const [SoundSelect, setSoundSelect] = useState();
+  useEffect(() => {
+    firebase
+      .database()
+      .ref("order")
+      .child("sound")
+      .once("value")
+      .then((snapshot) => {
+        setSoundSelect(snapshot.val());
+      });
+  }, []);
+  const onSoundChange = (e) => {
+    setSoundSelect(e.target.value);
+    firebase.database().ref("order").update({ sound: e.target.value });
+  };
+
   const Sound = new Howl({
-    src: [jumunSrc],
+    src: [SoundSelect],
   });
 
   const [OrderList, setOrderList] = useState([]);
@@ -131,33 +149,30 @@ function AdminOrder() {
               return -1;
             }
           });
-          setOrderList(array);         
+          setOrderList(array);
         });
     }
     return function cleanup() {
+      firebase.database().ref("order").off();
       mounted = false;
-      firebase.database().ref("order").off()
     };
   }, []);
 
-  const [OrderCount, setOrderCount] = useState()
   useEffect(() => {
     let mounted = true;
     if (mounted) {
       firebase
         .database()
-        .ref("order_count")        
+        .ref("order_count")
         .on("value", (snapshot) => {
-          let count = snapshot.val()
-          setOrderCount(count)
-        })
-      Sound.play();
+          Sound.play();
+        });
     }
     return function cleanup() {
+      firebase.database().ref("order_count").off();
       mounted = false;
-      firebase.database().ref("order_count").off()
-    }
-  }, [OrderCount])
+    };
+  }, [SoundSelect]);
 
   const stateChange = (key) => {
     if (window.confirm("완료하시겠습니까?")) {
@@ -170,6 +185,14 @@ function AdminOrder() {
   return (
     <>
       <h3 className="title">주문관리</h3>
+      <div style={{ marginBottom: "15px" }}>
+        <Radio.Group onChange={onSoundChange} value={SoundSelect}>
+          <Radio.Button value={src1}>주문-여자</Radio.Button>
+          <Radio.Button value={src2}>주문-남자</Radio.Button>
+          <Radio.Button value={src3}>주문-여자아이</Radio.Button>
+          <Radio.Button value={src4}>주문-남자아이</Radio.Button>
+        </Radio.Group>
+      </div>
       <OrderBox>
         {OrderList.map((list, index) => (
           <div className={`list state_${list.order_state}`} key={index}>

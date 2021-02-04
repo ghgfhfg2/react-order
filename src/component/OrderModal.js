@@ -15,9 +15,11 @@ export const OderModalPopup = styled.div`
   z-index: 100;
   border-radius: 10px;
   background: #fff;
+  transition: all 0.2s;
   transform: translate(-40%, -90%);
   left: ${(props) => props.posx}px;
   top: ${(props) => props.posy}px;
+  box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.25);
   @media all and (max-width: 640px) {
     width: 80%;
     max-width: 300px;
@@ -140,12 +142,12 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
     const nowTime = moment().format("YYYY-MM-DD HH:mm:ss|dddd");
     const timeStamp = new Date().getTime();
     e.preventDefault();
-    if(e.target.hot) {
+    if (e.target.hot) {
       if (!radioValue) {
         alert("온도를 선택해주세요");
         return;
       }
-    };
+    }
     let values = {
       order_uid: userInfo.uid,
       order_email: userInfo.email,
@@ -164,7 +166,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
       timestamp: timeStamp,
     };
 
-    try {      
+    try {
       await firebase
         .database()
         .ref("products")
@@ -192,7 +194,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
         .ref("order_count")
         .transaction((pre) => {
           return pre + 1;
-      });  
+        });
       alert("주문에 성공했습니다.");
       onFinished();
     } catch (error) {

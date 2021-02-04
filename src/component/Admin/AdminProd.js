@@ -50,14 +50,14 @@ export const ProdList = styled.div`
       }
       .kal {
         position: absolute;
-        left: 0;
-        top: 0;
+        right: 0;
+        bottom: 0;
         background: rgba(255, 255, 255, 0.85);
         display: inline-block;
         z-index: 1;
         padding: 3px 6px;
         font-size: 12px;
-        border-bottom-right-radius: 5px;
+        border-top-left-radius: 5px;
       }
     }
     .txt {
@@ -68,6 +68,7 @@ export const ProdList = styled.div`
       .name {
         font-weight: bold;
         font-size: 15px;
+        margin: 3px 0 2px 0;
       }
     }
     .hot {
@@ -173,11 +174,11 @@ function AdminProd() {
         .ref("products")
         .child(`prod_image/${uuid()}`)
         .put(file, metadata);
-      let downloadURL = await uploadTaskSnapshot.ref.getDownloadURL();     
-      if(!values.add){
-        values.add = ""
-      } 
-      values.sort_num = parseInt(values.sort_num)
+      let downloadURL = await uploadTaskSnapshot.ref.getDownloadURL();
+      if (!values.add) {
+        values.add = "";
+      }
+      values.sort_num = parseInt(values.sort_num);
       await firebase
         .database()
         .ref("products")
@@ -333,10 +334,7 @@ function AdminProd() {
             </Checkbox.Group>
           </Form.Item>
 
-          <Form.Item
-            name="sort_num"
-            label="순서"            
-          >
+          <Form.Item name="sort_num" label="순서">
             <Input className="sm-input" type="number" />
           </Form.Item>
           <div
