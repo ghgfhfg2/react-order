@@ -33,6 +33,7 @@ function AdminOrderList() {
         });
     }
     return function cleanup() {
+      firebase.database().ref("order").off();
       mounted = false;
     };
   }, []);

@@ -102,28 +102,34 @@ function MyMenu() {
       {SortItem ? (
         <ProdList>
           {ProdItem.map((item, index) => (
-            <div className={`ani-fadein list delay-${index}`} key={index}>
+            <div
+              style={{ cursor: "pointer" }}
+              className={`ani-fadein list delay-${index}`}
+              key={index}
+              onClick={(e) => orderHandler(e, item)}
+            >
               <div className="img">
-                <span className="kal">{item.kal}kal</span>
+                <span style={{ opacity: "0.85" }} className="kal">
+                  {item.kal}kal
+                </span>
                 <img src={item.image} alt="" />
               </div>
-              <div
-                className="admin-box"
-                style={{ padding: "7px 0 41px 0", position: "relative" }}
-              >
+              <div className="admin-box">
                 <div className="txt" style={{ padding: "0 10px" }}>
                   <span className="name">{item.name}</span>
                   <div className="flex-box between a-center">
                     <span className="hot">{item.hot}</span>
-                    <span className="price">{commaNumber(item.price)}원</span>
+                    <span
+                      style={{
+                        textDecoration: "line-through",
+                        color: "#888",
+                      }}
+                      className="price"
+                    >
+                      {commaNumber(item.price)}원
+                    </span>
                   </div>
                 </div>
-                <button
-                  className="order-btn"
-                  onClick={(e) => orderHandler(e, item)}
-                >
-                  주문하기
-                </button>
               </div>
             </div>
           ))}
