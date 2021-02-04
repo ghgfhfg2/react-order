@@ -177,6 +177,7 @@ function AdminProd() {
       if(!values.add){
         values.add = ""
       } 
+      values.sort_num = parseInt(values.sort_num)
       await firebase
         .database()
         .ref("products")
@@ -330,6 +331,13 @@ function AdminProd() {
                 </Checkbox>
               </Row>
             </Checkbox.Group>
+          </Form.Item>
+
+          <Form.Item
+            name="sort_num"
+            label="순서"            
+          >
+            <Input className="sm-input" type="number" />
           </Form.Item>
           <div
             style={{ width: "100%", maxWidth: "250px", textAlign: "center" }}

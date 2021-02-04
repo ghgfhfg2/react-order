@@ -66,7 +66,8 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
       kal: e.target.kal.value,
       category: e.target.category.value,
       hot: e.target.hot.value,
-      add: AddCheck,
+      add: AddCheck ? AddCheck : null,
+      sort_num: e.target.sort_num.value ? parseInt(e.target.sort_num.value) : 9999,
     };
     if (isNaN(values.price)) {
       alert("가격은 숫자만 입력해 주세요");
@@ -290,6 +291,17 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
                 id="_kal"
                 name="kal"
                 defaultValue={ProdItem.kal}
+              />
+            </div>
+            <div className="input-box">
+              <label className="tit" htmlFor="_sort_num">
+                순서
+              </label>
+              <input
+                type="text"
+                id="_sort_num"
+                name="sort_num"
+                defaultValue={ProdItem.sort_num ? ProdItem.sort_num : ""}
               />
             </div>
             <Checkbox.Group onChange={onChange}>

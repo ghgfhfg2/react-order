@@ -36,6 +36,7 @@ function Menu() {
         await firebase
           .database()
           .ref("products")
+          .orderByChild("sort_num")
           .once("value")
           .then((snapshot) => {
             let array = [];
