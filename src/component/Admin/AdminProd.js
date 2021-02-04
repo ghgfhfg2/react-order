@@ -173,8 +173,10 @@ function AdminProd() {
         .ref("products")
         .child(`prod_image/${uuid()}`)
         .put(file, metadata);
-      let downloadURL = await uploadTaskSnapshot.ref.getDownloadURL();
-
+      let downloadURL = await uploadTaskSnapshot.ref.getDownloadURL();     
+      if(!values.add){
+        values.add = ""
+      } 
       await firebase
         .database()
         .ref("products")
