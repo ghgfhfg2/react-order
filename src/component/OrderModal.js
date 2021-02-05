@@ -15,12 +15,16 @@ export const OderModalPopup = styled.div`
   z-index: 100;
   border-radius: 10px;
   background: #fff;
-  transform: translate(-40%, -50%);
+  transition: all 0.2s;
+  transform: translate(-40%, -90%);
   left: ${(props) => props.posx}px;
   top: ${(props) => props.posy}px;
+  box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.25);
   @media all and (max-width: 640px) {
+    width: 80%;
+    max-width: 300px;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -100%);
   }
   .num {
     width: 40px;
@@ -68,14 +72,13 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
     setradioValue(e.target.value);
   };
 
-
-const [AddCheck, setAddCheck] = useState()
-function onChange(checkedValues) {
-  setAddCheck(checkedValues)
-}
+  const [AddCheck, setAddCheck] = useState();
+  function onChange(checkedValues) {
+    setAddCheck(checkedValues);
+  }
 
   let hotRadio;
-  if (OrderItem.hot === "hot & ice") {      
+  if (OrderItem.hot === "hot & ice") {
     hotRadio = (
       <>
         <input
@@ -139,10 +142,11 @@ function onChange(checkedValues) {
     const nowTime = moment().format("YYYY-MM-DD HH:mm:ss|dddd");
     const timeStamp = new Date().getTime();
     e.preventDefault();
-
-    if (!radioValue) {
-      alert("온도를 선택해주세요");
-      return;
+    if (e.target.hot) {
+      if (!radioValue) {
+        alert("온도를 선택해주세요");
+        return;
+      }
     }
     let values = {
       order_uid: userInfo.uid,
@@ -156,8 +160,8 @@ function onChange(checkedValues) {
       price: OrderItem.price * e.target.amount.value,
       amount: parseInt(e.target.amount.value),
       kal: parseInt(OrderItem.kal),
-      hot: e.target.hot.value,
-      add:AddCheck,
+      hot: e.target.hot ? e.target.hot.value : "",
+      add: AddCheck ? AddCheck : null,
       category: OrderItem.category,
       timestamp: timeStamp,
     };
@@ -165,10 +169,31 @@ function onChange(checkedValues) {
     try {
       await firebase
         .database()
+        .ref("products")
+        .child(`${OrderItem.uid}/count`)
+        .transaction((pre) => {
+          return pre + 1;
+        });
+      await firebase
+        .database()
+        .ref("users")
+        .child(`${userInfo.uid}/favorite/${OrderItem.name}`)
+        .child("count")
+        .transaction((pre) => {
+          return pre + 1;
+        });
+      await firebase
+        .database()
         .ref("order")
         .child(uuid())
         .set({
           ...values,
+        });
+      await firebase
+        .database()
+        .ref("order_count")
+        .transaction((pre) => {
+          return pre + 1;
         });
       alert("주문에 성공했습니다.");
       onFinished();
@@ -179,7 +204,8 @@ function onChange(checkedValues) {
 
   return (
     <>
-      <OderModalPopup className="ani-fadein du-1"
+      <OderModalPopup
+        className="ani-fadein du-1"
         posx={posx}
         posy={posy}
         style={{ padding: "12px 15px 15px 15px" }}
@@ -204,29 +230,31 @@ function onChange(checkedValues) {
             <span className="tit"></span>
             {hotRadio}
           </div>
-          {OrderItem.add &&           
-          <div className="flex-box a-center">
-            <span className="tit">추가</span>
-            {OrderItem &&
-            <div className="order-check-box">
-              <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
-              {
-                OrderItem.add[0] &&
-                  <>
-                    <Checkbox value={OrderItem.add[0]}>{OrderItem.add[0]}</Checkbox>
-                  </>
-              }
-              {
-                OrderItem.add[1] &&
-                  <>
-                    <Checkbox value={OrderItem.add[1]}>{OrderItem.add[1]}</Checkbox>
-                  </>
-              }
-              </Checkbox.Group>
+          {OrderItem.add && (
+            <div className="flex-box a-center">
+              <span className="tit">추가</span>
+              {OrderItem && (
+                <div className="order-check-box">
+                  <Checkbox.Group style={{ width: "100%" }} onChange={onChange}>
+                    {OrderItem.add[0] && (
+                      <>
+                        <Checkbox value={OrderItem.add[0]}>
+                          {OrderItem.add[0]}
+                        </Checkbox>
+                      </>
+                    )}
+                    {OrderItem.add[1] && (
+                      <>
+                        <Checkbox value={OrderItem.add[1]}>
+                          {OrderItem.add[1]}
+                        </Checkbox>
+                      </>
+                    )}
+                  </Checkbox.Group>
+                </div>
+              )}
             </div>
-            }
-          </div>          
-          }
+          )}
           <div className="flex-box a-center">
             <span className="tit">기타</span>
             <Input name="etc" type="text" />

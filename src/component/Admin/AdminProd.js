@@ -21,7 +21,7 @@ export const ProdList = styled.div`
   .list {
     animation-delay: 1s;
     margin: 10px 8px;
-    width: calc(16.66% - 16px);
+    width: calc(20% - 16px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -50,14 +50,14 @@ export const ProdList = styled.div`
       }
       .kal {
         position: absolute;
-        left: 0;
-        top: 0;
+        right: 0;
+        bottom: 0;
         background: rgba(255, 255, 255, 0.85);
         display: inline-block;
         z-index: 1;
         padding: 3px 6px;
         font-size: 12px;
-        border-bottom-right-radius: 5px;
+        border-top-left-radius: 5px;
       }
     }
     .txt {
@@ -68,6 +68,7 @@ export const ProdList = styled.div`
       .name {
         font-weight: bold;
         font-size: 15px;
+        margin: 3px 0 2px 0;
       }
     }
     .hot {
@@ -174,7 +175,10 @@ function AdminProd() {
         .child(`prod_image/${uuid()}`)
         .put(file, metadata);
       let downloadURL = await uploadTaskSnapshot.ref.getDownloadURL();
-
+      if (!values.add) {
+        values.add = "";
+      }
+      values.sort_num = parseInt(values.sort_num);
       await firebase
         .database()
         .ref("products")
@@ -328,6 +332,10 @@ function AdminProd() {
                 </Checkbox>
               </Row>
             </Checkbox.Group>
+          </Form.Item>
+
+          <Form.Item name="sort_num" label="순서">
+            <Input className="sm-input" type="number" />
           </Form.Item>
           <div
             style={{ width: "100%", maxWidth: "250px", textAlign: "center" }}

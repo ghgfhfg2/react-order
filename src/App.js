@@ -6,6 +6,7 @@ import Join from "./component/Join";
 import Login from "./component/Login";
 import Menu from "./component/Menu";
 import MyOrder from "./component/MyOrder";
+import MyMenu from "./component/MyMenu";
 import Admin from "./component/Admin/Admin";
 import AdminProd from "./component/Admin/AdminProd";
 import AdminOrder from "./component/Admin/AdminOrder";
@@ -35,41 +36,37 @@ function App(props) {
     });
   }, []);
 
-
-// 스크롤 이벤트 핸들러
-const [TopFix, setTopFix] = useState(false)
-const [TopFixLeft, setTopFixLeft] = useState(false)
-const clientHeight = document.documentElement.clientHeight;
-const scrollHeight = document.documentElement.scrollHeight;
-const handleScroll = () => {
-  let scrollTop = document.documentElement.scrollTop;
-  if(scrollTop >= 100){
-    setTopFixLeft(true)
-  }else{
-    setTopFixLeft(false)
-  }
-  if(scrollTop >= 70){
-    setTopFix(true)
-  }else{
-    setTopFix(false)
-  }
- };
-
-const scrollToTop = (event) => {
-  console.log(event)
-  window.scrollTo(0, 0);
-};
- 
- useEffect(() => {
-  window.addEventListener("scroll", handleScroll);
-  return () => {
-    window.removeEventListener("scroll", handleScroll);
+  // 스크롤 이벤트 핸들러
+  const [TopFix, setTopFix] = useState(false);
+  const [TopFixLeft, setTopFixLeft] = useState(false);
+  const handleScroll = () => {
+    let scrollTop = document.documentElement.scrollTop;
+    if (scrollTop >= 100) {
+      setTopFixLeft(true);
+    } else {
+      setTopFixLeft(false);
+    }
+    if (scrollTop >= 70) {
+      setTopFix(true);
+    } else {
+      setTopFix(false);
+    }
   };
-});  
+
+  const scrollToTop = (event) => {
+    window.scrollTo(0, 0);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  });
   if (isLoading) {
     return (
       <>
-        <Layout className={(TopFix && "top-fix")}>
+        <Layout className={TopFix && "top-fix"}>
           <Header className="header-box">
             <a href="/">
               <img className="top-logo" src={Logo} alt="" />
@@ -91,7 +88,7 @@ const scrollToTop = (event) => {
   } else {
     return (
       <>
-        <Layout className={(TopFix && "top-fix")}>
+        <Layout className={TopFix && "top-fix"}>
           <Header className="header-box">
             <a href="/">
               <img className="top-logo" src={Logo} alt="" />
@@ -108,6 +105,7 @@ const scrollToTop = (event) => {
                   <Route exact path="/login" component={Login} />
                   <Route exact path="/join" component={Join} />
                   <Route exact path="/myorder" component={MyOrder} />
+                  <Route exact path="/mymenu" component={MyMenu} />
                   <Route exact path="/admin" component={Admin} />
                   <Route exact path="/admin/prod" component={AdminProd} />
                   <Route exact path="/admin/order" component={AdminOrder} />
@@ -118,7 +116,13 @@ const scrollToTop = (event) => {
                   />
                 </Switch>
               </Content>
-              <Button type="primary" shape="circle" className="btn-top-move" icon={<antIcon.AiOutlineArrowUp />} onClick={scrollToTop} />
+              <Button
+                type="primary"
+                shape="circle"
+                className="btn-top-move"
+                icon={<antIcon.AiOutlineArrowUp />}
+                onClick={scrollToTop}
+              />
             </div>
           </Layout>
         </Layout>

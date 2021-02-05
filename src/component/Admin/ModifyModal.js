@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "antd";
+import { Button, Checkbox } from "antd";
 import firebase from "../../firebase";
 import styled from "styled-components";
 import uuid from "react-uuid";
@@ -30,9 +30,16 @@ export const ModalPopup = styled.div`
   z-index: 100;
   border-radius: 10px;
   background: #fff;
-  transform: translate(-50px, -120%);
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
+  transform: translate(-50px, -100%);
   left: ${(props) => props.posx}px;
   top: ${(props) => props.posy}px;
+  @media all and (max-width: 640px) {
+    width: 80%;
+    max-width: 400px;
+    left: 50%;
+    transform: translate(-50%, -100%);
+  }
 `;
 function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
   const [radioValue, setradioValue] = useState();
@@ -45,6 +52,7 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
       .child(puid)
       .once("value")
       .then((snapshot) => {
+        console.log(snapshot.val());
         setProdItem(snapshot.val());
         setradioValue(snapshot.val().category);
         setradioValue2(snapshot.val().hot);
@@ -59,6 +67,8 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
       kal: e.target.kal.value,
       category: e.target.category.value,
       hot: e.target.hot.value,
+      add: AddCheck ? AddCheck : null,
+      sort_num: e.target.sort_num.value ? parseInt(e.target.sort_num.value) : 9999,
     };
     if (isNaN(values.price)) {
       alert("가격은 숫자만 입력해 주세요");
@@ -120,6 +130,13 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
   const radioChange2 = (e) => {
     setradioValue2(e.target.value);
   };
+
+  const [AddCheck, setAddCheck] = useState();
+  function onChange(checkedValues) {
+    setAddCheck(checkedValues);
+    console.log(AddCheck);
+  }
+
   const onCancel = () => {
     onFinished();
   };
@@ -130,140 +147,181 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
         <ModalPopup posx={posx} posy={posy}>
           <form className="admin-modify-form" onSubmit={onSubmitProd2}>
             <div className="input-box">
-            <input
-              style={{ display: "none" }}
-              type="file"
-              id="imgFile2"
-              onChange={handleChange2}
-            />
-            <FileLabel2 htmlFor="imgFile2" style={{ marginRight: "5px" }}>
-              {ProdImg2 && <img src={`${ProdImg2}`} alt="" />}
-              {!ProdImg2 && <img src={`${ProdItem.image}`} alt="" />}
-            </FileLabel2>
+              <input
+                style={{ display: "none" }}
+                type="file"
+                id="imgFile2"
+                onChange={handleChange2}
+              />
+              <FileLabel2 htmlFor="imgFile2" style={{ marginRight: "5px" }}>
+                {ProdImg2 && <img src={`${ProdImg2}`} alt="" />}
+                {!ProdImg2 && <img src={`${ProdItem.image}`} alt="" />}
+              </FileLabel2>
             </div>
             <div className="input-box">
-                <input
+              <input
                 type="radio"
                 id="hot1"
                 name="hot"
                 value="hot & ice"
                 checked={radioValue2 === "hot & ice"}
                 onChange={radioChange2}
-                />
-                <label htmlFor="hot1">hot & ice</label>
-                <input
+              />
+              <label htmlFor="hot1">hot & ice</label>
+              <input
                 type="radio"
                 id="hot2"
                 name="hot"
                 value="hot only"
                 checked={radioValue2 === "hot only"}
                 onChange={radioChange2}
-                />
-                <label htmlFor="hot2">hot only</label>
-                <input
+              />
+              <label htmlFor="hot2">hot only</label>
+              <input
                 type="radio"
                 id="hot3"
                 name="hot"
                 value="ice only"
                 checked={radioValue2 === "ice only"}
                 onChange={radioChange2}
-                />
-                <label htmlFor="hot3">ice only</label>
-                <input
+              />
+              <label htmlFor="hot3">ice only</label>
+              <input
                 type="radio"
                 id="hot4"
                 name="hot"
                 value="etc"
                 checked={radioValue2 === "etc"}
                 onChange={radioChange2}
-                />
-                <label htmlFor="hot4">etc</label>
+              />
+              <label htmlFor="hot4">etc</label>
             </div>
             <div className="input-box">
-            <input
-              type="radio"
-              id="cate1"
-              name="category"
-              value="커피"
-              checked={radioValue === "커피"}
-              onChange={radioChange}
-            />
-            <label htmlFor="cate1">커피</label>
-            <input
-              type="radio"
-              id="cate2"
-              name="category"
-              value="라떼"
-              checked={radioValue === "라떼"}
-              onChange={radioChange}
-            />
-            <label htmlFor="cate2">라떼</label>
-            <input
-              type="radio"
-              id="cate3"
-              name="category"
-              value="에이드"
-              checked={radioValue === "에이드"}
-              onChange={radioChange}
-            />
-            <label htmlFor="cate3">에이드</label>
-            <input
-              type="radio"
-              id="cate4"
-              name="category"
-              value="차"
-              checked={radioValue === "차"}
-              onChange={radioChange}
-            />
-            <label htmlFor="cate4">차</label>
-            <input
-              type="radio"
-              id="cate5"
-              name="category"
-              value="프로틴"
-              checked={radioValue === "프로틴"}
-              onChange={radioChange}
-            />
-            <label htmlFor="cate5">에이드</label>
-            <input
-              type="radio"
-              id="cate6"
-              name="category"
-              value="스낵"
-              checked={radioValue === "스낵"}
-              onChange={radioChange}
-            />
-            <label htmlFor="cate6">스낵</label>
-            <input
-              type="radio"
-              id="cate7"
-              name="category"
-              value="주스"
-              checked={radioValue === "주스"}
-              onChange={radioChange}
-            />
-            <label htmlFor="cate7">주스</label>
+              <input
+                type="radio"
+                id="cate1"
+                name="category"
+                value="커피"
+                checked={radioValue === "커피"}
+                onChange={radioChange}
+              />
+              <label htmlFor="cate1">커피</label>
+              <input
+                type="radio"
+                id="cate2"
+                name="category"
+                value="라떼"
+                checked={radioValue === "라떼"}
+                onChange={radioChange}
+              />
+              <label htmlFor="cate2">라떼</label>
+              <input
+                type="radio"
+                id="cate3"
+                name="category"
+                value="에이드"
+                checked={radioValue === "에이드"}
+                onChange={radioChange}
+              />
+              <label htmlFor="cate3">에이드</label>
+              <input
+                type="radio"
+                id="cate4"
+                name="category"
+                value="차"
+                checked={radioValue === "차"}
+                onChange={radioChange}
+              />
+              <label htmlFor="cate4">차</label>
+              <input
+                type="radio"
+                id="cate5"
+                name="category"
+                value="프로틴"
+                checked={radioValue === "프로틴"}
+                onChange={radioChange}
+              />
+              <label htmlFor="cate5">에이드</label>
+              <input
+                type="radio"
+                id="cate6"
+                name="category"
+                value="스낵"
+                checked={radioValue === "스낵"}
+                onChange={radioChange}
+              />
+              <label htmlFor="cate6">스낵</label>
+              <input
+                type="radio"
+                id="cate7"
+                name="category"
+                value="주스"
+                checked={radioValue === "주스"}
+                onChange={radioChange}
+              />
+              <label htmlFor="cate7">주스</label>
             </div>
             <div className="input-box">
-            <label className="tit" htmlFor="_name">이름</label>
-            <input type="text" id="_name" name="name" defaultValue={ProdItem.name} />
+              <label className="tit" htmlFor="_name">
+                이름
+              </label>
+              <input
+                type="text"
+                id="_name"
+                name="name"
+                defaultValue={ProdItem.name}
+              />
             </div>
             <div className="input-box">
-            <label className="tit" htmlFor="_price">가격</label>
-            <input type="text" id="_price" name="price" defaultValue={ProdItem.price} />
+              <label className="tit" htmlFor="_price">
+                가격
+              </label>
+              <input
+                type="text"
+                id="_price"
+                name="price"
+                defaultValue={ProdItem.price}
+              />
             </div>
             <div className="input-box">
-            <label className="tit" htmlFor="_kal">칼로리</label>
-            <input type="text" id="_kal" name="kal" defaultValue={ProdItem.kal} />
+              <label className="tit" htmlFor="_kal">
+                칼로리
+              </label>
+              <input
+                type="text"
+                id="_kal"
+                name="kal"
+                defaultValue={ProdItem.kal}
+              />
             </div>
+            <div className="input-box">
+              <label className="tit" htmlFor="_sort_num">
+                순서
+              </label>
+              <input
+                type="text"
+                id="_sort_num"
+                name="sort_num"
+                defaultValue={ProdItem.sort_num ? ProdItem.sort_num : ""}
+              />
+            </div>
+            <Checkbox.Group onChange={onChange}>
+              <Checkbox value="버블" style={{ lineHeight: "32px" }}>
+                버블
+              </Checkbox>
+              <Checkbox value="샷" style={{ lineHeight: "32px" }}>
+                샷
+              </Checkbox>
+            </Checkbox.Group>
             <div className="btn-box">
-              <Button htmlType="submit" type="primary" style={{ marginRight: "7px" }}>
+              <Button
+                htmlType="submit"
+                type="primary"
+                style={{ marginRight: "7px" }}
+              >
                 수정하기
               </Button>
-              <Button
-                onClick={onCancel}
-                type="default"
-              >
+              <Button onClick={onCancel} type="default">
                 취소
               </Button>
             </div>
