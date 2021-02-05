@@ -315,7 +315,7 @@ h3.title::before {
 
 @keyframes neon_blue {
   from {
-    box-shadow: 0 0 1px #fff, 0 0 2px #fff, 0 0 4px #228dff, 0 0 5px #228dff, 0 0 8px #228dff; }
+    box-shadow: 0 0 1px #fff, 0 0 2px #fff, 0 0 4px #228dff, 0 0 5px #228dff, 0 0 8px #228dff; }
   to {
     box-shadow: 0 0 1px #fff, 0 0 2px #228dff, 0 0 2px #228dff, 0 0 3px #228dff; } }
 

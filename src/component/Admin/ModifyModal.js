@@ -30,6 +30,7 @@ export const ModalPopup = styled.div`
   z-index: 100;
   border-radius: 10px;
   background: #fff;
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
   transform: translate(-50px, -100%);
   left: ${(props) => props.posx}px;
   top: ${(props) => props.posy}px;
