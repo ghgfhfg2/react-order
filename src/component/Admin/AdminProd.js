@@ -24,7 +24,6 @@ export const ProdList = styled.div`
     width: calc(20% - 16px);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     border-radius: 7px;
     box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
     overflow: hidden;
@@ -62,8 +61,10 @@ export const ProdList = styled.div`
     }
     .txt {
       display: flex;
+      flex: 1;
       width: 100%;
       flex-direction: column;
+      justify-content: space-between;
       margin-bottom: 5px;
       .name {
         font-weight: bold;
@@ -87,6 +88,7 @@ export const ProdList = styled.div`
     .admin-box {
       display: flex;
       flex-direction: column;
+      flex: 1;
       align-items: center;
       padding: 7px;
     }
