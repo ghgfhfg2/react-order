@@ -45,8 +45,13 @@ function Menu() {
   };
 
   useEffect(() => {
+    if (!userInfo) {
+      setTimeout(() => {
+        setSearchAgain(!SearchAgain);
+      }, 500);
+    }
     let mounted = true;
-    if (mounted) {
+    if (mounted && userInfo) {
       //즐찾
       async function getProdItem() {
         let favorItem = [];
