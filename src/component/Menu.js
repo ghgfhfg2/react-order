@@ -5,11 +5,14 @@ import OderModalPopup from "./OrderModal";
 import { commaNumber } from "./CommonFunc";
 import Loading from "./Loading";
 import { Radio, Input, Empty } from "antd";
+import * as antIcon from "react-icons/ai";
 import * as Hangul from "hangul-js";
+import { useSelector } from "react-redux";
 const { Search } = Input;
 const _ = require("lodash");
 
 function Menu() {
+  const userInfo = useSelector((state) => state.user.currentUser);
   const [ProdItem, setProdItem] = useState([]);
 
   //정렬 라디오버튼
@@ -23,16 +26,44 @@ function Menu() {
   const onSearchChange = (e) => {
     setSearchInput(e.target.value);
   };
+
   const [SearchAgain, setSearchAgain] = useState(false);
   const onSearch = () => {
     setSearchAgain(!SearchAgain);
   };
 
-  //즐찾
+  const onToggleFavor = (e, name) => {
+    e.currentTarget.classList.toggle("true");
+    firebase
+      .database()
+      .ref("users")
+      .child(userInfo.uid)
+      .child(`favorite/${name}/add_favor`)
+      .transaction((pre) => {
+        return !pre;
+      });
+  };
+
   useEffect(() => {
     let mounted = true;
     if (mounted) {
+      //즐찾
       async function getProdItem() {
+        let favorItem = [];
+        await firebase
+          .database()
+          .ref("users")
+          .child(`${userInfo.uid}/favorite`)
+          .once("value")
+          .then((snapshot) => {
+            snapshot.forEach(function (item) {
+              favorItem.push({
+                name: item.key,
+                add_favor: item.val().add_favor,
+              });
+            });
+          });
+
         await firebase
           .database()
           .ref("products")
@@ -50,8 +81,39 @@ function Menu() {
                 image: item.val().image,
                 price: item.val().price,
                 add: item.val().add,
+                sort_num: item.val().sort_num ? item.val().sort_num : 9999,
               });
             });
+
+            let newFavorItem = [];
+            array.map((el) => {
+              let name = el.name;
+              favorItem.forEach((favor) => {
+                if (favor.name === name) {
+                  newFavorItem.push({
+                    ...favor,
+                    ...el,
+                  });
+                }
+              });
+              return el;
+            });
+            //array = { ...array, ...newFavorItem };
+            newFavorItem.map((el) => {
+              let uid = el.uid;
+              let favor = el.add_favor;
+              array.forEach((el) => {
+                if (el.uid === uid) {
+                  el.add_favor = favor;
+                }
+                return el;
+              });
+            });
+
+            array.sort((a, b) => {
+              return a.sort_num - b.sort_num;
+            });
+
             array = array.filter((el) => {
               if (CateRadio === "all") {
                 return el;
@@ -71,9 +133,12 @@ function Menu() {
             }, "");
             item.diassembled = cho;
           });
+          let arr = searchInput.concat();
+          let search = Hangul.disassemble(arr).join("");
           array = array.filter(function (item) {
             return (
               item.diassembled.includes(searchInput) ||
+              item.diassembled.includes(search) ||
               item.name.includes(searchInput)
             );
           });
@@ -92,10 +157,12 @@ function Menu() {
   const [OnModal, setOnModal] = useState(false);
   const [OrderItem, setOrderItem] = useState();
   const orderHandler = (e, item) => {
-    setOrderItem(item);
-    setPosX(e.clientX);
-    setPosY(e.clientY);
-    setOnModal(true);
+    if (e.target.tagName !== "svg" && e.target.tagName !== "path") {
+      setOrderItem(item);
+      setPosX(e.clientX);
+      setPosY(e.clientY);
+      setOnModal(true);
+    }
   };
   const onFinished = () => {
     setOnModal(false);
@@ -152,11 +219,24 @@ function Menu() {
                 </span>
                 <img src={item.image} alt="" />
               </div>
-              <div className="admin-box">
+              <div className="user-box">
                 <div className="txt" style={{ padding: "0 5px" }}>
-                  <span className="name">{item.name}</span>
+                  <div className="flex-box between">
+                    <span className="name">{item.name}</span>
+                    <span
+                      className={"ic-favor " + item.add_favor}
+                      onClick={(e) => {
+                        onToggleFavor(e, item.name);
+                      }}
+                    >
+                      <antIcon.AiFillStar className="favor" />
+                      <antIcon.AiOutlineStar className="no-favor" />
+                    </span>
+                  </div>
                   <div className="flex-box between a-center">
-                    <span className="hot">{item.hot}</span>
+                    <span className="hot">
+                      {item.hot === "etc" ? "" : item.hot}
+                    </span>
                     <span
                       style={{
                         textDecoration: "line-through",

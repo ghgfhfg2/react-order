@@ -12,7 +12,7 @@ import AdminProd from "./component/Admin/AdminProd";
 import AdminOrder from "./component/Admin/AdminOrder";
 import AdminOrderList from "./component/Admin/AdminOrderList";
 import Loading from "./component/Loading";
-import { Layout, Button } from "antd";
+import { Layout, Button, BackTop } from "antd";
 import firebase from "./firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, clearUser } from "./redux/actions/user_action";
@@ -51,10 +51,6 @@ function App(props) {
     } else {
       setTopFix(false);
     }
-  };
-
-  const scrollToTop = (event) => {
-    window.scrollTo(0, 0);
   };
 
   useEffect(() => {
@@ -116,13 +112,14 @@ function App(props) {
                   />
                 </Switch>
               </Content>
-              <Button
-                type="primary"
-                shape="circle"
-                className="btn-top-move"
-                icon={<antIcon.AiOutlineArrowUp />}
-                onClick={scrollToTop}
-              />
+              <BackTop>
+                <Button
+                  type="primary"
+                  shape="circle"
+                  className="btn-top-move"
+                  icon={<antIcon.AiOutlineArrowUp />}
+                />
+              </BackTop>
             </div>
           </Layout>
         </Layout>
