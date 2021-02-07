@@ -53,8 +53,12 @@ function Nav() {
           <div className="nav-top-box">
             {!currentUser && (
               <>
-                <Link to="/login">login</Link>
-                <Link to="/join">join</Link>
+                <Link to="/login" onClick={onMenuHandler}>
+                  login
+                </Link>
+                <Link to="/join" onClick={onMenuHandler}>
+                  join
+                </Link>
               </>
             )}
             {currentUser && (
@@ -144,8 +148,12 @@ function Nav() {
           <div className="nav-top-box">
             {!currentUser && (
               <>
-                <Link to="/login">login</Link>
-                <Link to="/join">join</Link>
+                <Link to="/login" onClick={onMenuHandler}>
+                  login
+                </Link>
+                <Link to="/join" onClick={onMenuHandler}>
+                  join
+                </Link>
               </>
             )}
             {currentUser && (
