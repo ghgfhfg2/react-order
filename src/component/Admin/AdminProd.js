@@ -24,7 +24,6 @@ export const ProdList = styled.div`
     width: calc(20% - 16px);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     border-radius: 7px;
     box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
     overflow: hidden;
@@ -41,34 +40,67 @@ export const ProdList = styled.div`
       padding-bottom: 75%;
       overflow: hidden;
       position: relative;
-      img {
-        height: 100%;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-      }
-      .kal {
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        background: rgba(255, 255, 255, 0.85);
-        display: inline-block;
-        z-index: 1;
-        padding: 3px 6px;
-        font-size: 12px;
-        border-top-left-radius: 5px;
-      }
     }
-    .txt {
-      display: flex;
-      width: 100%;
-      flex-direction: column;
-      margin-bottom: 5px;
-      .name {
-        font-weight: bold;
-        font-size: 15px;
-        margin: 3px 0 2px 0;
+    img {
+      height: 100%;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .kal {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.85);
+      display: inline-block;
+      z-index: 1;
+      padding: 3px 6px;
+      font-size: 12px;
+      border-top-left-radius: 5px;
+    }
+  }
+  .txt {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    .name {
+      font-weight: bold;
+      font-size: 15px;
+      margin: 3px 0 2px 0;
+    }
+    .ic-favor {
+      margin-top: 7px;
+      margin-left: 5px;
+      flex-shrink: 0;
+      z-index: 10;
+      width: 18px;
+      height: 18px;
+      opacity: 0.3;
+      transition: all 0.2s;
+      svg {
+        width: 100%;
+        height: 100%;
+        display: none;
+      }
+      .no-favor {
+        display: block;
+      }
+      .favor {
+        display: none;
+      }
+      &.true {
+        color: #1890ff;
+        opacity: 1;
+        .no-favor {
+          display: none;
+        }
+        .favor {
+          display: block;
+        }
       }
     }
     .hot {
@@ -78,18 +110,26 @@ export const ProdList = styled.div`
       font-size: 13px;
       color: #1672c9;
     }
-    .admin {
-      display: flex;
-      button {
-        margin: 2px;
-      }
+  }
+  .user-box {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+    padding: 7px 5px;
+  }
+  .admin {
+    display: flex;
+    button {
+      margin: 2px;
     }
-    .admin-box {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 7px;
-    }
+  }
+  .admin-box {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+    padding: 7px;
   }
   @media all and (max-width: 1400px) {
     .list {
