@@ -98,6 +98,7 @@ function Join() {
             >
               <span>이메일</span>
             </label>
+            <span style={{color:"#888",fontSize:"12px",display:"block",paddingLeft:"10px",marginTop:"3px"}}>※ 실제 사용중인 이메일로 가입 바랍니다(비밀번호 재설정 시 필요)</span>
             {errors.email && errors.email.type === "required" && (
               <p>이메일을 입력해 주세요</p>
             )}

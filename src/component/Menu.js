@@ -44,6 +44,7 @@ function Menu() {
       });
   };
 
+  let b_soldout;
   useEffect(() => {
     if (!userInfo) {
       setTimeout(() => {
@@ -55,6 +56,15 @@ function Menu() {
       //즐찾
       async function getProdItem() {
         let favorItem = [];
+        await firebase
+          .database()
+          .ref("soldout")
+          .once("value")
+          .then((snapshot) => {
+            snapshot.forEach((el) => {
+              b_soldout = el.val();
+            });
+          });
         await firebase
           .database()
           .ref("users")
@@ -86,6 +96,8 @@ function Menu() {
                 image: item.val().image,
                 price: parseInt(item.val().price),
                 add: item.val().add,
+                b_soldout: b_soldout,
+                soldout: item.val().soldout,
                 sort_num: item.val().sort_num ? item.val().sort_num : 9999,
               });
             });
@@ -163,6 +175,9 @@ function Menu() {
   const [OrderItem, setOrderItem] = useState();
   const orderHandler = (e, item) => {
     if (e.target.tagName !== "svg" && e.target.tagName !== "path") {
+      if (b_soldout === false) {
+        item.add = "";
+      }
       setOrderItem(item);
       setPosX(e.clientX);
       setPosY(e.clientY);
@@ -213,18 +228,37 @@ function Menu() {
         <ProdList>
           {ProdItem.map((item, index) => (
             <div
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", position: "relative" }}
               className={`ani-fadein list delay-${index}`}
               key={index}
-              onClick={(e) => orderHandler(e, item)}
             >
-              <div className="img">
+              {item.soldout === false && (
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    position: "absolute",
+                    left: "0",
+                    top: "0",
+                    display: "flex",
+                    fontSize: "14px",
+                    color: "#fff",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    background: "rgba(0,0,0,0.5)",
+                    zIndex: "10",
+                  }}
+                >
+                  solout
+                </div>
+              )}
+              <div className="img" onClick={(e) => orderHandler(e, item)}>
                 <span style={{ opacity: "0.85" }} className="kal">
                   {item.kal}kal
                 </span>
                 <img src={item.image} alt="" />
               </div>
-              <div className="user-box">
+              <div className="user-box" onClick={(e) => orderHandler(e, item)}>
                 <div className="txt" style={{ padding: "0 5px" }}>
                   <div className="flex-box between">
                     <span className="name">{item.name}</span>

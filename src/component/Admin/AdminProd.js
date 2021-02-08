@@ -157,9 +157,31 @@ function AdminProd() {
   const itemSort = (e) => {
     setCateRadio(e.target.value);
   };
+
+  const [Soldout, setSoldout] = useState();
+  const SoldoutToggle = () => {
+    setSoldout(!Soldout);
+    firebase
+      .database()
+      .ref("soldout")
+      .child("b_soldout")
+      .transaction((pre) => {
+        return !pre;
+      });
+  };
+
   useEffect(() => {
     let mounted = true;
     if (mounted) {
+      firebase
+        .database()
+        .ref("soldout")
+        .once("value")
+        .then((snapshot) => {
+          snapshot.forEach((el) => {
+            setSoldout(el.val());
+          });
+        });
       firebase
         .database()
         .ref("products")
@@ -175,6 +197,7 @@ function AdminProd() {
               category: item.val().category,
               image: item.val().image,
               price: item.val().price,
+              soldout: true,
             });
           });
           array = array.filter((el) => {
@@ -279,8 +302,8 @@ function AdminProd() {
         </h3>
         <Switch
           onChange={ProdRegistToggle}
-          checkedChildren="off"
-          unCheckedChildren="on"
+          checkedChildren="on"
+          unCheckedChildren="off"
           defaultChecked
         />
       </div>
@@ -373,10 +396,41 @@ function AdminProd() {
               </Row>
             </Checkbox.Group>
           </Form.Item>
-
           <Form.Item name="sort_num" label="순서">
             <Input className="sm-input" type="number" />
           </Form.Item>
+
+          <div className="ant-row ant-form-item">
+            <div className="ant-col ant-form-item-label">
+              <label htmlFor="price">버블품절</label>
+            </div>
+            <div className="ant-col ant-form-item-control">
+              <div className="ant-form-item-control-input">
+                <div className="ant-form-item-control-input-content">
+                  {Soldout === true && (
+                    <>
+                      <Switch
+                        onChange={SoldoutToggle}
+                        checkedChildren="판매"
+                        unCheckedChildren="품절"
+                        defaultChecked
+                      />
+                    </>
+                  )}
+                  {Soldout === false && (
+                    <>
+                      <Switch
+                        onChange={SoldoutToggle}
+                        checkedChildren="판매"
+                        unCheckedChildren="품절"
+                      />
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div
             style={{ width: "100%", maxWidth: "250px", textAlign: "center" }}
           >

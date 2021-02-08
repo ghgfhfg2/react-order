@@ -70,11 +70,11 @@ function MyOrder() {
                   )}
                   <span className="info">{list.amount}개</span>
                   <div>
-                    {list.add && list.add[0] && (
-                      <span className="info">{list.add[0]}</span>
+                    {list.add && (
+                      <span className="info">{list.add}</span>
                     )}
-                    {list.add && list.add[1] && (
-                      <span className="info">{list.add[1]}</span>
+                    {list.add2 && (
+                      <span className="info">{list.add2}</span>
                     )}
                   </div>
                   {list.order_etc && (
@@ -83,7 +83,7 @@ function MyOrder() {
                     </Popover>
                   )}
                 </div>
-                <span>{commaNumber(list.price)}원</span>
+                <span>{commaNumber(parseInt(list.price))}원</span>
               </div>
               <div className="state">
                 <span className="date">
