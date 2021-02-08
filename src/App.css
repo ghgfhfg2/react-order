@@ -17,6 +17,14 @@
   .content-box {
     padding-left: 250px; } }
 
+.bg-box {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.5); }
+
 .ant-layout-content {
   padding: 30px; }
 
@@ -30,6 +38,12 @@
   display: flex;
   justify-content: center;
   align-items: center; }
+
+.center-box.fix {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100; }
 
 .ic-loading {
   position: fixed;

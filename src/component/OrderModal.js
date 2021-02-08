@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Input, Checkbox } from "antd";
+import { Button, Input, Checkbox, Spin } from "antd";
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
@@ -12,7 +12,7 @@ export const OderModalPopup = styled.div`
   padding: 20px;
   border: 1px solid #ddd;
   position: fixed;
-  z-index: 100;
+  z-index: 150;
   border-radius: 10px;
   background: #fff;
   transition: all 0.2s;
@@ -143,7 +143,9 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
   }
 
   // submit
+  const [submitLoading, setsubmitLoading] = useState(false)
   const onSubmitOrder = async (e) => {
+    setsubmitLoading(true)
     const nowTime = moment().format("YYYY-MM-DD HH:mm:ss|dddd");
     const timeStamp = new Date().getTime();
     e.preventDefault();
@@ -217,6 +219,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
         });
       alert("주문에 성공했습니다.");
       onFinished();
+      setsubmitLoading(false)
     } catch (error) {
       alert(error);
     }
@@ -308,6 +311,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
           </div>
           <div className="btn-box">
             <Button
+              disabled={submitLoading}
               htmlType="submit"
               type="primary"
               style={{ marginRight: "5px" }}
@@ -320,6 +324,17 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
           </div>
         </form>
       </OderModalPopup>
+      {
+        !submitLoading && 
+        <>
+        <div className="center-box fix">
+          <div className="bg-box"></div>
+          <Spin         
+            tip="Loading...">
+          </Spin>
+        </div>
+        </>
+      }      
     </>
   );
 }
