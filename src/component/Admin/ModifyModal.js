@@ -52,7 +52,6 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
       .child(puid)
       .once("value")
       .then((snapshot) => {
-        console.log(snapshot.val());
         setProdItem(snapshot.val());
         setradioValue(snapshot.val().category);
         setradioValue2(snapshot.val().hot);
@@ -134,7 +133,6 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
   const [AddCheck, setAddCheck] = useState();
   function onChange(checkedValues) {
     setAddCheck(checkedValues);
-    console.log(AddCheck);
   }
 
   const onCancel = () => {
@@ -312,7 +310,7 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
               <Checkbox value="샷" style={{ lineHeight: "32px" }}>
                 샷
               </Checkbox>
-            </Checkbox.Group>
+            </Checkbox.Group>            
             <div className="btn-box">
               <Button
                 htmlType="submit"

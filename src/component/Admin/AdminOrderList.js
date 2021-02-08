@@ -47,6 +47,7 @@ function AdminOrderList() {
             <th scope="col">주문자</th>
             <th scope="col">상품명</th>
             <th scope="col">수량</th>
+            <th scope="col">추가</th>
             <th scope="col">코멘트</th>
             <th scope="col">주문시간</th>
             <th scope="col">가격</th>
@@ -63,6 +64,7 @@ function AdminOrderList() {
                 {list.hot}
               </td>
               <td>{list.amount}</td>
+              <td>{list.add} {list.add2}</td>
               <td>{list.order_etc}</td>
               <td>{list.order_time}</td>
               <td>{list.price}</td>

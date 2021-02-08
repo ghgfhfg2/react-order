@@ -72,6 +72,11 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
     setradioValue(e.target.value);
   };
 
+  const [radioValue2, setradioValue2] = useState();
+  const radioChange2 = (e) => {
+    setradioValue2(e.target.value);
+  };
+
   const [AddCheck, setAddCheck] = useState();
   function onChange(checkedValues) {
     setAddCheck(checkedValues);
@@ -148,6 +153,16 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
         return;
       }
     }
+    let addPrice
+    if(e.target.shot.value === '샷'){
+      addPrice = 500
+    }
+    if(e.target.shot.value === '샷2'){
+      addPrice = 1000
+    }
+    if(AddCheck){
+      addPrice += 500
+    }
     let values = {
       order_uid: userInfo.uid,
       order_email: userInfo.email,
@@ -157,15 +172,15 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
       order_etc: e.target.etc.value,
       order_state: 0,
       prod_name: OrderItem.name,
-      price: OrderItem.price * e.target.amount.value,
+      price: OrderItem.price * e.target.amount.value + addPrice,
       amount: parseInt(e.target.amount.value),
       kal: parseInt(OrderItem.kal),
       hot: e.target.hot ? e.target.hot.value : "",
       add: AddCheck ? AddCheck : null,
+      add2: e.target.shot ? e.target.shot.value : "",
       category: OrderItem.category,
       timestamp: timeStamp,
-    };
-
+    };    
     try {
       await firebase
         .database()
@@ -231,26 +246,53 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
             {hotRadio}
           </div>
           {OrderItem.add && (
-            <div className="flex-box a-center">
-              <span className="tit">추가</span>
+            <div className="flex-box">
+              <span className="tit" style={{marginTop:"3px"}}>추가</span>
               {OrderItem && (
-                <div className="order-check-box">
+                <div className="order-check-box" style={{flexDirection:"column"}}>
                   <Checkbox.Group style={{ width: "100%" }} onChange={onChange}>
-                    {OrderItem.add[0] && (
+                    
+                    {OrderItem.b_soldout && OrderItem.add.includes('버블') && (                      
                       <>
-                        <Checkbox value={OrderItem.add[0]}>
-                          {OrderItem.add[0]}
+                        <Checkbox value="버블">
+                          버블
                         </Checkbox>
                       </>
                     )}
-                    {OrderItem.add[1] && (
+                    {!OrderItem.b_soldout && OrderItem.add.includes('버블') && (                      
                       <>
-                        <Checkbox value={OrderItem.add[1]}>
-                          {OrderItem.add[1]}
+                        <Checkbox value="버블" disabled>
+                          버블품절
                         </Checkbox>
                       </>
                     )}
                   </Checkbox.Group>
+                  {OrderItem.add.includes('샷') && (
+                    <>
+                    <div className="flex-box a-center" style={{marginTop:"5px"}}>
+                      <input
+                        type="radio"
+                        id="shot"
+                        name="shot"
+                        value="샷"
+                        onChange={radioChange2}                        
+                      />
+                      <label className="radio_ice" htmlFor="shot" style={{marginRight:"5px"}}>
+                        1샷
+                      </label>
+                      <input
+                        type="radio"
+                        id="shot2"
+                        name="shot"
+                        value="샷2"
+                        onChange={radioChange2}
+                      />
+                      <label className="radio_ice" htmlFor="shot2">
+                        2샷
+                      </label>
+                      </div>  
+                    </>
+                  )}
                 </div>
               )}
             </div>

@@ -44,6 +44,7 @@ function Menu() {
       });
   };
 
+  let b_soldout;
   useEffect(() => {
     if (!userInfo) {
       setTimeout(() => {
@@ -55,6 +56,13 @@ function Menu() {
       //즐찾
       async function getProdItem() {
         let favorItem = [];
+        await firebase
+          .database()
+          .ref("products/soldout")
+          .once("value")
+          .then((snapshot) => {
+            b_soldout = snapshot.val().b_soldout;
+          });
         await firebase
           .database()
           .ref("users")
@@ -84,8 +92,9 @@ function Menu() {
                 hot: item.val().hot,
                 category: item.val().category,
                 image: item.val().image,
-                price: item.val().price,
+                price: parseInt(item.val().price),
                 add: item.val().add,
+                b_soldout: b_soldout,
                 sort_num: item.val().sort_num ? item.val().sort_num : 9999,
               });
             });
@@ -163,6 +172,9 @@ function Menu() {
   const [OrderItem, setOrderItem] = useState();
   const orderHandler = (e, item) => {
     if (e.target.tagName !== "svg" && e.target.tagName !== "path") {
+      if(b_soldout === false){
+        item.add = ""
+      }
       setOrderItem(item);
       setPosX(e.clientX);
       setPosY(e.clientY);
@@ -245,7 +257,7 @@ function Menu() {
                     <span
                       style={{
                         textDecoration: "line-through",
-                        color: "#888",
+                        color: "#888"
                       }}
                       className="price"
                     >

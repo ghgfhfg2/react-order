@@ -220,8 +220,8 @@ function AdminOrder() {
                 <span className="info">{list.amount}개</span>
                 {list.add && (
                   <>
-                    <span className="info">{list.add[0]}</span>
-                    <span className="info">{list.add[1]}</span>
+                    <span className="info">{list.add}</span>
+                    <span className="info">{list.add2}</span>
                   </>
                 )}
                 {list.order_etc && (
