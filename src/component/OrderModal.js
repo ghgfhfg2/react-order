@@ -154,11 +154,13 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
       }
     }
     let addPrice
-    if(e.target.shot.value === '샷'){
-      addPrice = 500
-    }
-    if(e.target.shot.value === '샷2'){
-      addPrice = 1000
+    if(e.target.shot){
+      if(e.target.shot.value === '샷'){
+        addPrice = 500
+      }
+      if(e.target.shot.value === '샷2'){
+        addPrice = 1000
+      }
     }
     if(AddCheck){
       addPrice += 500

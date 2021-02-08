@@ -220,7 +220,6 @@ function Menu() {
   );
 
   if (ProdItem.length) {
-    console.log(ProdItem)
     return (
       <>
         {TopBox}
