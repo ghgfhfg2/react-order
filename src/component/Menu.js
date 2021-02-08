@@ -84,7 +84,7 @@ function Menu() {
                 hot: item.val().hot,
                 category: item.val().category,
                 image: item.val().image,
-                price: item.val().price,
+                price: parseInt(item.val().price),
                 add: item.val().add,
                 sort_num: item.val().sort_num ? item.val().sort_num : 9999,
               });
