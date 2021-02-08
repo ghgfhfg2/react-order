@@ -161,7 +161,6 @@ function AdminProd() {
   const [Soldout, setSoldout] = useState()
   const SoldoutToggle = () => {
     setSoldout(!Soldout)
-    console.log(Soldout)
     firebase
     .database()
     .ref("products")

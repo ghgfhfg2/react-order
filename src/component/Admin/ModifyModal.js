@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Checkbox } from "antd";
+import { Button, Checkbox, Switch} from "antd";
 import firebase from "../../firebase";
 import styled from "styled-components";
 import uuid from "react-uuid";
@@ -45,16 +45,22 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
   const [radioValue, setradioValue] = useState();
   const [radioValue2, setradioValue2] = useState();
   const [ProdItem, setProdItem] = useState([]);
+
+  const [Soldout, setSoldout] = useState()
+  const SoldoutToggle = () => {
+    setSoldout(!Soldout)
+  }  
   useEffect(() => {
     firebase
-      .database()
-      .ref("products")
-      .child(puid)
-      .once("value")
-      .then((snapshot) => {
-        setProdItem(snapshot.val());
-        setradioValue(snapshot.val().category);
-        setradioValue2(snapshot.val().hot);
+    .database()
+    .ref("products")
+    .child(puid)
+    .once("value")
+    .then((snapshot) => {
+      setProdItem(snapshot.val());
+      setradioValue(snapshot.val().category);
+      setradioValue2(snapshot.val().hot);
+      setSoldout(snapshot.val().soldout)
       });
   }, [puid]);
 
@@ -68,6 +74,7 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
       hot: e.target.hot.value,
       add: AddCheck ? AddCheck : null,
       sort_num: e.target.sort_num.value ? parseInt(e.target.sort_num.value) : 9999,
+      soldout:Soldout
     };
     if (isNaN(values.price)) {
       alert("가격은 숫자만 입력해 주세요");
@@ -135,10 +142,10 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
     setAddCheck(checkedValues);
   }
 
+
   const onCancel = () => {
     onFinished();
   };
-
   if (ProdItem) {
     return (
       <>
@@ -310,7 +317,24 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
               <Checkbox value="샷" style={{ lineHeight: "32px" }}>
                 샷
               </Checkbox>
-            </Checkbox.Group>            
+            </Checkbox.Group>   
+            {Soldout &&          
+              <Switch
+                style={{width:"60px"}}
+                onChange={SoldoutToggle}
+                checkedChildren="판매"
+                unCheckedChildren="품절"
+                defaultChecked
+              />         
+            }     
+            {!Soldout &&          
+              <Switch
+                style={{width:"60px"}}
+                onChange={SoldoutToggle}
+                checkedChildren="판매"
+                unCheckedChildren="품절"
+              />         
+            }   
             <div className="btn-box">
               <Button
                 htmlType="submit"

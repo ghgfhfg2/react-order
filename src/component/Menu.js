@@ -95,6 +95,7 @@ function Menu() {
                 price: parseInt(item.val().price),
                 add: item.val().add,
                 b_soldout: b_soldout,
+                soldout: item.val().soldout,
                 sort_num: item.val().sort_num ? item.val().sort_num : 9999,
               });
             });
@@ -219,27 +220,43 @@ function Menu() {
   );
 
   if (ProdItem.length) {
+    console.log(ProdItem)
     return (
       <>
         {TopBox}
         <ProdList>
-          {ProdItem.map((item, index) => (
+          {ProdItem.map((item, index) => (         
             <div
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer",position:"relative" }}
               className={`ani-fadein list delay-${index}`}
-              key={index}
-              onClick={(e) => orderHandler(e, item)}
+              key={index}              
             >
-              <div className="img">
+              {item.soldout === false && 
+                <div style={{
+                  width:"100%",
+                  height:"100%",                  
+                  position:"absolute",
+                  left:"0",top:"0",
+                  display:"flex",fontSize:"14px",color:"#fff",
+                  justifyContent:"center",alignItems:"center",
+                  background:"rgba(0,0,0,0.5)",zIndex:"10"
+                }}>solout</div>
+              }
+              <div className="img"
+                onClick={(e) => orderHandler(e, item)}
+              >                
                 <span style={{ opacity: "0.85" }} className="kal">
                   {item.kal}kal
                 </span>
                 <img src={item.image} alt="" />
               </div>
-              <div className="user-box">
+              <div className="user-box"
+                onClick={(e) => orderHandler(e, item)}
+              >
                 <div className="txt" style={{ padding: "0 5px" }}>
                   <div className="flex-box between">
-                    <span className="name">{item.name}</span>
+                    <span className="name">{item.name}                    
+                    </span>
                     <span
                       className={"ic-favor " + item.add_favor}
                       onClick={(e) => {

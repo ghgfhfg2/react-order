@@ -163,6 +163,9 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
     if(AddCheck){
       addPrice += 500
     }
+    if(!addPrice){
+      addPrice = 0
+    }
     let values = {
       order_uid: userInfo.uid,
       order_email: userInfo.email,
@@ -177,7 +180,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
       kal: parseInt(OrderItem.kal),
       hot: e.target.hot ? e.target.hot.value : "",
       add: AddCheck ? AddCheck : null,
-      add2: e.target.shot ? e.target.shot.value : "",
+      add2: e.target.shot ? e.target.shot.value : null,
       category: OrderItem.category,
       timestamp: timeStamp,
     };    
