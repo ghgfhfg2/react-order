@@ -73,8 +73,7 @@ function Login() {
               className={"place-holder " + (InputEmail && "on")}
             >
               <span>이메일</span>
-            </label>
-          <span style={{color:"#888",fontSize:"12px",display:"block",paddingLeft:"10px",marginTop:"3px"}}>※ 실제 사용중인 이메일로 가입 바랍니다(비밀번호 재설정 시 필요)</span>
+            </label>          
           </div>
           <div className="input-box">
             <input
