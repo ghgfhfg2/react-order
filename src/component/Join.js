@@ -131,7 +131,7 @@ function Join() {
               name="password"
               id="password"
               onChange={onInputPw}
-              ref={register({ required: true, minLength: 4 })}
+              ref={register({ required: true, minLength: 6 })}
             />
             <label
               htmlFor="password"
@@ -143,7 +143,7 @@ function Join() {
               <p>비밀번호를 입력해 주세요</p>
             )}
             {errors.password && errors.password.type === "minLength" && (
-              <p>비밀번호는 최소 4글자이상 이어야 합니다.</p>
+              <p>비밀번호는 최소 6글자이상 이어야 합니다.</p>
             )}
           </div>
           <div className="input-box">

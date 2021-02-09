@@ -10,7 +10,7 @@ function AdminOrderList() {
         .database()
         .ref("order")
         .orderByChild("order_state")
-        .equalTo(1)
+        .equalTo(2)
         .on("value", (snapshot) => {
           let array = [];
           snapshot.forEach(function (item) {

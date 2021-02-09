@@ -51,6 +51,13 @@ function MyOrder() {
     };
   }, []);
 
+  const orderCancel = (key) => {
+    console.log(key)
+    if (window.confirm("주문 취소 하시겠습니까?")) {
+    firebase.database().ref("order").child(key).remove()
+    }
+  }
+
   if (OrderList.length) {
     return (
       <>
@@ -90,7 +97,23 @@ function MyOrder() {
                   {list.order_time.split("|")[0]}&nbsp; (
                   {list.order_time.split("|")[1]})
                 </span>
-                <span>{list.order_state === 0 ? "대기중" : "완료"}</span>
+                <span>
+                  {list.order_state === 0 &&
+                  <>
+                    <Button
+                      style={{marginRight:"5px"}}
+                      onClick={() => {
+                        orderCancel(list.key);
+                      }}
+                    >
+                      주문취소
+                    </Button>
+                    대기중
+                    </>
+                    }
+                  {list.order_state === 1 && "주문접수"}
+                  {list.order_state === 2 && "완료"}
+                </span>
               </div>
             </div>
           ))}

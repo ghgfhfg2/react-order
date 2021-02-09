@@ -35,7 +35,7 @@ export const OrderBox = styled.div`
     .ic-ice {
       background: #1890ff;
     }
-    color: #888;
+    color: #888;    
     &.state_0 {
       .ic-hot,
       .ic-ice {
@@ -44,6 +44,16 @@ export const OrderBox = styled.div`
       color: #555;
       border-color: #e6f7ff;
       animation: neon_blue 1.5s ease-in-out infinite alternate;
+      .info {
+        color: #111;
+        font-weight: 500;
+      }
+    }
+    &.state_1{
+      .ic-hot,
+      .ic-ice {
+        opacity: 1;
+      }
       .info {
         color: #111;
         font-weight: 500;
@@ -110,7 +120,7 @@ function AdminOrder() {
   useEffect(() => {
     firebase
       .database()
-      .ref("order")
+      .ref("order_sound")
       .child("sound")
       .once("value")
       .then((snapshot) => {
@@ -119,7 +129,7 @@ function AdminOrder() {
   }, []);
   const onSoundChange = (e) => {
     setSoundSelect(e.target.value);
-    firebase.database().ref("order").update({ sound: e.target.value });
+    firebase.database().ref("order_sound").update({ sound: e.target.value });
   };
 
   const Sound = new Howl({
@@ -130,11 +140,11 @@ function AdminOrder() {
   useEffect(() => {
     let mounted = true;
     if (mounted) {
-      firebase
+        firebase
         .database()
         .ref("order")
         .orderByChild("order_state")
-        .equalTo(0)
+        .endAt(1)
         .on("value", (snapshot) => {
           let array = [];
           snapshot.forEach(function (item) {
@@ -154,7 +164,7 @@ function AdminOrder() {
           });
           setOrderList(array);
         });
-    }
+      }
     return function cleanup() {
       firebase.database().ref("order").off();
       mounted = false;
@@ -178,13 +188,21 @@ function AdminOrder() {
   }, [SoundSelect]);
 
   const stateChange = (key) => {
+      firebase.database().ref(`order/${key}`)
+      .child("order_state")
+      .transaction((pre) => {
+        return pre + 1;
+      });
+  };
+  const stateChange2 = (key) => {
     if (window.confirm("완료하시겠습니까?")) {
-      firebase.database().ref("order").child(key).update({
-        order_state: 1,
+      firebase.database().ref(`order/${key}`)
+      .child("order_state")
+      .transaction((pre) => {
+        return pre + 1;
       });
     }
   };
-
   return (
     <>
       <h3 className="title">주문관리</h3>
@@ -230,20 +248,30 @@ function AdminOrder() {
                   </Popover>
                 )}
               </div>
-              <span>{commaNumber(list.price)}원</span>
+              <span>{commaNumber(parseInt(list.price))}원</span>
             </div>
             <div className="state">
               <span className="date">
-                {list.order_time.split("|")[0]}&nbsp; (
-                {list.order_time.split("|")[1]})
+                {list.order_time}
               </span>
+              {list.order_state === 0 &&
               <Button
                 onClick={() => {
                   stateChange(list.key);
                 }}
               >
+                주문접수
+              </Button>
+              }
+              {list.order_state === 1 &&
+              <Button
+                onClick={() => {
+                  stateChange2(list.key);
+                }}
+              >
                 완료처리
               </Button>
+              }
             </div>
           </div>
         ))}
