@@ -43,6 +43,7 @@ function MyOrder() {
           if (array.length === 0) {
             setNodata(true);
           }
+          notify()
         });
     }
     return function cleanup() {
@@ -72,12 +73,13 @@ function MyOrder() {
         }
     });
 }
+getNotificationPermission()
 // 알림 띄우기
 function notify() {
   var options = {
-      body: "주문이 완료되었습니다."
+      body: "주문상태가 변경되었습니다."
   }
-  var notification = new Notification("주문완료", options);
+  var notification = new Notification("주문알림", options);
   
   setTimeout(function(){
       notification.close();

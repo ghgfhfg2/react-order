@@ -204,6 +204,7 @@ function AdminOrder() {
       });
     }
   };
+  console.log(OrderList)
   return (
     <>
       <h3 className="title">주문관리</h3>
@@ -238,10 +239,13 @@ function AdminOrder() {
                 )}
                 <span className="info shrink-0">{list.amount}개</span>
                 {list.add && (
-                  <>
-                    <span className="info shrink-0">{list.add}</span>
-                    <span className="info shrink-0">{list.add2}</span>
-                  </>
+                      <span className="info shrink-0">{list.add}</span>
+                    )}
+                {list.add2 && list.add2[0] && (
+                  <span className="info shrink-0">{list.add2[0]}</span>
+                )}
+                {list.add2 && list.add2[1] && (
+                  <span className="info shrink-0">{list.add2[1]}</span>
                 )}
               </div>
               <span className="shrink-0">{commaNumber(parseInt(list.price))}원</span>
