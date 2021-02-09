@@ -72,7 +72,6 @@ function MyOrder() {
         }
     });
 }
-getNotificationPermission()
 // 알림 띄우기
 function notify() {
   var options = {
