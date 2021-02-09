@@ -78,14 +78,14 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
     setradioValue(e.target.value);
   };
 
-  const [radioValue2, setradioValue2] = useState();
-  const radioChange2 = (e) => {
-    setradioValue2(e.target.value);
-  };
-
   const [AddCheck, setAddCheck] = useState();
   function onChange(checkedValues) {
     setAddCheck(checkedValues);
+  }
+
+  const [AddCheck2, setAddCheck2] = useState();
+  function onChange2(checkedValues) {
+    setAddCheck2(checkedValues);
   }
 
   let hotRadio;
@@ -162,20 +162,18 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
         return;
       }
     }
-    let addPrice;
-    if (e.target.shot) {
-      if (e.target.shot.value === "샷") {
-        addPrice = 500;
+    let addPrice = 0;
+
+    if (AddCheck2) {
+      if (AddCheck2.includes("샷1")) {
+        addPrice += 500;
       }
-      if (e.target.shot.value === "샷2") {
-        addPrice = 1000;
+      if (AddCheck2.includes("샷2")) {
+        addPrice += 1000;
       }
     }
     if (AddCheck) {
       addPrice += 500;
-    }
-    if (!addPrice) {
-      addPrice = 0;
     }
     let values = {
       order_uid: userInfo.uid,
@@ -191,7 +189,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
       kal: parseInt(OrderItem.kal),
       hot: e.target.hot ? e.target.hot.value : "",
       add: AddCheck ? AddCheck : null,
-      add2: e.target.shot ? e.target.shot.value : null,
+      add2: AddCheck2 ? AddCheck2 : null,
       category: OrderItem.category,
       timestamp: timeStamp,
     };
@@ -290,33 +288,16 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
                         className="flex-box a-center"
                         style={{ marginTop: "5px" }}
                       >
-                        <input
-                          type="radio"
-                          id="shot"
-                          name="shot"
-                          value="샷"
-                          onChange={radioChange2}
-                        />
-                        <label
-                          className="radio_ice"
-                          htmlFor="shot"
-                          style={{ marginRight: "5px" }}
-                        >
-                          1샷
-                        </label>
-                        <input
-                          type="radio"
-                          id="shot2"
-                          name="shot"
-                          value="샷2"
-                          onChange={radioChange2}
-                        />
-                        <label className="radio_ice" htmlFor="shot2">
-                          2샷
-                        </label>
+                        <Checkbox.Group style={{ width: "100%" }} onChange={onChange2}>                          
+                          {OrderItem.add.includes("연하게") && (        
+                              <Checkbox value="연하게">연하게</Checkbox>
+                          )}
+                          <Checkbox value="샷1">1샷 추가</Checkbox>
+                          <Checkbox value="샷2">2샷 추가</Checkbox>
+                        </Checkbox.Group>                        
                       </div>
                     </>
-                  )}
+                  )}                  
                 </div>
               )}
             </div>

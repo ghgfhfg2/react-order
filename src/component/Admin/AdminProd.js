@@ -393,6 +393,9 @@ function AdminProd() {
                 <Checkbox value="샷" style={{ lineHeight: "32px" }}>
                   샷
                 </Checkbox>
+                <Checkbox value="연하게" style={{ lineHeight: "32px" }}>
+                  연하게
+                </Checkbox>
               </Row>
             </Checkbox.Group>
           </Form.Item>
