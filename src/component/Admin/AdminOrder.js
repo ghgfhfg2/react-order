@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "antd";
 import styled from "styled-components";
 import firebase from "../../firebase";
-import { Popover, Radio } from "antd";
+import { Radio } from "antd";
 import { commaNumber } from "../CommonFunc";
 import { Howl } from "howler";
 import src1 from "../../jumun.mp3";
@@ -63,6 +63,7 @@ export const OrderBox = styled.div`
       border-bottom: 1px solid #ddd;
       height: 30px;
     }
+    .shrink-0{flex-shrink: 0;}
     diplay: flex;
     flex-direction: column;
     padding: 10px;
@@ -78,8 +79,8 @@ export const OrderBox = styled.div`
     }
     .info-box {
       display: flex;
+      min-height:30px;
       align-items: center;
-      height: 28px;
       .info {
         margin-right: 7px;
       }
@@ -229,26 +230,24 @@ function AdminOrder() {
               <div className="info-box">
                 <span className="info">{list.prod_name}</span>
                 {list.hot === "hot" ? (
-                  <span className="ic-hot"></span>
+                  <span className="ic-hot shrink-0"></span>
                 ) : list.hot === "ice" ? (
-                  <span className="ic-ice"></span>
+                  <span className="ic-ice shrink-0"></span>
                 ) : (
                   ""
                 )}
-                <span className="info">{list.amount}개</span>
+                <span className="info shrink-0">{list.amount}개</span>
                 {list.add && (
                   <>
-                    <span className="info">{list.add}</span>
-                    <span className="info">{list.add2}</span>
+                    <span className="info shrink-0">{list.add}</span>
+                    <span className="info shrink-0">{list.add2}</span>
                   </>
                 )}
-                {list.order_etc && (
-                  <Popover content={list.order_etc} trigger="click">
-                    <Button type="default">기타</Button>
-                  </Popover>
-                )}
               </div>
-              <span>{commaNumber(parseInt(list.price))}원</span>
+              <span className="shrink-0">{commaNumber(parseInt(list.price))}원</span>
+            </div>
+            <div style={{color:"red",fontWeight:"500"}}>
+                {list.order_etc && list.order_etc}
             </div>
             <div className="state">
               <span className="date">

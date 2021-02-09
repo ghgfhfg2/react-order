@@ -69,19 +69,19 @@ function MyOrder() {
                 <div className="info-box">
                   <span className="info">{list.prod_name}</span>
                   {list.hot === "hot" ? (
-                    <span className="ic-hot"></span>
+                    <span className="ic-hot shrink-0"></span>
                   ) : list.hot === "ice" ? (
-                    <span className="ic-ice"></span>
+                    <span className="ic-ice shrink-0"></span>
                   ) : (
                     ""
                   )}
-                  <span className="info">{list.amount}개</span>
+                  <span className="info shrink-0">{list.amount}개</span>
                   <div>
                     {list.add && (
-                      <span className="info">{list.add}</span>
+                      <span className="info shrink-0">{list.add}</span>
                     )}
                     {list.add2 && (
-                      <span className="info">{list.add2}</span>
+                      <span className="info shrink-0">{list.add2}</span>
                     )}
                   </div>
                   {list.order_etc && (
@@ -90,7 +90,7 @@ function MyOrder() {
                     </Popover>
                   )}
                 </div>
-                <span>{commaNumber(parseInt(list.price))}원</span>
+                <span className="shrink-0">{commaNumber(parseInt(list.price))}원</span>
               </div>
               <div className="state">
                 <span className="date">
