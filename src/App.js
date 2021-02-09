@@ -16,11 +16,15 @@ import { Layout, Button, BackTop } from "antd";
 import firebase from "./firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, clearUser } from "./redux/actions/user_action";
+import { getNotificationPermission } from "./component/CommonFunc";
 import * as antIcon from "react-icons/ai";
 import Logo from "./img/logo.svg";
 
 const { Sider, Content, Header } = Layout;
 function App(props) {
+
+  getNotificationPermission();
+
   let history = useHistory();
   let dispatch = useDispatch();
   const isLoading = useSelector((state) => state.user.isLoading);

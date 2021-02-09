@@ -2,7 +2,7 @@ import { Button } from "antd";
 import React, { useState, useEffect } from "react";
 import firebase from "../firebase";
 import { Popover } from "antd";
-import { commaNumber } from "./CommonFunc";
+import { commaNumber,notify } from "./CommonFunc";
 import { useSelector } from "react-redux";
 import { OrderBox } from "./Admin/AdminOrder";
 import Loading from "./Loading";
@@ -21,7 +21,6 @@ function MyOrder() {
         .ref("order")
         .orderByChild("order_uid")
         .equalTo(userInfo.uid)
-        .limitToFirst(30)
         .on("value", (snapshot) => {
           let array = [];
           snapshot.forEach(function (item) {
@@ -39,11 +38,12 @@ function MyOrder() {
               return -1;
             }
           });
+          array = array.slice(0,30)
           setOrderList(array);
           if (array.length === 0) {
             setNodata(true);
           }
-          notify()
+          notify('주문상태가 변경되었습니다.')
         });
     }
     return function cleanup() {
@@ -59,32 +59,6 @@ function MyOrder() {
     }
   }
 
-  const getNotificationPermission = () => {
-    // 브라우저 지원 여부 체크
-    if (!("Notification" in window)) {
-        alert("데스크톱 알림을 지원하지 않는 브라우저입니다.");
-    }
-    // 데스크탑 알림 권한 요청
-    Notification.requestPermission(function (result) {
-        // 권한 거절
-        if(result == 'denied') {
-            alert('알림을 차단하셨습니다.\n브라우저의 사이트 설정에서 변경하실 수 있습니다.');
-            return false;
-        }
-    });
-}
-getNotificationPermission()
-// 알림 띄우기
-function notify() {
-  var options = {
-      body: "주문상태가 변경되었습니다."
-  }
-  var notification = new Notification("주문알림", options);
-  
-  setTimeout(function(){
-      notification.close();
-  }, 3000);
-}
 
 
   if (OrderList.length) {

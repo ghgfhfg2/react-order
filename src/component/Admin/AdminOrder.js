@@ -3,7 +3,7 @@ import { Button } from "antd";
 import styled from "styled-components";
 import firebase from "../../firebase";
 import { Radio } from "antd";
-import { commaNumber } from "../CommonFunc";
+import { commaNumber,notify } from "../CommonFunc";
 import { Howl } from "howler";
 import src1 from "../../jumun.mp3";
 import src2 from "../../jumun2.mp3";
@@ -180,6 +180,7 @@ function AdminOrder() {
         .ref("order_count")
         .on("value", (snapshot) => {
           Sound.play();
+          notify('새 주문이 들어왔습니다.')
         });
     }
     return function cleanup() {
