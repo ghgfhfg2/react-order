@@ -249,7 +249,7 @@ function Menu() {
                     zIndex: "10",
                   }}
                 >
-                  solout
+                  sold out
                 </div>
               )}
               <div className="img" onClick={(e) => orderHandler(e, item)}>

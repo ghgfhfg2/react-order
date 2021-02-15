@@ -22,8 +22,13 @@ import Logo from "./img/logo.svg";
 
 const { Sider, Content, Header } = Layout;
 function App(props) {
+  function isDesktopOS(){
+    return ( 'win16|win32|win64|windows|mac|macintel|linux|freebsd|openbsd|sunos'.indexOf(navigator.platform.toLowerCase()) >= 0 ); 
+  }
 
-  getNotificationPermission();
+  if(isDesktopOS()){
+    getNotificationPermission();
+  }
 
   let history = useHistory();
   let dispatch = useDispatch();

@@ -242,17 +242,17 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
           <h4>{OrderItem.name}</h4>
           <div className="flex-box a-center">
             <span className="tit">수량</span>
-            <Button
+            {/* <Button
               onClick={minusAmount}
               icon={<MinusOutlined />}
               type="default"
-            ></Button>
-            <Input className="num" name="amount" value={Amount} />
-            <Button
+            ></Button> */}
+            <Input className="num" name="amount" style={{border:"none"}} value={Amount} />
+            {/* <Button
               onClick={plusAmount}
               icon={<PlusOutlined />}
               type="default"
-            ></Button>
+            ></Button> */}
           </div>
           <div className="flex-box a-center">
             <span className="tit"></span>
