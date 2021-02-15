@@ -197,13 +197,11 @@ function AdminOrder() {
       });
   };
   const stateChange2 = (key) => {
-    if (window.confirm("완료하시겠습니까?")) {
       firebase.database().ref(`order/${key}`)
       .child("order_state")
       .transaction((pre) => {
         return pre + 1;
       });
-    }
   };
   console.log(OrderList)
   return (
