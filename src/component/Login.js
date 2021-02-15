@@ -81,7 +81,7 @@ function Login() {
               onChange={onInputPw}
               name="password"
               id="password"
-              ref={register({ required: true, minLength: 4 })}
+              ref={register({ required: true, minLength: 6 })}
             />
             <label
               htmlFor="password"
@@ -93,7 +93,7 @@ function Login() {
               <p>비밀번호를 입력해 주세요</p>
             )}
             {errors.password && errors.password.type === "minLength" && (
-              <p>비밀번호는 4글자 이상이어야 합니다.</p>
+              <p>비밀번호는 6글자 이상이어야 합니다.</p>
             )}
             {errorFromSubmit && <p>{errorFromSubmit}</p>}
           </div>
