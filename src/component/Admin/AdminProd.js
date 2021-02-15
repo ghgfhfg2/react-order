@@ -241,7 +241,8 @@ function AdminProd() {
       if (!values.add) {
         values.add = "";
       }
-      values.sort_num ? parseInt(values.sort_num) : 9999
+      values.sort_num = parseInt(values.sort_num);
+      values.sort_num >= 0 ? values.sort_num = values.sort_num : values.sort_num = 9999;
       await firebase
         .database()
         .ref("products")
