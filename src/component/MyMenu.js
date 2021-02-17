@@ -76,10 +76,13 @@ function MyMenu() {
           array = array.filter((el) => {
             return favorName.includes(el.name);
           });
-          array.map((el, idx) => {
-            return Object.assign(el, FavorItem[idx]);
+          let assignArr = [];
+          array.map(el => {
+            favor.map((item) => {
+              item.name === el.name && assignArr.push(Object.assign(item, el));
+            });
           });
-          array.sort((a, b) => {
+          assignArr.sort((a, b) => {
             if (a.count > b.count) {
               return -1;
             }
@@ -88,11 +91,10 @@ function MyMenu() {
             }
             return 0;
           });
-          array = array.slice(0, 10);
-          setProdItem(array);
+          assignArr = assignArr.slice(0, 10);
+          setProdItem(assignArr);
         }
 
-        //즐찾
       }
       getProdItem();
       //즐찾
