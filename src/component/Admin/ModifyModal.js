@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Checkbox } from "antd";
+import { Button, Checkbox, Switch } from "antd";
 import firebase from "../../firebase";
 import styled from "styled-components";
 import uuid from "react-uuid";
@@ -30,7 +30,7 @@ export const ModalPopup = styled.div`
   z-index: 100;
   border-radius: 10px;
   background: #fff;
-  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25);
   transform: translate(-50px, -100%);
   left: ${(props) => props.posx}px;
   top: ${(props) => props.posy}px;
@@ -45,6 +45,11 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
   const [radioValue, setradioValue] = useState();
   const [radioValue2, setradioValue2] = useState();
   const [ProdItem, setProdItem] = useState([]);
+
+  const [Soldout, setSoldout] = useState();
+  const SoldoutToggle = () => {
+    setSoldout(!Soldout);
+  };
   useEffect(() => {
     firebase
       .database()
@@ -52,10 +57,10 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
       .child(puid)
       .once("value")
       .then((snapshot) => {
-        console.log(snapshot.val());
         setProdItem(snapshot.val());
         setradioValue(snapshot.val().category);
         setradioValue2(snapshot.val().hot);
+        setSoldout(snapshot.val().soldout);
       });
   }, [puid]);
 
@@ -68,7 +73,10 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
       category: e.target.category.value,
       hot: e.target.hot.value,
       add: AddCheck ? AddCheck : null,
-      sort_num: e.target.sort_num.value ? parseInt(e.target.sort_num.value) : 9999,
+      sort_num: e.target.sort_num.value
+        ? parseInt(e.target.sort_num.value)
+        : 9999,
+      soldout: Soldout,
     };
     if (isNaN(values.price)) {
       alert("가격은 숫자만 입력해 주세요");
@@ -134,13 +142,11 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
   const [AddCheck, setAddCheck] = useState();
   function onChange(checkedValues) {
     setAddCheck(checkedValues);
-    console.log(AddCheck);
   }
 
   const onCancel = () => {
     onFinished();
   };
-
   if (ProdItem) {
     return (
       <>
@@ -312,7 +318,27 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
               <Checkbox value="샷" style={{ lineHeight: "32px" }}>
                 샷
               </Checkbox>
+              <Checkbox value="연하게" style={{ lineHeight: "32px" }}>
+                연하게
+              </Checkbox>
             </Checkbox.Group>
+            {(Soldout === true || Soldout === "") && (
+              <Switch
+                style={{ width: "60px" }}
+                onChange={SoldoutToggle}
+                checkedChildren="판매"
+                unCheckedChildren="품절"
+                defaultChecked
+              />
+            )}
+            {!Soldout && (
+              <Switch
+                style={{ width: "60px" }}
+                onChange={SoldoutToggle}
+                checkedChildren="판매"
+                unCheckedChildren="품절"
+              />
+            )}
             <div className="btn-box">
               <Button
                 htmlType="submit"

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Input, Checkbox } from "antd";
+import { Button, Input, Checkbox, Spin } from "antd";
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
@@ -12,7 +12,7 @@ export const OderModalPopup = styled.div`
   padding: 20px;
   border: 1px solid #ddd;
   position: fixed;
-  z-index: 100;
+  z-index: 150;
   border-radius: 10px;
   background: #fff;
   transition: all 0.2s;
@@ -20,6 +20,12 @@ export const OderModalPopup = styled.div`
   left: ${(props) => props.posx}px;
   top: ${(props) => props.posy}px;
   box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.25);
+  .modal-loading {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
   @media all and (max-width: 640px) {
     width: 80%;
     max-width: 300px;
@@ -75,6 +81,11 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
   const [AddCheck, setAddCheck] = useState();
   function onChange(checkedValues) {
     setAddCheck(checkedValues);
+  }
+
+  const [AddCheck2, setAddCheck2] = useState();
+  function onChange2(checkedValues) {
+    setAddCheck2(checkedValues);
   }
 
   let hotRadio;
@@ -138,15 +149,31 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
   }
 
   // submit
+  const [submitLoading, setsubmitLoading] = useState(false);
   const onSubmitOrder = async (e) => {
+    setsubmitLoading(true);
     const nowTime = moment().format("YYYY-MM-DD HH:mm:ss|dddd");
     const timeStamp = new Date().getTime();
     e.preventDefault();
     if (e.target.hot) {
       if (!radioValue) {
         alert("온도를 선택해주세요");
+        setsubmitLoading(false);
         return;
       }
+    }
+    let addPrice = 0;
+
+    if (AddCheck2) {
+      if (AddCheck2.includes("샷1")) {
+        addPrice += 500;
+      }
+      if (AddCheck2.includes("샷2")) {
+        addPrice += 1000;
+      }
+    }
+    if (AddCheck) {
+      addPrice += 500;
     }
     let values = {
       order_uid: userInfo.uid,
@@ -157,15 +184,15 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
       order_etc: e.target.etc.value,
       order_state: 0,
       prod_name: OrderItem.name,
-      price: OrderItem.price * e.target.amount.value,
+      price: OrderItem.price * e.target.amount.value + addPrice,
       amount: parseInt(e.target.amount.value),
       kal: parseInt(OrderItem.kal),
       hot: e.target.hot ? e.target.hot.value : "",
       add: AddCheck ? AddCheck : null,
+      add2: AddCheck2 ? AddCheck2 : null,
       category: OrderItem.category,
       timestamp: timeStamp,
     };
-
     try {
       await firebase
         .database()
@@ -197,6 +224,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
         });
       alert("주문에 성공했습니다.");
       onFinished();
+      setsubmitLoading(false);
     } catch (error) {
       alert(error);
     }
@@ -214,43 +242,62 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
           <h4>{OrderItem.name}</h4>
           <div className="flex-box a-center">
             <span className="tit">수량</span>
-            <Button
+            {/* <Button
               onClick={minusAmount}
               icon={<MinusOutlined />}
               type="default"
-            ></Button>
-            <Input className="num" name="amount" value={Amount} />
-            <Button
+            ></Button> */}
+            <Input className="num" name="amount" style={{border:"none"}} value={Amount} />
+            {/* <Button
               onClick={plusAmount}
               icon={<PlusOutlined />}
               type="default"
-            ></Button>
+            ></Button> */}
           </div>
           <div className="flex-box a-center">
             <span className="tit"></span>
             {hotRadio}
           </div>
           {OrderItem.add && (
-            <div className="flex-box a-center">
-              <span className="tit">추가</span>
+            <div className="flex-box">
+              <span className="tit" style={{ marginTop: "3px" }}>
+                추가
+              </span>
               {OrderItem && (
-                <div className="order-check-box">
+                <div
+                  className="order-check-box"
+                  style={{ flexDirection: "column" }}
+                >
                   <Checkbox.Group style={{ width: "100%" }} onChange={onChange}>
-                    {OrderItem.add[0] && (
+                    {OrderItem.b_soldout && OrderItem.add.includes("버블") && (
                       <>
-                        <Checkbox value={OrderItem.add[0]}>
-                          {OrderItem.add[0]}
-                        </Checkbox>
+                        <Checkbox value="버블">버블</Checkbox>
                       </>
                     )}
-                    {OrderItem.add[1] && (
+                    {!OrderItem.b_soldout && OrderItem.add.includes("버블") && (
                       <>
-                        <Checkbox value={OrderItem.add[1]}>
-                          {OrderItem.add[1]}
+                        <Checkbox value="버블" disabled>
+                          버블품절
                         </Checkbox>
                       </>
                     )}
                   </Checkbox.Group>
+                  {OrderItem.add.includes("샷") && (
+                    <>
+                      <div
+                        className="flex-box a-center"
+                        style={{ marginTop: "5px" }}
+                      >
+                        <Checkbox.Group style={{ width: "100%" }} onChange={onChange2}>                          
+                          {OrderItem.add.includes("연하게") && (        
+                              <Checkbox value="연하게">연하게</Checkbox>
+                          )}
+                          <Checkbox value="샷1">1샷 추가</Checkbox>
+                          <Checkbox value="샷2">2샷 추가</Checkbox>
+                        </Checkbox.Group>                        
+                      </div>
+                    </>
+                  )}                  
                 </div>
               )}
             </div>
@@ -261,6 +308,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
           </div>
           <div className="btn-box">
             <Button
+              disabled={submitLoading}
               htmlType="submit"
               type="primary"
               style={{ marginRight: "5px" }}
@@ -272,6 +320,21 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
             </Button>
           </div>
         </form>
+        {submitLoading && (
+          <>
+            <div
+              className="bg-box"
+              style={{
+                position: "absolute",
+                width: "100%",
+                height: "100%",
+                background: "rgba(255,255,255,0.5)",
+                borderRadius: "10px",
+              }}
+            ></div>
+            <Spin className="modal-loading" tip="Loading..."></Spin>
+          </>
+        )}
       </OderModalPopup>
     </>
   );

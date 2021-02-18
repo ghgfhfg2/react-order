@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Button } from "antd";
 import styled from "styled-components";
 import firebase from "../../firebase";
-import { Popover, Radio } from "antd";
-import { commaNumber } from "../CommonFunc";
+import { Radio } from "antd";
+import { commaNumber,notify } from "../CommonFunc";
 import { Howl } from "howler";
 import src1 from "../../jumun.mp3";
 import src2 from "../../jumun2.mp3";
@@ -35,7 +35,7 @@ export const OrderBox = styled.div`
     .ic-ice {
       background: #1890ff;
     }
-    color: #888;
+    color: #888;    
     &.state_0 {
       .ic-hot,
       .ic-ice {
@@ -49,10 +49,21 @@ export const OrderBox = styled.div`
         font-weight: 500;
       }
     }
+    &.state_1{
+      .ic-hot,
+      .ic-ice {
+        opacity: 1;
+      }
+      .info {
+        color: #111;
+        font-weight: 500;
+      }
+    }
     .from {
       border-bottom: 1px solid #ddd;
       height: 30px;
     }
+    .shrink-0{flex-shrink: 0;}
     diplay: flex;
     flex-direction: column;
     padding: 10px;
@@ -68,8 +79,8 @@ export const OrderBox = styled.div`
     }
     .info-box {
       display: flex;
+      min-height:30px;
       align-items: center;
-      height: 28px;
       .info {
         margin-right: 7px;
       }
@@ -110,7 +121,7 @@ function AdminOrder() {
   useEffect(() => {
     firebase
       .database()
-      .ref("order")
+      .ref("order_sound")
       .child("sound")
       .once("value")
       .then((snapshot) => {
@@ -119,7 +130,7 @@ function AdminOrder() {
   }, []);
   const onSoundChange = (e) => {
     setSoundSelect(e.target.value);
-    firebase.database().ref("order").update({ sound: e.target.value });
+    firebase.database().ref("order_sound").update({ sound: e.target.value });
   };
 
   const Sound = new Howl({
@@ -130,11 +141,11 @@ function AdminOrder() {
   useEffect(() => {
     let mounted = true;
     if (mounted) {
-      firebase
+        firebase
         .database()
         .ref("order")
         .orderByChild("order_state")
-        .equalTo(0)
+        .endAt(1)
         .on("value", (snapshot) => {
           let array = [];
           snapshot.forEach(function (item) {
@@ -154,7 +165,7 @@ function AdminOrder() {
           });
           setOrderList(array);
         });
-    }
+      }
     return function cleanup() {
       firebase.database().ref("order").off();
       mounted = false;
@@ -169,6 +180,7 @@ function AdminOrder() {
         .ref("order_count")
         .on("value", (snapshot) => {
           Sound.play();
+          notify('새 주문이 들어왔습니다.')
         });
     }
     return function cleanup() {
@@ -178,13 +190,20 @@ function AdminOrder() {
   }, [SoundSelect]);
 
   const stateChange = (key) => {
-    if (window.confirm("완료하시겠습니까?")) {
-      firebase.database().ref("order").child(key).update({
-        order_state: 1,
+      firebase.database().ref(`order/${key}`)
+      .child("order_state")
+      .transaction((pre) => {
+        return pre + 1;
       });
-    }
   };
-
+  const stateChange2 = (key) => {
+      firebase.database().ref(`order/${key}`)
+      .child("order_state")
+      .transaction((pre) => {
+        return pre + 1;
+      });
+  };
+  console.log(OrderList)
   return (
     <>
       <h3 className="title">주문관리</h3>
@@ -211,39 +230,50 @@ function AdminOrder() {
               <div className="info-box">
                 <span className="info">{list.prod_name}</span>
                 {list.hot === "hot" ? (
-                  <span className="ic-hot"></span>
+                  <span className="ic-hot shrink-0"></span>
                 ) : list.hot === "ice" ? (
-                  <span className="ic-ice"></span>
+                  <span className="ic-ice shrink-0"></span>
                 ) : (
                   ""
                 )}
-                <span className="info">{list.amount}개</span>
+                <span className="info shrink-0">{list.amount}개</span>
                 {list.add && (
-                  <>
-                    <span className="info">{list.add[0]}</span>
-                    <span className="info">{list.add[1]}</span>
-                  </>
+                      <span className="info shrink-0">{list.add}</span>
+                    )}
+                {list.add2 && list.add2[0] && (
+                  <span className="info shrink-0">{list.add2[0]}</span>
                 )}
-                {list.order_etc && (
-                  <Popover content={list.order_etc} trigger="click">
-                    <Button type="default">기타</Button>
-                  </Popover>
+                {list.add2 && list.add2[1] && (
+                  <span className="info shrink-0">{list.add2[1]}</span>
                 )}
               </div>
-              <span>{commaNumber(list.price)}원</span>
+              <span className="shrink-0">{commaNumber(parseInt(list.price))}원</span>
+            </div>
+            <div style={{color:"red",fontWeight:"500"}}>
+                {list.order_etc && list.order_etc}
             </div>
             <div className="state">
               <span className="date">
-                {list.order_time.split("|")[0]}&nbsp; (
-                {list.order_time.split("|")[1]})
+                {list.order_time}
               </span>
+              {list.order_state === 0 &&
               <Button
                 onClick={() => {
                   stateChange(list.key);
                 }}
               >
+                주문접수
+              </Button>
+              }
+              {list.order_state === 1 &&
+              <Button
+                onClick={() => {
+                  stateChange2(list.key);
+                }}
+              >
                 완료처리
               </Button>
+              }
             </div>
           </div>
         ))}

@@ -5,12 +5,16 @@ import OderModalPopup from "./OrderModal";
 import { commaNumber } from "./CommonFunc";
 import Loading from "./Loading";
 import { Radio, Input, Empty } from "antd";
+import * as antIcon from "react-icons/ai";
 import * as Hangul from "hangul-js";
+import { useSelector } from "react-redux";
 const { Search } = Input;
 const _ = require("lodash");
 
 function Menu() {
+  const userInfo = useSelector((state) => state.user.currentUser);
   const [ProdItem, setProdItem] = useState([]);
+  const [ProdItemCopy, setProdItemCopy] = useState();
 
   //정렬 라디오버튼
   const [CateRadio, setCateRadio] = useState("all");
@@ -22,17 +26,59 @@ function Menu() {
   const [searchInput, setSearchInput] = useState("");
   const onSearchChange = (e) => {
     setSearchInput(e.target.value);
+    if(e.target.value === ''){
+      setSearchAgain(!SearchAgain);
+    }
   };
+
   const [SearchAgain, setSearchAgain] = useState(false);
   const onSearch = () => {
     setSearchAgain(!SearchAgain);
   };
 
-  //즐찾
+  const onToggleFavor = (e, name) => {
+    e.currentTarget.classList.toggle("true");
+    firebase
+      .database()
+      .ref("users")
+      .child(userInfo.uid)
+      .child(`favorite/${name}/add_favor`)
+      .transaction((pre) => {
+        return !pre;
+      });
+  };
+
+  let b_soldout;
   useEffect(() => {
+    
     let mounted = true;
-    if (mounted) {
+    if (mounted && userInfo) {
+      //즐찾
       async function getProdItem() {
+        let favorItem = [];
+        await firebase
+          .database()
+          .ref("soldout")
+          .once("value")
+          .then((snapshot) => {
+            snapshot.forEach((el) => {
+              b_soldout = el.val();
+            });
+          });
+        await firebase
+          .database()
+          .ref("users")
+          .child(`${userInfo.uid}/favorite`)
+          .once("value")
+          .then((snapshot) => {
+            snapshot.forEach(function (item) {
+              favorItem.push({
+                name: item.key,
+                add_favor: item.val().add_favor,
+              });
+            });
+          });
+
         await firebase
           .database()
           .ref("products")
@@ -48,10 +94,43 @@ function Menu() {
                 hot: item.val().hot,
                 category: item.val().category,
                 image: item.val().image,
-                price: item.val().price,
+                price: parseInt(item.val().price),
                 add: item.val().add,
+                b_soldout: b_soldout,
+                soldout: item.val().soldout,
+                sort_num: item.val().sort_num ? item.val().sort_num : 9999,
               });
             });
+
+            let newFavorItem = [];
+            array.map((el) => {
+              let name = el.name;
+              favorItem.forEach((favor) => {
+                if (favor.name === name) {
+                  newFavorItem.push({
+                    ...favor,
+                    ...el,
+                  });
+                }
+              });
+              return el;
+            });
+            //array = { ...array, ...newFavorItem };
+            newFavorItem.map((el) => {
+              let uid = el.uid;
+              let favor = el.add_favor;
+              array.forEach((el) => {
+                if (el.uid === uid) {
+                  el.add_favor = favor;
+                }
+                return el;
+              });
+            });
+
+            array.sort((a, b) => {
+              return a.sort_num - b.sort_num;
+            });
+
             array = array.filter((el) => {
               if (CateRadio === "all") {
                 return el;
@@ -59,43 +138,55 @@ function Menu() {
               return el.category === CateRadio;
             });
             setProdItem(array);
-          });
-
-        if (searchInput !== "") {
-          let array = _.cloneDeep(ProdItem);
-          array.forEach(function (item) {
-            var dis = Hangul.disassemble(item.name, true);
-            var cho = dis.reduce(function (prev, elem) {
-              elem = elem[0] ? elem[0] : elem;
-              return prev + elem;
-            }, "");
-            item.diassembled = cho;
-          });
-          array = array.filter(function (item) {
-            return (
-              item.diassembled.includes(searchInput) ||
-              item.name.includes(searchInput)
-            );
-          });
-          setProdItem(array);
+            setProdItemCopy(array);
+          });          
         }
+        getProdItem();
       }
-      getProdItem();
-    }
-    return function cleanup() {
-      mounted = false;
-    };
-  }, [CateRadio, searchInput, SearchAgain]);
+      return function cleanup() {
+        mounted = false;
+      };
+    }, [CateRadio, SearchAgain]);
+    
+    
+    useEffect(() => {
+      if (ProdItemCopy && searchInput !== "") {
+      let array = _.cloneDeep(ProdItemCopy);
+      array.forEach(function (item) {
+        var dis = Hangul.disassemble(item.name, true);
+        var cho = dis.reduce(function (prev, elem) {
+          elem = elem[0] ? elem[0] : elem;
+          return prev + elem;
+        }, "");
+        item.diassembled = cho;
+      });
+      let arr = searchInput.concat();
+      let search = Hangul.disassemble(arr).join("");
+      array = array.filter(function (item) {
+        return (
+          item.diassembled.includes(searchInput) ||
+          item.diassembled.includes(search) ||
+          item.name.includes(searchInput)
+          );
+        });
+        setProdItem(array);
+    }    
+  }, [searchInput])
 
   const [PosX, setPosX] = useState(0);
   const [PosY, setPosY] = useState(0);
   const [OnModal, setOnModal] = useState(false);
   const [OrderItem, setOrderItem] = useState();
   const orderHandler = (e, item) => {
-    setOrderItem(item);
-    setPosX(e.clientX);
-    setPosY(e.clientY);
-    setOnModal(true);
+    if (e.target.tagName !== "svg" && e.target.tagName !== "path") {
+      if (b_soldout === false) {
+        item.add = "";
+      }
+      setOrderItem(item);
+      setPosX(e.clientX);
+      setPosY(e.clientY);
+      setOnModal(true);
+    }
   };
   const onFinished = () => {
     setOnModal(false);
@@ -141,22 +232,54 @@ function Menu() {
         <ProdList>
           {ProdItem.map((item, index) => (
             <div
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", position: "relative" }}
               className={`ani-fadein list delay-${index}`}
               key={index}
-              onClick={(e) => orderHandler(e, item)}
             >
-              <div className="img">
+              {item.soldout === false && (
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    position: "absolute",
+                    left: "0",
+                    top: "0",
+                    display: "flex",
+                    fontSize: "14px",
+                    color: "#fff",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    background: "rgba(0,0,0,0.5)",
+                    zIndex: "10",
+                  }}
+                >
+                  sold out
+                </div>
+              )}
+              <div className="img" onClick={(e) => orderHandler(e, item)}>
                 <span style={{ opacity: "0.85" }} className="kal">
                   {item.kal}kal
                 </span>
                 <img src={item.image} alt="" />
               </div>
-              <div className="admin-box">
+              <div className="user-box" onClick={(e) => orderHandler(e, item)}>
                 <div className="txt" style={{ padding: "0 5px" }}>
-                  <span className="name">{item.name}</span>
+                  <div className="flex-box between">
+                    <span className="name">{item.name}</span>
+                    <span
+                      className={"ic-favor " + item.add_favor}
+                      onClick={(e) => {
+                        onToggleFavor(e, item.name);
+                      }}
+                    >
+                      <antIcon.AiFillStar className="favor" />
+                      <antIcon.AiOutlineStar className="no-favor" />
+                    </span>
+                  </div>
                   <div className="flex-box between a-center">
-                    <span className="hot">{item.hot}</span>
+                    <span className="hot">
+                      {item.hot === "etc" ? "" : item.hot}
+                    </span>
                     <span
                       style={{
                         textDecoration: "line-through",

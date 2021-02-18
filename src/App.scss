@@ -8,9 +8,16 @@
   max-width: 1400px;
   display: flex;
   margin: 0 auto;
+  
   @media all and (min-width: 761px) {
     padding-left: 250px;
   }
+}
+.bg-box{
+  width: 100vw;height: 100vh;
+  position: fixed;left: 0;top:0;
+  
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .ant-layout-content {
   padding: 30px;
@@ -24,6 +31,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  &.fix{
+    position: fixed;left: 0;top:0;z-index: 100;
+  };
 }
 .ic-loading {
   position: fixed;
@@ -104,19 +114,24 @@ h3.title {
   position: fixed;
   right: 40px;
   bottom: 30px;
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0;
   transition: all 0.2s;
+  svg {
+    font-size: 18px;
+  }
   box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
   @include mobile() {
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     right: 15px;
     bottom: 15px;
+    svg {
+      font-size: 16px;
+    }
   }
 }
 .header-box {
@@ -135,11 +150,7 @@ h3.title {
     }
   }
 }
-.top-fix {
-  .btn-top-move {
-    opacity: 0.9;
-  }
-}
+
 @include mobile() {
   .top-fix {
     padding-top: 70px;

@@ -12,15 +12,24 @@ import AdminProd from "./component/Admin/AdminProd";
 import AdminOrder from "./component/Admin/AdminOrder";
 import AdminOrderList from "./component/Admin/AdminOrderList";
 import Loading from "./component/Loading";
-import { Layout, Button } from "antd";
+import { Layout, Button, BackTop } from "antd";
 import firebase from "./firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, clearUser } from "./redux/actions/user_action";
+import { getNotificationPermission } from "./component/CommonFunc";
 import * as antIcon from "react-icons/ai";
 import Logo from "./img/logo.svg";
 
 const { Sider, Content, Header } = Layout;
 function App(props) {
+  function isDesktopOS(){
+    return ( 'win16|win32|win64|windows|mac|macintel|linux|freebsd|openbsd|sunos'.indexOf(navigator.platform.toLowerCase()) >= 0 ); 
+  }
+
+  if(isDesktopOS()){
+    getNotificationPermission();
+  }
+
   let history = useHistory();
   let dispatch = useDispatch();
   const isLoading = useSelector((state) => state.user.isLoading);
@@ -35,6 +44,7 @@ function App(props) {
       }
     });
   }, []);
+  
 
   // 스크롤 이벤트 핸들러
   const [TopFix, setTopFix] = useState(false);
@@ -51,10 +61,6 @@ function App(props) {
     } else {
       setTopFix(false);
     }
-  };
-
-  const scrollToTop = (event) => {
-    window.scrollTo(0, 0);
   };
 
   useEffect(() => {
@@ -116,13 +122,14 @@ function App(props) {
                   />
                 </Switch>
               </Content>
-              <Button
-                type="primary"
-                shape="circle"
-                className="btn-top-move"
-                icon={<antIcon.AiOutlineArrowUp />}
-                onClick={scrollToTop}
-              />
+              <BackTop>
+                <Button
+                  type="primary"
+                  shape="circle"
+                  className="btn-top-move"
+                  icon={<antIcon.AiOutlineArrowUp />}
+                />
+              </BackTop>
             </div>
           </Layout>
         </Layout>

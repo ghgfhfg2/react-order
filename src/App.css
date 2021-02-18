@@ -17,6 +17,14 @@
   .content-box {
     padding-left: 250px; } }
 
+.bg-box {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.5); }
+
 .ant-layout-content {
   padding: 30px; }
 
@@ -30,6 +38,12 @@
   display: flex;
   justify-content: center;
   align-items: center; }
+
+.center-box.fix {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100; }
 
 .ic-loading {
   position: fixed;
@@ -93,18 +107,11 @@ h3.title::before {
 @media all and (min-width: 761px) {
   .ant-layout-sider {
     position: absolute;
-<<<<<<< HEAD
-    height: 100%;
-    left: 0;
-    margin-left: 0; }
-  .ant-layout-sider.fix {
-=======
     height: calc(100% - 100px);
     left: 0;
     margin-left: 0; }
   .ant-layout-sider.fix {
     height: 100%;
->>>>>>> master
     top: 0;
     position: fixed; } }
 
@@ -117,21 +124,25 @@ h3.title::before {
   position: fixed;
   right: 40px;
   bottom: 30px;
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0;
   transition: all 0.2s;
   box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2); }
 
+.btn-top-move svg {
+  font-size: 18px; }
+
 @media (max-width: 760px) {
   .btn-top-move {
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     right: 15px;
-    bottom: 15px; } }
+    bottom: 15px; }
+  .btn-top-move svg {
+    font-size: 16px; } }
 
 .header-box {
   display: flex;
@@ -149,9 +160,6 @@ h3.title::before {
   .header-box .top-logo {
     width: 120px; } }
 
-.top-fix .btn-top-move {
-  opacity: 0.9; }
-
 @media (max-width: 760px) {
   .top-fix {
     padding-top: 70px; }
@@ -164,11 +172,7 @@ h3.title::before {
     animation: fade_down 0.2s both; }
   .top-fix .btn-m-menu {
     position: fixed;
-<<<<<<< HEAD
-    top: 15px;
-=======
     top: 18px;
->>>>>>> master
     animation: fade_down 0.2s both; } }
 
 .nav-top-box {
@@ -215,12 +219,8 @@ h3.title::before {
   position: relative;
   font-weight: 500; }
 
-<<<<<<< HEAD
-.left-nav-menu ul .ant-menu-submenu-title, .left-nav-menu ul li a {
-=======
 .left-nav-menu ul .ant-menu-submenu-title,
 .left-nav-menu ul li a {
->>>>>>> master
   display: flex;
   align-items: center; }
 
@@ -412,8 +412,6 @@ h3.title::before {
     width: 25%;
     flex: auto;
     margin-top: -1px; } }
-<<<<<<< HEAD
-=======
 
 .btn-ic-favor {
   position: absolute;
@@ -425,7 +423,6 @@ h3.title::before {
   border-radius: 50%;
   cursor: pointer;
   opacity: 0.7; }
->>>>>>> master
 
 .order-check-box {
   display: flex; }
@@ -435,8 +432,6 @@ h3.title::before {
 
 .order-check-box .check input {
   margin-right: 3px; }
-<<<<<<< HEAD
-=======
 
 .admin-box .ic-hot,
 .admin-box .ic-ice {
@@ -454,7 +449,6 @@ h3.title::before {
 
 .admin-box .ic-ice {
   background: #1890ff; }
->>>>>>> master
 
 .join-form-wrap .input-box {
   position: relative;

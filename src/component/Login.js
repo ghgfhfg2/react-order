@@ -73,8 +73,7 @@ function Login() {
               className={"place-holder " + (InputEmail && "on")}
             >
               <span>이메일</span>
-            </label>
-          <span style={{color:"#888",fontSize:"12px",display:"block",paddingLeft:"10px",marginTop:"3px"}}>※ 실제 사용중인 이메일로 가입 바랍니다(비밀번호 재설정 시 필요)</span>
+            </label>          
           </div>
           <div className="input-box">
             <input
@@ -82,7 +81,7 @@ function Login() {
               onChange={onInputPw}
               name="password"
               id="password"
-              ref={register({ required: true, minLength: 4 })}
+              ref={register({ required: true, minLength: 6 })}
             />
             <label
               htmlFor="password"
@@ -94,7 +93,7 @@ function Login() {
               <p>비밀번호를 입력해 주세요</p>
             )}
             {errors.password && errors.password.type === "minLength" && (
-              <p>비밀번호는 4글자 이상이어야 합니다.</p>
+              <p>비밀번호는 6글자 이상이어야 합니다.</p>
             )}
             {errorFromSubmit && <p>{errorFromSubmit}</p>}
           </div>
