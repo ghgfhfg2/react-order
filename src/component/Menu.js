@@ -137,11 +137,14 @@ function Menu() {
               }
               return el.category === CateRadio;
             });
+            console.log(array)
             setProdItem(array);
           });
-
+          
+          console.log(ProdItem)
         if (searchInput !== "") {
           let array = _.cloneDeep(ProdItem);
+          console.log(array)
           array.forEach(function (item) {
             var dis = Hangul.disassemble(item.name, true);
             var cho = dis.reduce(function (prev, elem) {
@@ -157,9 +160,10 @@ function Menu() {
               item.diassembled.includes(searchInput) ||
               item.diassembled.includes(search) ||
               item.name.includes(searchInput)
-            );
-          });
-          setProdItem(array);
+              );
+            });
+            console.log(array)
+            setProdItem(array);
         }
       }
       getProdItem();
