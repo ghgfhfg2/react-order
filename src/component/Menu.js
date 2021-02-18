@@ -14,6 +14,7 @@ const _ = require("lodash");
 function Menu() {
   const userInfo = useSelector((state) => state.user.currentUser);
   const [ProdItem, setProdItem] = useState([]);
+  const [ProdItemCopy, setProdItemCopy] = useState();
 
   //정렬 라디오버튼
   const [CateRadio, setCateRadio] = useState("all");
@@ -25,6 +26,9 @@ function Menu() {
   const [searchInput, setSearchInput] = useState("");
   const onSearchChange = (e) => {
     setSearchInput(e.target.value);
+    if(e.target.value === ''){
+      setSearchAgain(!SearchAgain);
+    }
   };
 
   const [SearchAgain, setSearchAgain] = useState(false);
@@ -46,11 +50,7 @@ function Menu() {
 
   let b_soldout;
   useEffect(() => {
-    if (!userInfo) {
-      setTimeout(() => {
-        setSearchAgain(!SearchAgain);
-      }, 500);
-    }
+    
     let mounted = true;
     if (mounted && userInfo) {
       //즐찾
@@ -137,41 +137,41 @@ function Menu() {
               }
               return el.category === CateRadio;
             });
-            console.log(array)
             setProdItem(array);
-          });
-          
-          console.log(ProdItem)
-        if (searchInput !== "") {
-          let array = _.cloneDeep(ProdItem);
-          console.log(array)
-          array.forEach(function (item) {
-            var dis = Hangul.disassemble(item.name, true);
-            var cho = dis.reduce(function (prev, elem) {
-              elem = elem[0] ? elem[0] : elem;
-              return prev + elem;
-            }, "");
-            item.diassembled = cho;
-          });
-          let arr = searchInput.concat();
-          let search = Hangul.disassemble(arr).join("");
-          array = array.filter(function (item) {
-            return (
-              item.diassembled.includes(searchInput) ||
-              item.diassembled.includes(search) ||
-              item.name.includes(searchInput)
-              );
-            });
-            console.log(array)
-            setProdItem(array);
+            setProdItemCopy(array);
+          });          
         }
+        getProdItem();
       }
-      getProdItem();
-    }
-    return function cleanup() {
-      mounted = false;
-    };
-  }, [CateRadio, searchInput, SearchAgain]);
+      return function cleanup() {
+        mounted = false;
+      };
+    }, [CateRadio, SearchAgain]);
+    
+    
+    useEffect(() => {
+      if (ProdItemCopy && searchInput !== "") {
+      let array = _.cloneDeep(ProdItemCopy);
+      array.forEach(function (item) {
+        var dis = Hangul.disassemble(item.name, true);
+        var cho = dis.reduce(function (prev, elem) {
+          elem = elem[0] ? elem[0] : elem;
+          return prev + elem;
+        }, "");
+        item.diassembled = cho;
+      });
+      let arr = searchInput.concat();
+      let search = Hangul.disassemble(arr).join("");
+      array = array.filter(function (item) {
+        return (
+          item.diassembled.includes(searchInput) ||
+          item.diassembled.includes(search) ||
+          item.name.includes(searchInput)
+          );
+        });
+        setProdItem(array);
+    }    
+  }, [searchInput])
 
   const [PosX, setPosX] = useState(0);
   const [PosY, setPosY] = useState(0);
