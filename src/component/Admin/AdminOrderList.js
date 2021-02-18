@@ -5,6 +5,7 @@ import { commaNumber } from "../CommonFunc";
 
 function AdminOrderList() {
 
+  const [ProdList, setProdList] = useState([]);
   const [OrderList, setOrderList] = useState([]);
   const [SelectDay, setSelectDay] = useState();
   const [LastDay, setLastDay] = useState()
@@ -17,6 +18,23 @@ function AdminOrderList() {
   useEffect(() => {
     let mounted = true;
     if (mounted) {
+      async function getProdItem() {
+        await firebase
+        .database()
+          .ref("products")
+          .orderByChild("sort_num")
+          .once("value")
+          .then((snapshot) => {
+            let prod = [];
+            snapshot.forEach(function (item) {
+              prod.push({
+                name: item.val().name,
+                sort_num: item.val().sort_num ? item.val().sort_num : 9999,
+              });
+          });
+          setProdList(prod)
+          console.log(prod)
+        });
       firebase
         .database()
         .ref("order")
@@ -47,7 +65,7 @@ function AdminOrderList() {
             prevDayIndex = 4;
           }  
           setPrevDay(day[prevDayIndex]);
-          if(SelectDay){
+          if(SelectDay){           
             array = array.filter(el => {
               return el.order_time.includes(SelectDay)
             })
@@ -89,7 +107,20 @@ function AdminOrderList() {
             })     
             setSumPrice(sumP)
             console.log(array)
-            array.sort((a,b) => {
+
+            let assignArr = [];
+            ProdList.map(el => {
+              array.map((item) => {
+                if(el.name === item.prod_name) {
+                  console.log(1);
+                  assignArr.push(Object.assign(item, el));
+                }
+              });
+            });
+            console.log(assignArr)
+
+
+            array = assignArr.sort((a,b) => {
               if (a.category > b.category) {
                 return -1;
               }
@@ -100,6 +131,8 @@ function AdminOrderList() {
           }
           setOrderList(array);          
         });
+      }
+      getProdItem();
       }
       return function cleanup() {
         firebase.database().ref("order").off();
@@ -163,7 +196,9 @@ function AdminOrderList() {
       {SelectDay && 
         <>
         <div style={{marginTop:"12px"}}>
-        {OrderList[0].order_time}        
+        {OrderList[0] && 
+          <span>{OrderList[0].order_time}</span>
+        }        
         </div>
         <div style={{display:"flex"}}>
         <table className="fl-table" style={{marginTop:"12px",width:"48%"}}>
@@ -175,7 +210,7 @@ function AdminOrderList() {
             </tr>
           </thead>
           <tbody>
-            {OrderList.map((list, index) => (
+            {OrderList && OrderList.map((list, index) => (
               <tr key={index}>
                 <td>
                   {list.hot === "hot" && "따뜻한 "}
