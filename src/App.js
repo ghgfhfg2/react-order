@@ -7,7 +7,6 @@ import Login from "./component/Login";
 import Menu from "./component/Menu";
 import MyOrder from "./component/MyOrder";
 import MyMenu from "./component/MyMenu";
-import Admin from "./component/Admin/Admin";
 import AdminProd from "./component/Admin/AdminProd";
 import AdminOrder from "./component/Admin/AdminOrder";
 import AdminOrderList from "./component/Admin/AdminOrderList";
@@ -112,7 +111,6 @@ function App(props) {
                   <Route exact path="/join" component={Join} />
                   <Route exact path="/myorder" component={MyOrder} />
                   <Route exact path="/mymenu" component={MyMenu} />
-                  <Route exact path="/admin" component={Admin} />
                   <Route exact path="/admin/prod" component={AdminProd} />
                   <Route exact path="/admin/order" component={AdminOrder} />
                   <Route
