@@ -5,7 +5,6 @@ import { commaNumber } from "../CommonFunc";
 
 function AdminOrderList() {
 
-  const [ProdList, setProdList] = useState([]);
   const [OrderList, setOrderList] = useState([]);
   const [SelectDay, setSelectDay] = useState();
   const [LastDay, setLastDay] = useState()
@@ -17,25 +16,8 @@ function AdminOrderList() {
   const [SumAddAmount, setSumAddAmount] = useState()
   useEffect(() => {
     let mounted = true;
-    if (mounted) {
-      async function getProdItem() {
-        await firebase
-        .database()
-          .ref("products")
-          .orderByChild("sort_num")
-          .once("value")
-          .then((snapshot) => {
-            let prod = [];
-            snapshot.forEach(function (item) {
-              prod.push({
-                name: item.val().name,
-                sort_num: item.val().sort_num ? item.val().sort_num : 9999,
-              });
-          });
-          setProdList(prod)
-          console.log(prod)
-        });
-      firebase
+    if (mounted) {     
+        firebase
         .database()
         .ref("order")
         .orderByChild("order_state")
@@ -106,21 +88,8 @@ function AdminOrderList() {
               el.price = el.price * el.amount
             })     
             setSumPrice(sumP)
-            console.log(array)
 
-            let assignArr = [];
-            ProdList.map(el => {
-              array.map((item) => {
-                if(el.name === item.prod_name) {
-                  console.log(1);
-                  assignArr.push(Object.assign(item, el));
-                }
-              });
-            });
-            console.log(assignArr)
-
-
-            array = assignArr.sort((a,b) => {
+            array = array.sort((a,b) => {
               if (a.category > b.category) {
                 return -1;
               }
@@ -128,11 +97,9 @@ function AdminOrderList() {
                 return 1;
               }
             })
-          }
+          }          
           setOrderList(array);          
         });
-      }
-      getProdItem();
       }
       return function cleanup() {
         firebase.database().ref("order").off();
