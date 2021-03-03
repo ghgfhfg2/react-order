@@ -71,6 +71,11 @@ export const ProdList = styled.div`
       font-weight: bold;
       font-size: 15px;
       margin: 3px 0 2px 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2; 
+      -webkit-box-orient: vertical;
+      overflow:hidden;
+      max-height: 46px;
     }
     .ic-favor {
       margin-top: 7px;
