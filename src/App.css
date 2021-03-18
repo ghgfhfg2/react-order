@@ -4,6 +4,40 @@
   display: none; }
 
 /* 인풋 */
+/*
+.ant-btn{
+  &:active,&:hover,&:focus{
+    color: $p-color !important;
+    border-color: $p-color !important;
+  }
+}
+.ant-btn-primary{
+  border-color: $p-color !important;
+  background-color: $p-color !important;
+  &:active,&:hover,&:focus{
+    color: #fff !important;
+  }
+}
+.ant-menu-vertical .ant-menu-item::after, .ant-menu-vertical-left .ant-menu-item::after, .ant-menu-vertical-right .ant-menu-item::after, .ant-menu-inline .ant-menu-item::after{
+  border-right-color: $p-color !important;
+}
+.ant-menu-item-selected a, .ant-menu-item-selected a:hover{
+  color: $p-color;
+}
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected{
+  background-color: lighten($p-color, 21%);
+}
+.ant-menu-item a:hover{color: lighten($p-color, 5%)}
+
+.ic-favor.true{color: $p-color;}
+
+.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover{
+  background:lighten($p-color, 5%);
+  border-color: lighten($p-color, 5%);
+}
+.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):active{background:darken($p-color, 5%);
+  border-color: darken($p-color, 5%);}
+*/
 .ant-layout-header {
   background: #fff; }
 
@@ -89,7 +123,7 @@ h3.title::before {
   display: inline-block;
   width: 4px;
   height: 17px;
-  background-color: #1890ff;
+  background-color: #0e62b1;
   position: absolute;
   left: 0;
   top: 5px; }

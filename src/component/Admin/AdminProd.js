@@ -98,7 +98,6 @@ export const ProdList = styled.div`
         display: none;
       }
       &.true {
-        color: #1890ff;
         opacity: 1;
         .no-favor {
           display: none;

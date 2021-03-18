@@ -16,7 +16,7 @@ export const OderModalPopup = styled.div`
   border-radius: 10px;
   background: #fff;
   transition: all 0.2s;
-  transform: translate(-40%, -90%);
+  transform: translate(-50%, -70%);
   left: ${(props) => props.posx}px;
   top: ${(props) => props.posy}px;
   box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.25);

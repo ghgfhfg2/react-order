@@ -17,7 +17,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser, clearUser } from "./redux/actions/user_action";
 import { getNotificationPermission } from "./component/CommonFunc";
 import * as antIcon from "react-icons/ai";
-import Logo from "./img/logo.svg";
+//import Logo from "./img/logo.svg";
+import Logo from "./img/logo_2021_spring.png";
 
 const { Sider, Content, Header } = Layout;
 function App(props) {
