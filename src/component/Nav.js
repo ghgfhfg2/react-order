@@ -90,7 +90,7 @@ function Nav() {
             setCurAbleTime(4);
           }
         }else{
-          setCurAbleTime(0)
+          setCurAbleTime(5)
         }    
         if(currentDay == '토요일' || currentDay == '일요일'){
           setCurAbleTime(5)
