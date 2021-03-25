@@ -196,7 +196,7 @@ function MyMenu() {
                   <div className="flex-box between">
                     <span className="name">{item.name}</span>
                     <span
-                      className="ic-favor true"
+                      className="ic-favor true p-color"
                       onClick={(e) => {
                         onToggleFavor(e, item.name);
                       }}

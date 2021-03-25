@@ -50,7 +50,6 @@ function Menu() {
 
   let b_soldout;
   useEffect(() => {
-    
     let mounted = true;
     if (mounted && userInfo) {
       //즐찾
@@ -142,6 +141,8 @@ function Menu() {
           });          
         }
         getProdItem();
+      }else{
+        setSearchAgain(!SearchAgain);
       }
       return function cleanup() {
         mounted = false;

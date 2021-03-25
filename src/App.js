@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
 import Nav from "./component/Nav";
+import './custom_antd.less';
 import "./App.css";
 import Join from "./component/Join";
 import Login from "./component/Login";
@@ -19,6 +20,7 @@ import { getNotificationPermission } from "./component/CommonFunc";
 import * as antIcon from "react-icons/ai";
 //import Logo from "./img/logo.svg";
 import Logo from "./img/logo_2021_spring.png";
+
 
 const { Sider, Content, Header } = Layout;
 function App(props) {

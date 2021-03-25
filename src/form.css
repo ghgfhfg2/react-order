@@ -17,7 +17,6 @@ form.join-form {
   border-bottom: 1px solid #4f6294; }
 
 .join-form p {
-  color: #3894ea;
   padding-left: 10px;
   margin-top: 5px; }
 
@@ -54,7 +53,6 @@ form.join-form {
 .join-form button[type="submit"],
 .join-form input[type="submit"] {
   cursor: pointer;
-  background: #0e62b1;
   color: white;
   text-transform: uppercase;
   border: none;
@@ -62,10 +60,6 @@ form.join-form {
   padding: 20px;
   font-size: 17px;
   font-weight: 500; }
-
-.join-form button[type="submit"]:hover,
-i.join-form nput[type="submit"]:hover {
-  background: #0e62b1; }
 
 .join-form button[type="submit"]:active,
 .join-form input[type="button"]:active,

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Menu } from "antd";
@@ -6,6 +6,7 @@ import * as bsIcon from "react-icons/bs";
 import * as antIcon from "react-icons/ai";
 import firebase from "../firebase";
 import styled from "styled-components";
+import moment from "moment";
 const { SubMenu } = Menu;
 export const BlackBg = styled.div`
   width: 100vw;
@@ -22,7 +23,8 @@ export const BlackBg = styled.div`
     }
   }
 `;
-function Nav() {
+function Nav() { 
+
   const currentUser = useSelector((state) => state.user.currentUser);
 
   const [current, setCurrent] = useState("1");
@@ -40,6 +42,67 @@ function Nav() {
   const onLogout = () => {
     firebase.auth().signOut();
   };
+  
+  
+  const timeDiff = (time) => {
+    let hour = parseInt(time.split(':')[0] * 60);
+    let min = parseInt(time.split(':')[1]);
+    return hour + min;
+  }
+  
+  const [AbleTime, setAbleTime] = useState();
+  const [CurAbleTime, setCurAbleTime] = useState(0);
+  const [TimeChange, setTimeChange] = useState(false);
+  const timeRef = useRef(false);
+
+  useEffect(() => {          
+    setTimeout(() => {
+      timeRef.current = !timeRef.current;      
+      setTimeChange(timeRef.current);
+    }, 2000);
+    const currentDay = moment().format('dddd');
+    const currentTime = moment().format('HH:mm');
+    const currentTimeNum = timeDiff(currentTime);
+    let mounted = true;
+    if (mounted) {
+      firebase
+      .database()
+      .ref("time")
+      .on("value", (snapshot) => {
+        setAbleTime(snapshot.val());
+        let able = snapshot.val();
+        let ableKeys = Object.keys(able);
+        let newAble = {}
+        for (let i = 0; i < ableKeys.length; i++) {
+          const key = ableKeys[i]
+          const value = able[key]
+          newAble[key] = timeDiff(value);
+        }
+        if(currentTimeNum >= newAble.ableTimeStart && currentTimeNum <= newAble.ableTimeEnd){
+          setCurAbleTime(1);
+          if(currentTimeNum >= newAble.disableTimeStart && currentTimeNum < newAble.disableTimeEnd){
+            setCurAbleTime(2);
+          }
+          if(currentTimeNum >= newAble.lunchTimeStart && currentTimeNum < newAble.lunchTimeEnd){
+            setCurAbleTime(3);
+          }
+          if(currentTimeNum >= newAble.breakTimeStart && currentTimeNum <= newAble.breakTimeEnd){
+            setCurAbleTime(4);
+          }
+        }else{
+          setCurAbleTime(0)
+        }    
+        if(currentDay == '토요일' || currentDay == '일요일'){
+          setCurAbleTime(5)
+        }    
+      });
+      
+    }
+    return () => {
+      mounted = false;
+    }
+  }, [TimeChange])
+
   if (currentUser) {
     return (
       <>
@@ -67,8 +130,8 @@ function Nav() {
                   {currentUser.displayName}님 반갑습니다.
                   <span
                     onClick={onLogout}
+                    className="p-color-l"
                     style={{
-                      color: "#1890ff",
                       cursor: "pointer",
                       marginLeft: "10px",
                     }}
@@ -130,7 +193,20 @@ function Nav() {
                 </Menu.Item>
               </SubMenu>
             )}
-          </Menu>
+            {AbleTime && CurAbleTime && (
+            <li className="nav-time">
+                <span className={"current"+" state_"+CurAbleTime}>
+                  <span>Now</span>
+                </span>
+                <ul>
+                  <li className={CurAbleTime === 1 ? "cur" : ""}><span>운영시간</span> - {AbleTime.ableTimeStart}~{AbleTime.ableTimeEnd}</li>
+                  <li className={CurAbleTime === 2 ? "cur" : ""}><span>이용불가</span> - {AbleTime.disableTimeStart}~{AbleTime.disableTimeEnd}</li>
+                  <li className={CurAbleTime === 3 ? "cur" : ""}><span>점심시간</span> - {AbleTime.lunchTimeStart}~{AbleTime.lunchTimeEnd}</li>
+                  <li className={CurAbleTime === 4 ? "cur" : ""}><span>브레이크</span> - {AbleTime.breakTimeStart}~{AbleTime.breakTimeEnd}</li>
+                </ul>
+            </li>
+            )}
+          </Menu>          
         </div>
         <BlackBg className={LeftMenu && "on"} onClick={onMenuHandler} />
       </>
@@ -160,10 +236,10 @@ function Nav() {
               <>
                 <div className="flex-box j-center">
                   {currentUser.displayName}님 반갑습니다.
-                  <span
+                  <span 
+                    class="p-color-l"
                     onClick={onLogout}
                     style={{
-                      color: "#1890ff",
                       cursor: "pointer",
                       marginLeft: "10px",
                     }}

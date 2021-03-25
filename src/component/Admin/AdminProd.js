@@ -9,11 +9,13 @@ import {
   Row,
   Divider,
   Switch,
+  TimePicker,
 } from "antd";
 import firebase from "../../firebase";
 import styled from "styled-components";
 import ModifyModal from "./ModifyModal";
 import uuid from "react-uuid";
+import moment from 'moment';
 
 export const ProdList = styled.div`
   display: flex;
@@ -174,6 +176,23 @@ function AdminProd() {
       });
   };
 
+  const [AbleTime, setAbleTime] = useState()
+  useEffect(() => {
+    let mounted = true;
+    if (mounted) {
+      firebase
+      .database()
+      .ref("time")
+      .on("value", (snapshot) => {
+        setAbleTime(snapshot.val());
+        console.log(AbleTime)
+      });      
+    }
+    return () => {
+      mounted = false;
+    }
+  }, [])  
+
   useEffect(() => {
     let mounted = true;
     if (mounted) {
@@ -294,13 +313,84 @@ function AdminProd() {
     setItemChange((pre) => pre + 1);
   };
 
-  const [ProdRegist, setProdRegist] = useState(true);
+  const [ProdRegist, setProdRegist] = useState(false);
   const ProdRegistToggle = () => {
     setProdRegist(!ProdRegist);
   };
+  const [TimeRegist, setTimeRegist] = useState(false);
+  const TimeRegistToggle = () => {
+    setTimeRegist(!TimeRegist);
+  };  
+
+  const format = 'HH:mm';
+  const onTimeSet = () => {
+    let time1_1 = document.querySelectorAll('.time1 input')[0].value;
+    let time1_2 = document.querySelectorAll('.time1 input')[1].value;
+    let time2_1 = document.querySelectorAll('.time2 input')[0].value;
+    let time2_2 = document.querySelectorAll('.time2 input')[1].value;
+    let time3_1 = document.querySelectorAll('.time3 input')[0].value;
+    let time3_2 = document.querySelectorAll('.time3 input')[1].value;
+    let time4_1 = document.querySelectorAll('.time4 input')[0].value;
+    let time4_2 = document.querySelectorAll('.time4 input')[1].value;
+    let body = {}
+    body.ableTimeStart = time1_1;
+    body.ableTimeEnd = time1_2;
+    body.disableTimeStart = time2_1;
+    body.disableTimeEnd = time2_2;
+    body.lunchTimeStart = time3_1;
+    body.lunchTimeEnd = time3_2;
+    body.breakTimeStart = time4_1;
+    body.breakTimeEnd = time4_2;
+    
+    firebase.database().ref('time').update(body)
+
+  }
 
   return (
     <>
+      <div className="flex-box a-center" style={{ marginBottom: "10px" }}>
+        <h3 className="title" style={{ margin: "0 10px 0 0" }}>
+        운영시간 설정
+        </h3>
+        <Switch
+          onChange={TimeRegistToggle}
+          checkedChildren="on"
+          unCheckedChildren="off"
+        />
+      </div> 
+      {AbleTime && TimeRegist && (
+      <div style={{marginBottom:"20px"}}>
+        <div className="time-seting">
+          <div className="tit">
+            운영시간
+          </div>
+          <TimePicker.RangePicker className="time1" format={format} />
+          <div className="tit">
+            주문불가 시간
+          </div>
+          <TimePicker.RangePicker className="time2" format={format} />     
+        </div>
+        <div className="time-seting">
+          <div className="tit">
+            점심시간
+          </div>
+          <TimePicker.RangePicker className="time3" format={format} />
+          <div className="tit">
+            브레이크 타임
+          </div>
+          <TimePicker.RangePicker className="time4" format={format} />        
+        </div>
+        <Button
+              htmlType="button"
+              style={{ width: "100%",maxWidth:"250px" }}
+              type="primary"
+              size="large"
+              onClick={onTimeSet}
+            >
+              시간설정 적용하기
+            </Button>
+      </div>
+      )}
       <div className="flex-box a-center" style={{ marginBottom: "10px" }}>
         <h3 className="title" style={{ margin: "0 10px 0 0" }}>
           상품등록
@@ -309,9 +399,8 @@ function AdminProd() {
           onChange={ProdRegistToggle}
           checkedChildren="on"
           unCheckedChildren="off"
-          defaultChecked
         />
-      </div>
+      </div>            
       {ProdRegist && (
         <Form className="admin-prod-form" onFinish={onSubmitProd}>
           <div
