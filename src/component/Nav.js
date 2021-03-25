@@ -78,7 +78,7 @@ function Nav() {
           const value = able[key]
           newAble[key] = timeDiff(value);
         }
-        if(currentTimeNum >= newAble.ableTimeStart && currentTimeNum <= newAble.ableTimeEnd){
+        if(currentTimeNum >= newAble.ableTimeStart && currentTimeNum < newAble.ableTimeEnd){
           setCurAbleTime(1);
           if(currentTimeNum >= newAble.disableTimeStart && currentTimeNum < newAble.disableTimeEnd){
             setCurAbleTime(2);
@@ -86,7 +86,7 @@ function Nav() {
           if(currentTimeNum >= newAble.lunchTimeStart && currentTimeNum < newAble.lunchTimeEnd){
             setCurAbleTime(3);
           }
-          if(currentTimeNum >= newAble.breakTimeStart && currentTimeNum <= newAble.breakTimeEnd){
+          if(currentTimeNum >= newAble.breakTimeStart && currentTimeNum < newAble.breakTimeEnd){
             setCurAbleTime(4);
           }
         }else{
