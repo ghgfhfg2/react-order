@@ -55,7 +55,7 @@ function Nav() {
   const [TimeChange, setTimeChange] = useState(false);
   const timeRef = useRef(false);
 
-  useEffect(() => {          
+  useEffect(() => {              
     setTimeout(() => {
       timeRef.current = !timeRef.current;      
       setTimeChange(timeRef.current);
@@ -64,7 +64,7 @@ function Nav() {
     const currentTime = moment().format('HH:mm');
     const currentTimeNum = timeDiff(currentTime);
     let mounted = true;
-    if (mounted) {
+    if (mounted) {      
       firebase
       .database()
       .ref("time")
@@ -96,7 +96,6 @@ function Nav() {
           setCurAbleTime(5)
         }    
       });
-      
     }
     return () => {
       mounted = false;
@@ -199,10 +198,18 @@ function Nav() {
                   <span>Now</span>
                 </span>
                 <ul>
+                  {AbleTime.ableTimeStart &&
                   <li className={CurAbleTime === 1 ? "cur" : ""}><span>운영시간</span> - {AbleTime.ableTimeStart}~{AbleTime.ableTimeEnd}</li>
+                  }
+                  {AbleTime.disableTimeStart &&
                   <li className={CurAbleTime === 2 ? "cur" : ""}><span>이용불가</span> - {AbleTime.disableTimeStart}~{AbleTime.disableTimeEnd}</li>
+                  }
+                  {AbleTime.lunchTimeStart &&
                   <li className={CurAbleTime === 3 ? "cur" : ""}><span>점심시간</span> - {AbleTime.lunchTimeStart}~{AbleTime.lunchTimeEnd}</li>
+                  }
+                  {AbleTime.breakTimeStart &&
                   <li className={CurAbleTime === 4 ? "cur" : ""}><span>브레이크</span> - {AbleTime.breakTimeStart}~{AbleTime.breakTimeEnd}</li>
+                  }
                 </ul>
             </li>
             )}
