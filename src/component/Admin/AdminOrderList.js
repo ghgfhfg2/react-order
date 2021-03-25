@@ -16,8 +16,8 @@ function AdminOrderList() {
   const [SumAddAmount, setSumAddAmount] = useState()
   useEffect(() => {
     let mounted = true;
-    if (mounted) {
-      firebase
+    if (mounted) {     
+        firebase
         .database()
         .ref("order")
         .orderByChild("order_state")
@@ -47,7 +47,7 @@ function AdminOrderList() {
             prevDayIndex = 4;
           }  
           setPrevDay(day[prevDayIndex]);
-          if(SelectDay){
+          if(SelectDay){           
             array = array.filter(el => {
               return el.order_time.includes(SelectDay)
             })
@@ -88,8 +88,8 @@ function AdminOrderList() {
               el.price = el.price * el.amount
             })     
             setSumPrice(sumP)
-            console.log(array)
-            array.sort((a,b) => {
+
+            array = array.sort((a,b) => {
               if (a.category > b.category) {
                 return -1;
               }
@@ -97,7 +97,7 @@ function AdminOrderList() {
                 return 1;
               }
             })
-          }
+          }          
           setOrderList(array);          
         });
       }
@@ -163,7 +163,9 @@ function AdminOrderList() {
       {SelectDay && 
         <>
         <div style={{marginTop:"12px"}}>
-        {OrderList[0].order_time}        
+        {OrderList[0] && 
+          <span>{OrderList[0].order_time}</span>
+        }        
         </div>
         <div style={{display:"flex"}}>
         <table className="fl-table" style={{marginTop:"12px",width:"48%"}}>
@@ -175,7 +177,7 @@ function AdminOrderList() {
             </tr>
           </thead>
           <tbody>
-            {OrderList.map((list, index) => (
+            {OrderList && OrderList.map((list, index) => (
               <tr key={index}>
                 <td>
                   {list.hot === "hot" && "따뜻한 "}

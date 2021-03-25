@@ -1,8 +1,21 @@
 @import "scss-common.scss";
 @import "form.css";
+
+.p-color{color:$p-color;}
+.p-color-l{color:lighten($p-color,5%);}
+
 .ant-layout-header {
   background: #fff;
 }
+.join-form p{color: $p-color;}
+.join-form button[type="submit"],
+.join-form input[type="submit"] {
+  background-color: darken($p-color,10%);
+}
+.join-form button[type="submit"]:hover,
+i.join-form nput[type="submit"]:hover {
+  background: $p-color; }
+
 .content-box {
   width: 100%;
   max-width: 1400px;
@@ -44,7 +57,6 @@
 .ic-loading svg {
   width: 40px;
   height: 40px;
-  color: #1890ff;
 }
 .flex-box {
   width: 100%;
@@ -78,7 +90,7 @@ h3.title {
     display: inline-block;
     width: 4px;
     height: 17px;
-    background-color: #1890ff;
+    background-color: $p-color;
     position: absolute;
     left: 0;
     top: 5px;
@@ -203,7 +215,7 @@ h3.title {
     }
   }
 }
-.left-nav-menu ul {
+.left-nav-menu > ul {
   height: calc(100% - 50px);
   background-color: #fff;
   z-index: 100;
@@ -324,11 +336,11 @@ h3.title {
 
 @keyframes neon_blue {
   from {
-    box-shadow: 0 0 1px #fff, 0 0 2px #fff, 0 0 4px #228dff, 0 0 5px #228dff,
-      0 0 8px #228dff;
+    box-shadow: 0 0 1px #fff, 0 0 2px #fff, 0 0 4px $p-color, 0 0 5px $p-color,
+      0 0 8px $p-color;
   }
   to {
-    box-shadow: 0 0 1px #fff, 0 0 2px #228dff, 0 0 2px #228dff, 0 0 3px #228dff;
+    box-shadow: 0 0 1px #fff, 0 0 2px $p-color, 0 0 2px $p-color, 0 0 3px $p-color;
   }
 }
 
@@ -374,7 +386,7 @@ h3.title {
     cursor: pointer;
   }
   input[type="radio"]:checked + label {
-    border-color: #1890ff;
+    border-color: $p-color;
     z-index: 1;
   }
   .btn-box {
@@ -391,6 +403,45 @@ h3.title {
 .ant-table-cell {
   padding: 8px 10px !important;
 }
+
+
+// 시간설정 
+.time-seting{
+  margin:10px 0 10px 0;
+  @include flex();
+  .tit{margin-right: 8px;}
+  .ant-picker{margin-right: 15px;width: 195px;}
+  @include mobile(){
+    flex-direction: column;
+    align-items: flex-start;
+    .tit{margin-right: 0;margin-bottom: 4px;}
+    .ant-picker{margin-right: 0;margin-bottom: 10px;}
+  }
+}
+  
+.nav-time{
+  padding: 15px 0;width: 100%;
+  position: absolute;left:0;bottom:0;
+  border-top: 1px solid #ddd;
+ .current{
+   display: inline-block;width: 100%;height: 24px;border:2px solid $p-color;border-width:2px 0;position: absolute;left: 50%;transform: translateX(-50%);
+   transition: all 0.2s;
+   span{position: absolute;left:27px;top:10px;font-size: 12px;color: $p-color;}
+   &.state_1{top:14px;}
+   &.state_2{top:36px;}
+   &.state_3{top:58px;}
+   &.state_4{top:80px;}
+   &.state_5{display: none;}
+}
+  ul{
+    font-size: 12px;
+    text-align: center;
+    li{line-height: 1.9;color:#999;font-weight:400;
+      &.cur{color: #333;font-weight: 700;}
+    }
+  }
+}
+
 
 // 메뉴판
 .menuCategory .ant-radio-group {
@@ -459,6 +510,7 @@ h3.title {
   }
 }
 
+
 //폼 커스텀
 .join-form-wrap {
   .input-box {
@@ -466,7 +518,7 @@ h3.title {
     margin-bottom: 20px;
   }
   input {
-    outline-color: #1672c9;
+    outline-color: $p-color;
   }
   input + .place-holder {
     line-height: 1;
@@ -481,7 +533,7 @@ h3.title {
   }
   input:focus + .place-holder,
   input + .place-holder.on {
-    color: #156ab9;
+    color: $p-color;
     font-size: 12px;
     top: -12px;
     padding-bottom: 2px;

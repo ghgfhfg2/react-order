@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
 import Nav from "./component/Nav";
+import './custom_antd.less';
 import "./App.css";
 import Join from "./component/Join";
 import Login from "./component/Login";
 import Menu from "./component/Menu";
 import MyOrder from "./component/MyOrder";
 import MyMenu from "./component/MyMenu";
-import Admin from "./component/Admin/Admin";
 import AdminProd from "./component/Admin/AdminProd";
 import AdminOrder from "./component/Admin/AdminOrder";
 import AdminOrderList from "./component/Admin/AdminOrderList";
@@ -18,7 +18,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser, clearUser } from "./redux/actions/user_action";
 import { getNotificationPermission } from "./component/CommonFunc";
 import * as antIcon from "react-icons/ai";
-import Logo from "./img/logo.svg";
+//import Logo from "./img/logo.svg";
+import Logo from "./img/logo_2021_spring.png";
+
 
 const { Sider, Content, Header } = Layout;
 function App(props) {
@@ -112,7 +114,6 @@ function App(props) {
                   <Route exact path="/join" component={Join} />
                   <Route exact path="/myorder" component={MyOrder} />
                   <Route exact path="/mymenu" component={MyMenu} />
-                  <Route exact path="/admin" component={Admin} />
                   <Route exact path="/admin/prod" component={AdminProd} />
                   <Route exact path="/admin/order" component={AdminOrder} />
                   <Route

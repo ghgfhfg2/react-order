@@ -3,7 +3,7 @@ import * as antIcon from "@ant-design/icons";
 
 function Loading() {
   return <>
-  <antIcon.LoadingOutlined className="ic-loading" />
+  <antIcon.LoadingOutlined className="ic-loading p-color" />
 </>;
 }
 

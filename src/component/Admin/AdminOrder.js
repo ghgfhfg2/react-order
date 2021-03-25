@@ -203,7 +203,7 @@ function AdminOrder() {
         return pre + 1;
       });
   };
-  console.log(OrderList)
+  
   return (
     <>
       <h3 className="title">주문관리</h3>
