@@ -73,10 +73,16 @@ function MyMenu() {
                 name: item.val().name,
                 kal: item.val().kal,
                 hot: item.val().hot,
+                milk: item.val().milk,                
                 category: item.val().category,
                 image: item.val().image,
                 price: parseInt(item.val().price),
                 add: item.val().add,
+                b_soldout: b_soldout,
+                m_soldout: m_soldout,
+                m_soldout2: m_soldout2,
+                soldout: item.val().soldout,
+                sort_num: item.val().sort_num ? item.val().sort_num : 9999,
               });
             });
             setProdItem(array);
@@ -181,6 +187,9 @@ function MyMenu() {
   const [OrderItem, setOrderItem] = useState();
   const orderHandler = (e, item) => {
     if (e.target.tagName !== "svg" && e.target.tagName !== "path") {
+      if (b_soldout === false) {
+        item.add = "";
+      }
       setOrderItem(item);
       setPosX(e.clientX);
       setPosY(e.clientY);
@@ -200,8 +209,7 @@ function MyMenu() {
             <div
               style={{ cursor: "pointer",position:"relative" }}
               className={`ani-fadein list delay-${index}`}
-              key={index}
-              onClick={(e) => orderHandler(e, item)}
+              key={index}              
             >
               {item.soldout === false && (
                 <div
@@ -223,13 +231,13 @@ function MyMenu() {
                   sold out
                 </div>
               )}
-              <div className="img">
+              <div className="img" onClick={(e) => orderHandler(e, item)}>
                 <span style={{ opacity: "0.85" }} className="kal">
                   {item.kal}kal
                 </span>
                 <img src={item.image} alt="" />
               </div>
-              <div className="user-box">
+              <div className="user-box" onClick={(e) => orderHandler(e, item)}>
                 <div className="txt" style={{ padding: "0 5px" }}>
                   <div className="flex-box between">
                     <span className="name">{item.name}</span>
@@ -271,10 +279,9 @@ function MyMenu() {
         <ProdList>
           {ProdItem.map((item, index) => (
             <div
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer",position:"relative" }}
               className={`ani-fadein list delay-${index}`}
-              key={index}
-              onClick={(e) => orderHandler(e, item)}
+              key={index}              
             >
               {item.soldout === false && (
                 <div
@@ -290,13 +297,13 @@ function MyMenu() {
                     justifyContent: "center",
                     alignItems: "center",
                     background: "rgba(0,0,0,0.5)",
-                    zIndex: "10",
+                    zIndex: "100",
                   }}
                 >
                   sold out
                 </div>
               )}
-              <div className="img">
+              <div className="img" onClick={(e) => orderHandler(e, item)}>
                 <span style={{ opacity: "0.85" }} className="kal">
                   {item.kal}kal
                 </span>
@@ -320,7 +327,7 @@ function MyMenu() {
                 </span>
                 <img src={item.image} alt="" />
               </div>
-              <div className="user-box">
+              <div className="user-box" onClick={(e) => orderHandler(e, item)}>
                 <div className="txt" style={{ padding: "0 5px" }}>
                   <span className="name">{item.name}</span>
                   <div className="flex-box between a-center">
