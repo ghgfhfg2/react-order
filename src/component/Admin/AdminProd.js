@@ -15,7 +15,6 @@ import firebase from "../../firebase";
 import styled from "styled-components";
 import ModifyModal from "./ModifyModal";
 import uuid from "react-uuid";
-import moment from 'moment';
 
 export const ProdList = styled.div`
   display: flex;
@@ -176,6 +175,29 @@ function AdminProd() {
       });
   };
 
+  const [MilkSoldout, setMilkSoldout] = useState();
+  const MilkSoldoutToggle = () => {
+    setMilkSoldout(!MilkSoldout);
+    firebase
+      .database()
+      .ref("soldout")
+      .child("MilkSoldout")
+      .transaction((pre) => {
+        return !pre;
+      });
+  };
+  const [MilkSoldout2, setMilkSoldout2] = useState();
+  const MilkSoldoutToggle2 = () => {
+    setMilkSoldout2(!MilkSoldout2);
+    firebase
+      .database()
+      .ref("soldout")
+      .child("MilkSoldout2")
+      .transaction((pre) => {
+        return !pre;
+      });
+  };  
+
   const [AbleTime, setAbleTime] = useState()
   useEffect(() => {
     let mounted = true;
@@ -185,7 +207,6 @@ function AdminProd() {
       .ref("time")
       .on("value", (snapshot) => {
         setAbleTime(snapshot.val());
-        console.log(AbleTime)
       });      
     }
     return () => {
@@ -200,11 +221,17 @@ function AdminProd() {
         .database()
         .ref("soldout")
         .once("value")
-        .then((snapshot) => {
-          snapshot.forEach((el) => {
-            setSoldout(el.val());
-          });
-        });
+        .then((snapshot) => {    
+          let soldoutArr = [];      
+            soldoutArr.push({
+              b_soldout:snapshot.val().b_soldout,
+              MilkSoldout:snapshot.val().MilkSoldout,
+              MilkSoldout2:snapshot.val().MilkSoldout2
+            })
+            setSoldout(snapshot.val().b_soldout);            
+            setMilkSoldout(snapshot.val().MilkSoldout);            
+            setMilkSoldout2(snapshot.val().MilkSoldout2);            
+        });        
       firebase
         .database()
         .ref("products")
@@ -263,6 +290,9 @@ function AdminProd() {
       let downloadURL = await uploadTaskSnapshot.ref.getDownloadURL();
       if (!values.add) {
         values.add = "";
+      }
+      if (!values.milk) {
+        values.milk = "";
       }
       values.sort_num = parseInt(values.sort_num);
       values.sort_num >= 0 ? values.sort_num = values.sort_num : values.sort_num = 9999;
@@ -493,11 +523,20 @@ function AdminProd() {
               </Row>
             </Checkbox.Group>
           </Form.Item>
+          <Form.Item name="milk" label="우유 유무">
+            <Checkbox.Group>
+              <Row>
+                <Checkbox value="1" style={{ lineHeight: "32px" }}>
+                  우유
+                </Checkbox>
+              </Row>
+            </Checkbox.Group>
+          </Form.Item>
           <Form.Item name="sort_num" label="순서">
             <Input className="sm-input" type="number" />
           </Form.Item>
 
-          <div className="ant-row ant-form-item">
+          <div className="ant-row ant-form-item soldout-switch">
             <div className="ant-col ant-form-item-label">
               <label htmlFor="price">버블품절</label>
             </div>
@@ -518,6 +557,62 @@ function AdminProd() {
                     <>
                       <Switch
                         onChange={SoldoutToggle}
+                        checkedChildren="판매"
+                        unCheckedChildren="품절"
+                      />
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="ant-col ant-form-item-label">
+              <label htmlFor="price">무지방 품절</label>
+            </div>
+            <div className="ant-col ant-form-item-control">
+              <div className="ant-form-item-control-input">
+                <div className="ant-form-item-control-input-content">
+                  {MilkSoldout === true && (
+                    <>
+                      <Switch
+                        onChange={MilkSoldoutToggle}
+                        checkedChildren="판매"
+                        unCheckedChildren="품절"
+                        defaultChecked
+                      />
+                    </>
+                  )}
+                  {MilkSoldout === false && (
+                    <>
+                      <Switch
+                        onChange={MilkSoldoutToggle}
+                        checkedChildren="판매"
+                        unCheckedChildren="품절"
+                      />
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="ant-col ant-form-item-label">
+              <label htmlFor="price">락토프리 품절</label>
+            </div>
+            <div className="ant-col ant-form-item-control">
+              <div className="ant-form-item-control-input">
+                <div className="ant-form-item-control-input-content">
+                  {MilkSoldout2 === true && (
+                    <>
+                      <Switch
+                        onChange={MilkSoldoutToggle2}
+                        checkedChildren="판매"
+                        unCheckedChildren="품절"
+                        defaultChecked
+                      />
+                    </>
+                  )}
+                  {MilkSoldout2 === false && (
+                    <>
+                      <Switch
+                        onChange={MilkSoldoutToggle2}
                         checkedChildren="판매"
                         unCheckedChildren="품절"
                       />

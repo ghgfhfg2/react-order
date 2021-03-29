@@ -86,6 +86,9 @@ function MyOrder() {
                     {list.add2 && (
                       <span className="info shrink-0">{list.add2}</span>
                     )}
+                    {list.milk && (
+                      <span className="info shrink-0">{list.milk}</span>
+                    )}
                   </div>
                   {list.order_etc && (
                     <Popover content={list.order_etc} trigger="click">

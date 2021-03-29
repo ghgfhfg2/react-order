@@ -327,13 +327,17 @@ h3.title::before {
   cursor: pointer;
   text-align: center;
   border-radius: 4px;
-  border: 1px solid #ddd; }
+  border: 1px solid #ddd;
+  margin-right: 5px;
+  flex-shrink: 0; }
 
 .order-form-box .radio_hot {
   margin-right: 5px; }
 
 .order-form-box input[type="radio"]:checked + label {
   font-weight: bold;
+  background-color: #ff8a9a;
+  border-color: #ff8a9a;
   color: #fff; }
 
 .order-form-box input[type="radio"]:checked + .radio_hot {
@@ -406,6 +410,15 @@ h3.title::before {
 
 .ant-table-cell {
   padding: 8px 10px !important; }
+
+.soldout-switch .ant-form-item-label {
+  width: auto !important; }
+
+.soldout-switch .ant-form-item-control {
+  flex: 0;
+  margin-right: 10px;
+  flex-shrink: 0;
+  min-width: 80px; }
 
 .time-seting {
   margin: 10px 0 10px 0;

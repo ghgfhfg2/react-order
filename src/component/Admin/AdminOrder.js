@@ -69,7 +69,7 @@ export const OrderBox = styled.div`
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 10px;
-    width: calc(33.33% - 10px);
+    width: calc(50% - 10px);
     margin: 5px;
     .from {
       margin-bottom: 5px;
@@ -103,12 +103,8 @@ export const OrderBox = styled.div`
       padding: 0 4px;
     }
   }
-  @media all and (max-width: 1024px) {
-    .list {
-      width: calc(50% - 10px);
-    }
-  }
-  @media all and (max-width: 640px) {
+
+  @media all and (max-width: 1200px) {
     .list {
       width: 100%;
       margin: 5px 0;
@@ -236,7 +232,7 @@ function AdminOrder() {
                 ) : (
                   ""
                 )}
-                <span className="info shrink-0">{list.amount}개</span>
+                {/* <span className="info shrink-0">{list.amount}개</span> */}
                 {list.add && (
                       <span className="info shrink-0">{list.add}</span>
                     )}
@@ -245,6 +241,9 @@ function AdminOrder() {
                 )}
                 {list.add2 && list.add2[1] && (
                   <span className="info shrink-0">{list.add2[1]}</span>
+                )}
+                {list.milk && (
+                  <span className="info shrink-0">{list.milk}</span>
                 )}
               </div>
               <span className="shrink-0">{commaNumber(parseInt(list.price))}원</span>

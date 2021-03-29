@@ -27,13 +27,24 @@ function MyMenu() {
         return !pre;
       });
   };
-
+  let b_soldout;
+  let m_soldout;
+  let m_soldout2;
   useEffect(() => {
     let mounted = true;
     if (mounted) {
       async function getProdItem() {
         let favor = [];
         let favorName = [];
+        await firebase
+          .database()
+          .ref("soldout")
+          .once("value")
+          .then((snapshot) => {            
+            b_soldout = snapshot.val().b_soldout;
+            m_soldout = snapshot.val().MilkSoldout;
+            m_soldout2 = snapshot.val().MilkSoldout2;
+          });
         await firebase
           .database()
           .ref(`users/${userInfo.uid}/favorite`)
@@ -128,14 +139,20 @@ function MyMenu() {
                 name: item.val().name,
                 kal: item.val().kal,
                 hot: item.val().hot,
+                milk: item.val().milk,                
                 category: item.val().category,
                 image: item.val().image,
-                price: item.val().price,
+                price: parseInt(item.val().price),
                 add: item.val().add,
-                sort_num: item.val().sort_num,
+                b_soldout: b_soldout,
+                m_soldout: m_soldout,
+                m_soldout2: m_soldout2,
+                soldout: item.val().soldout,
+                sort_num: item.val().sort_num ? item.val().sort_num : 9999,
               });
             });
           });
+          
         array = array.filter((el) => {
           return addFavorName.includes(el.name);
         });
@@ -151,6 +168,7 @@ function MyMenu() {
         setAddFavorItem(array);
       }
       getFavorItem();
+      console.log(AddFavorItem)
     }
     return function cleanup() {
       mounted = false;
@@ -180,11 +198,31 @@ function MyMenu() {
         <ProdList>
           {AddFavorItem.map((item, index) => (
             <div
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer",position:"relative" }}
               className={`ani-fadein list delay-${index}`}
               key={index}
               onClick={(e) => orderHandler(e, item)}
             >
+              {item.soldout === false && (
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    position: "absolute",
+                    left: "0",
+                    top: "0",
+                    display: "flex",
+                    fontSize: "14px",
+                    color: "#fff",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    background: "rgba(0,0,0,0.5)",
+                    zIndex: "10",
+                  }}
+                >
+                  sold out
+                </div>
+              )}
               <div className="img">
                 <span style={{ opacity: "0.85" }} className="kal">
                   {item.kal}kal
@@ -238,6 +276,26 @@ function MyMenu() {
               key={index}
               onClick={(e) => orderHandler(e, item)}
             >
+              {item.soldout === false && (
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    position: "absolute",
+                    left: "0",
+                    top: "0",
+                    display: "flex",
+                    fontSize: "14px",
+                    color: "#fff",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    background: "rgba(0,0,0,0.5)",
+                    zIndex: "10",
+                  }}
+                >
+                  sold out
+                </div>
+              )}
               <div className="img">
                 <span style={{ opacity: "0.85" }} className="kal">
                   {item.kal}kal

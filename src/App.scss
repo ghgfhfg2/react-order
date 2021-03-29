@@ -316,13 +316,17 @@ h3.title {
     text-align: center;
     border-radius: 4px;
     border: 1px solid #ddd;
+    margin-right: 5px;
+    flex-shrink: 0;
   }
   .radio_hot {
     margin-right: 5px;
   }
   input[type="radio"]:checked + label {
     font-weight: bold;
-    color: #fff;
+    background-color: $p-color;
+    border-color: $p-color;    
+    color: #fff;    
   }
   input[type="radio"]:checked + .radio_hot {
     background-color: #f02424;
@@ -402,6 +406,11 @@ h3.title {
 }
 .ant-table-cell {
   padding: 8px 10px !important;
+}
+
+.soldout-switch{
+  .ant-form-item-label{width: auto !important;}
+  .ant-form-item-control{flex: 0;margin-right: 10px;flex-shrink: 0;min-width: 80px;}
 }
 
 

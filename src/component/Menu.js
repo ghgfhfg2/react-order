@@ -49,6 +49,8 @@ function Menu() {
   };
 
   let b_soldout;
+  let m_soldout;
+  let m_soldout2;
   useEffect(() => {
     let mounted = true;
     if (mounted && userInfo) {
@@ -59,11 +61,12 @@ function Menu() {
           .database()
           .ref("soldout")
           .once("value")
-          .then((snapshot) => {
-            snapshot.forEach((el) => {
-              b_soldout = el.val();
-            });
+          .then((snapshot) => {            
+            b_soldout = snapshot.val().b_soldout;
+            m_soldout = snapshot.val().MilkSoldout;
+            m_soldout2 = snapshot.val().MilkSoldout2;
           });
+          
         await firebase
           .database()
           .ref("users")
@@ -91,16 +94,18 @@ function Menu() {
                 name: item.val().name,
                 kal: item.val().kal,
                 hot: item.val().hot,
+                milk: item.val().milk,                
                 category: item.val().category,
                 image: item.val().image,
                 price: parseInt(item.val().price),
                 add: item.val().add,
                 b_soldout: b_soldout,
+                m_soldout: m_soldout,
+                m_soldout2: m_soldout2,
                 soldout: item.val().soldout,
                 sort_num: item.val().sort_num ? item.val().sort_num : 9999,
               });
             });
-
             let newFavorItem = [];
             array.map((el) => {
               let name = el.name;

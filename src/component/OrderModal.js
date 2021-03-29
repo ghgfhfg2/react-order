@@ -9,6 +9,7 @@ import "moment/locale/ko";
 import uuid from "react-uuid";
 export const OderModalPopup = styled.div`
   width: auto;
+  min-width:290px;
   padding: 20px;
   border: 1px solid #ddd;
   position: fixed;
@@ -77,6 +78,10 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
   const radioChange = (e) => {
     setradioValue(e.target.value);
   };
+  const [radioValue2, setradioValue2] = useState('저지방');
+  const radioChange2 = (e) => {
+    setradioValue2(e.target.value);
+  };  
 
   const [AddCheck, setAddCheck] = useState();
   function onChange(checkedValues) {
@@ -188,6 +193,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
       amount: parseInt(e.target.amount.value),
       kal: parseInt(OrderItem.kal),
       hot: e.target.hot ? e.target.hot.value : "",
+      milk: e.target.milk ? e.target.milk.value : "",
       add: AddCheck ? AddCheck : null,
       add2: AddCheck2 ? AddCheck2 : null,
       category: OrderItem.category,
@@ -254,10 +260,56 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
               type="default"
             ></Button> */}
           </div>
+          {hotRadio &&
           <div className="flex-box a-center">
             <span className="tit"></span>
             {hotRadio}
           </div>
+          }
+            {OrderItem.milk &&
+            <div className="flex-box a-center">
+              <span className="tit"></span>
+                    <input
+                    type="radio"
+                    name="milk"
+                    id="basic"
+                    value="저지방"
+                    defaultChecked
+                    onChange={radioChange2}
+                    />
+                    <label htmlFor="basic">
+                    저지방
+                    </label>
+              {OrderItem.m_soldout && (
+                  <>
+                  <input
+                    type="radio"
+                    id="none"
+                    name="milk"
+                    value="무지방"
+                    onChange={radioChange2}
+                  />
+                  <label htmlFor="none">
+                  무지방
+                  </label>
+                </>
+              )}
+              {OrderItem.m_soldout2 && (
+                <>
+                  <input
+                    type="radio"
+                    id="free"
+                    name="milk"
+                    value="락토프리"
+                    onChange={radioChange2}
+                  />
+                  <label htmlFor="free">
+                  락토프리
+                  </label>
+                </>
+              )}
+            </div>
+            }
           {OrderItem.add && (
             <div className="flex-box">
               <span className="tit" style={{ marginTop: "3px" }}>

@@ -73,6 +73,7 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
       category: e.target.category.value,
       hot: e.target.hot.value,
       add: AddCheck ? AddCheck : null,
+      milk: MilkCheck ? MilkCheck : null,
       sort_num: e.target.sort_num.value
         ? parseInt(e.target.sort_num.value)
         : 9999,
@@ -143,6 +144,10 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
   function onChange(checkedValues) {
     setAddCheck(checkedValues);
   }
+  const [MilkCheck, setMilkCheck] = useState();
+  function onChange2(checkedValues) {
+    setMilkCheck(checkedValues);
+  }  
 
   const onCancel = () => {
     onFinished();
@@ -320,6 +325,11 @@ function ModifyModal({ puid, pimg, onFinished, posx, posy }) {
               </Checkbox>
               <Checkbox value="연하게" style={{ lineHeight: "32px" }}>
                 연하게
+              </Checkbox>
+            </Checkbox.Group>
+            <Checkbox.Group onChange={onChange2}>
+              <Checkbox value="우유" style={{ lineHeight: "32px" }}>
+                우유
               </Checkbox>
             </Checkbox.Group>
             {(Soldout === true || Soldout === "") && (
