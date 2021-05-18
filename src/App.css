@@ -194,7 +194,7 @@ h3.title::before {
 .nav-top-box {
   background-color: #fff;
   position: relative;
-  z-index: 100;
+  z-index: 200;
   display: flex;
   justify-content: flex-start;
   align-items: center;

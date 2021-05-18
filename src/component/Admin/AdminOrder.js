@@ -5,6 +5,7 @@ import firebase from "../../firebase";
 import { Radio } from "antd";
 import { commaNumber,notify } from "../CommonFunc";
 import { Howl } from "howler";
+import axios from "axios";
 import src1 from "../../jumun.mp3";
 import src2 from "../../jumun2.mp3";
 import src3 from "../../jumun3.mp3";
@@ -112,6 +113,7 @@ export const OrderBox = styled.div`
   }
 `;
 
+
 function AdminOrder() {
   const [SoundSelect, setSoundSelect] = useState();
   useEffect(() => {
@@ -199,6 +201,24 @@ function AdminOrder() {
         return pre + 1;
       });
   };
+
+  const kakaoTest = (key) => { 
+    let url = "https://metree.co.kr/_sys/_xml/order_kakao.php?order_tel="+ key.order_phone +"&goods_name="+ key.prod_name;
+    window.open(url,'kakao',"height=1,width=1");
+    alert("카톡발송"); 
+    let body = {
+      goods_name:key.prod_name,
+      order_tel:key.order_phone
+    }
+    /*
+    axios.post('https://metree.co.kr/_sys/_xml/order_kakao.php', body)
+     .then((res)=>{
+      console.log(res)
+      alert('전송성공');
+     })
+     .catch(error => console.error(error))
+     */
+  }
   
   return (
     <>
@@ -255,6 +275,13 @@ function AdminOrder() {
               <span className="date">
                 {list.order_time}
               </span>
+              <Button
+                onClick={() => {
+                  kakaoTest(list);
+                }}
+              >
+                카톡알림
+              </Button>
               {list.order_state === 0 &&
               <Button
                 onClick={() => {

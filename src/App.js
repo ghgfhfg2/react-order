@@ -12,6 +12,7 @@ import AdminProd from "./component/Admin/AdminProd";
 import AdminOrder from "./component/Admin/AdminOrder";
 import AdminOrderList from "./component/Admin/AdminOrderList";
 import Loading from "./component/Loading";
+import Test from "./component/Test";
 import { Layout, Button, BackTop } from "antd";
 import firebase from "./firebase";
 import { useDispatch, useSelector } from "react-redux";
@@ -114,6 +115,7 @@ function App(props) {
                   <Route exact path="/join" component={Join} />
                   <Route exact path="/myorder" component={MyOrder} />
                   <Route exact path="/mymenu" component={MyMenu} />
+                  <Route exact path="/test" component={Test} />
                   <Route exact path="/admin/prod" component={AdminProd} />
                   <Route exact path="/admin/order" component={AdminOrder} />
                   <Route

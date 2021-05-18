@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Menu } from "antd";
+import { Menu, Input, Button } from "antd";
 import * as bsIcon from "react-icons/bs";
 import * as antIcon from "react-icons/ai";
 import firebase from "../firebase";
 import styled from "styled-components";
 import moment from "moment";
+import { OderModalPopup } from "./OrderModal";
 const { SubMenu } = Menu;
 export const BlackBg = styled.div`
   width: 100vw;
@@ -102,6 +103,47 @@ function Nav() {
     }
   }, [TimeChange])
 
+  const [InfoPop, setInfoPop] = useState(false)
+  const onChangeInfo = () => {
+    setInfoPop(!InfoPop);
+  }
+
+  const [submitLoading, setsubmitLoading] = useState(false);
+  const onSubmitInfo = async (e) => {
+    e.preventDefault();
+    let call_num = e.target.call_number.value;
+    if(isNaN(call_num)){
+      alert('숫자만 입력해 주세요');
+      return;
+    }
+    if(call_num.length != 11){
+      alert('올바른 번호가 아닙니다');
+      return;
+    }
+    setsubmitLoading(true);
+    try{
+      let user = firebase.auth().currentUser;
+      user.updateProfile({
+        phoneNumber: "01055278712"
+      }).then(function() {
+        alert('업데이트 되었습니다.');
+      }).catch(function(error) {
+        console.error(error);
+      });  
+      await firebase
+      .database()
+      .ref("users")
+      .child(currentUser.uid)
+      .update({
+        call_number: call_num
+      })
+      setInfoPop(false)
+    }catch (error) {
+      console.error(error);
+    }
+    setsubmitLoading(false);
+  }
+
   if (currentUser) {
     return (
       <>
@@ -125,8 +167,38 @@ function Nav() {
             )}
             {currentUser && (
               <>
+                {InfoPop &&
+                  <OderModalPopup style={{
+                    top:"110px",
+                    left:"155px",
+                    position:"absolute",
+                  }}>
+                    <form className="order-form-box" onSubmit={onSubmitInfo}>
+                      <div className="flex-box a-center" style={{marginBottom:"0"}}>
+                      <span className="tit" style={{width:"auto",flexShrink:"0"}}>휴대전화</span>
+                        <Input name="call_number" style={{marginRight:"5px"}}></Input>
+                        <Button
+                          disabled={submitLoading}
+                          htmlType="submit"
+                          type="primary"
+                        >수정</Button>
+                      </div>
+                      <span>'-'이나 공백없이 수자만 입력해 주세요.</span>
+                    </form>
+                  </OderModalPopup>
+                }
                 <div className="flex-box j-center">
-                  {currentUser.displayName}님 반갑습니다.
+                  <span className="p-color-l"
+                    onClick={onChangeInfo}
+                    style={{
+                      cursor: "pointer",
+                      fontWeight: "500",
+                      marginLeft: "10px",
+                    }}
+                  >
+                    {currentUser.displayName}
+                  </span>
+                  님 반갑습니다.                  
                   <span
                     onClick={onLogout}
                     className="p-color-l"
@@ -166,7 +238,14 @@ function Nav() {
                 마이메뉴
               </Link>
             </Menu.Item>
-            {currentUser.uid === "xMIQkuZuh5S7lTjwsBnkcbLi5kF3" && (
+            <Menu.Item key="7">
+              <Link to="/test">
+                <antIcon.AiOutlineStar />
+                test
+              </Link>
+            </Menu.Item>
+            {currentUser.uid === "xMIQkuZuh5S7lTjwsBnkcbLi5kF3" &&
+            (
               <SubMenu
                 key="sub1"
                 title="관리자"

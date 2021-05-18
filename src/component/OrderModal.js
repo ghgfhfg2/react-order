@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Input, Checkbox, Spin } from "antd";
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import styled from "styled-components";
@@ -55,6 +55,16 @@ export const OderModalPopup = styled.div`
 
 function OrderModal({ posx, posy, onFinished, OrderItem }) {
   const userInfo = useSelector((state) => state.user.currentUser);
+  const [UserPhone, setUserPhone] = useState()
+  useEffect(() => {
+    firebase
+    .database()
+    .ref(`users/${userInfo.uid}`)
+    .once("value")
+    .then((snapshot) => {            
+      setUserPhone(snapshot.val().call_number)
+    });
+  }, [])
   const [Amount, setAmount] = useState(1);
   const plusAmount = () => {
     if (Amount < 10) {
@@ -188,6 +198,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
       order_time: nowTime,
       order_etc: e.target.etc.value,
       order_state: 0,
+      order_phone:UserPhone,
       prod_name: OrderItem.name,
       price: OrderItem.price * e.target.amount.value + addPrice,
       amount: parseInt(e.target.amount.value),
