@@ -35,6 +35,7 @@ $bd-color: #e2e2e2; //보더컬러
   position: absolute;
   width: $width;
   height: $height;
+  @content;
 }
 
 @mixin font($s: $fon-size, $w: normal, $c: $fon-color) {

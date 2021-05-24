@@ -2,6 +2,31 @@ export const commaNumber = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+export const getFormatDate = (date) => {
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    month = month >= 10 ? month : '0' + month;
+    let og_month = date.getMonth();
+    let day = date.getDate();
+    day = day >= 10 ? day : '0' + day;    
+    let og_day = date.getDate();
+    let weeek = date.getDay();
+    let weekArr = ['일','월','화','수','목','금','토'];
+    let obj = {
+        'year':year,
+        'month':month,
+        'day':day,
+        'og_month':og_month,
+        'og_day':og_day,
+        'week':weekArr[weeek],
+        'weekNum':weeek,
+        'full': year + '' + month + '' + day,
+        'full_': year + '-' + month + '-' + day
+    }
+
+    return obj;  
+}
+
 export const getNotificationPermission = () => {
     // 브라우저 지원 여부 체크
     if (!("Notification" in window)) {

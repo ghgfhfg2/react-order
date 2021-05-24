@@ -159,6 +159,7 @@ function Menu() {
       if (ProdItemCopy && searchInput !== "") {
       let array = _.cloneDeep(ProdItemCopy);
       array.forEach(function (item) {
+        console.log(typeof(item.name));
         var dis = Hangul.disassemble(item.name, true);
         var cho = dis.reduce(function (prev, elem) {
           elem = elem[0] ? elem[0] : elem;

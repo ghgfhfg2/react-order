@@ -54,12 +54,12 @@ function App(props) {
   const [TopFixLeft, setTopFixLeft] = useState(false);
   const handleScroll = () => {
     let scrollTop = document.documentElement.scrollTop;
-    if (scrollTop >= 100) {
+    if (scrollTop >= 130) {
       setTopFixLeft(true);
     } else {
       setTopFixLeft(false);
     }
-    if (scrollTop >= 70) {
+    if (scrollTop >= 80) {
       setTopFix(true);
     } else {
       setTopFix(false);

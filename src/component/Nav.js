@@ -18,7 +18,7 @@ export const BlackBg = styled.div`
   top: 0;
   z-index: 50;
   display: none;
-  @media all and (max-width: 640px) {
+  @media all and (max-width: 760px) {
     &.on {
       display: block;
     }
@@ -35,8 +35,14 @@ function Nav() {
     setLeftMenu(!LeftMenu);
   };
 
+  const [InfoPop, setInfoPop] = useState(false)
+  const onChangeInfo = () => {
+    setInfoPop(!InfoPop);
+  }
+
   const [LeftMenu, setLeftMenu] = useState(false);
   const onMenuHandler = () => {
+    setInfoPop(false);
     setLeftMenu(!LeftMenu);
   };
 
@@ -50,6 +56,8 @@ function Nav() {
     let min = parseInt(time.split(':')[1]);
     return hour + min;
   }
+
+  const [UserDb, setUserDb] = useState()
   
   const [AbleTime, setAbleTime] = useState();
   const [CurAbleTime, setCurAbleTime] = useState(0);
@@ -65,7 +73,16 @@ function Nav() {
     const currentTime = moment().format('HH:mm');
     const currentTimeNum = timeDiff(currentTime);
     let mounted = true;
-    if (mounted) {      
+    if (mounted) {   
+      if(currentUser){  
+        firebase
+        .database()
+        .ref("users")
+        .child(currentUser.uid)
+        .on("value", (snapshot) => {
+          setUserDb(snapshot.val());
+        });
+      }
       firebase
       .database()
       .ref("time")
@@ -98,15 +115,12 @@ function Nav() {
         }    
       });
     }
-    return () => {
+    return function cleanup() {
+      firebase.database().ref("users").off();
+      firebase.database().ref("time").off();
       mounted = false;
-    }
+    };
   }, [TimeChange])
-
-  const [InfoPop, setInfoPop] = useState(false)
-  const onChangeInfo = () => {
-    setInfoPop(!InfoPop);
-  }
 
   const [submitLoading, setsubmitLoading] = useState(false);
   const onSubmitInfo = async (e) => {
@@ -168,22 +182,25 @@ function Nav() {
             {currentUser && (
               <>
                 {InfoPop &&
-                  <OderModalPopup style={{
-                    top:"110px",
+                  <OderModalPopup className="call_modify" style={{
+                    top:"130px",
                     left:"155px",
                     position:"absolute",
                   }}>
+                    <div className="flex-box a-center" style={{marginBottom:"5px"}}>
+                      <span>{currentUser.email} / {currentUser.photoURL}</span>
+                    </div>
                     <form className="order-form-box" onSubmit={onSubmitInfo}>
-                      <div className="flex-box a-center" style={{marginBottom:"0"}}>
+                      <div className="flex-box a-center" style={{marginBottom:"5px"}}>
                       <span className="tit" style={{width:"auto",flexShrink:"0"}}>휴대전화</span>
-                        <Input name="call_number" style={{marginRight:"5px"}}></Input>
+                        <Input name="call_number" defaultValue={UserDb.call_number} style={{marginRight:"5px"}}></Input>
                         <Button
                           disabled={submitLoading}
                           htmlType="submit"
                           type="primary"
                         >수정</Button>
                       </div>
-                      <span>'-'이나 공백없이 수자만 입력해 주세요.</span>
+                      <span>'-'이나 공백없이 숫자만 입력해 주세요.</span>
                     </form>
                   </OderModalPopup>
                 }
@@ -238,13 +255,16 @@ function Nav() {
                 마이메뉴
               </Link>
             </Menu.Item>
+            {UserDb && UserDb.role > 1 &&
             <Menu.Item key="7">
               <Link to="/test">
                 <antIcon.AiOutlineStar />
                 test
               </Link>
             </Menu.Item>
-            {currentUser.uid === "xMIQkuZuh5S7lTjwsBnkcbLi5kF3" &&
+            }
+           
+            {UserDb && UserDb.role > 0 &&
             (
               <SubMenu
                 key="sub1"

@@ -26,6 +26,7 @@ function Join() {
       await firebase.database().ref("users").child(createdUser.user.uid).set({
         name: createdUser.user.displayName,
         part: createdUser.user.photoURL,
+        call_number: data.call_number,
         email: data.email,
         role: 0,
       });
@@ -41,11 +42,13 @@ function Join() {
 
   watch("name");
   watch("email");
+  watch("call_number");
   watch("password");
   watch("password2");
 
   const [InputName, setInputName] = useState(false);
   const [InputEmail, setInputEmail] = useState(false);
+  const [InputPhone, setInputPhone] = useState(false);
   const [InputPw, setInputPw] = useState(false);
   const [InputPw2, setInputPw2] = useState(false);
 
@@ -54,6 +57,9 @@ function Join() {
   };
   const onInputEmail = (e) => {
     setInputEmail(e.target.value);
+  };
+  const onInputPhone = (e) => {
+    setInputPhone(e.target.value);
   };
   const onInputPw = (e) => {
     setInputPw(e.target.value);
@@ -104,6 +110,31 @@ function Join() {
             )}
             {errors.email && errors.email.type === "pattern" && (
               <p>이메일 형식이 맞지 않습니다.</p>
+            )}
+          </div>
+          <div className="input-box">
+            <input
+              name="call_number"
+              type="number"
+              id="call_number"
+              onChange={onInputPhone}
+              ref={register({ required: true, minLength: 11, maxLength:11 })}
+            />
+            <label
+              htmlFor="call_number"
+              className={"place-holder " + (InputPhone && "on")}
+            >
+              <span>휴대전화</span>
+            </label>
+            <span style={{color:"#888",fontSize:"12px",display:"block",paddingLeft:"10px",marginTop:"3px"}}>※ 실제 사용중인 휴대전화로 가입 바랍니다.(카카오톡 연동기능에 필요)</span>
+            {errors.call_number && errors.call_number.type === "required" && (
+              <p>휴대전화 번호를 입력해 주세요</p>
+            )}
+            {errors.call_number && errors.call_number.type === "minLength" && (
+              <p>자리수를 확인해 주세요</p>
+            )}
+            {errors.call_number && errors.call_number.type === "maxLength" && (
+              <p>자리수를 확인해 주세요</p>
             )}
           </div>
           <div className="input-box">

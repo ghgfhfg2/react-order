@@ -108,7 +108,7 @@ h3.title {
   z-index: 100;
   @media all and (min-width: 761px) {
     position: absolute;
-    height: calc(100% - 100px);
+    height: calc(100% - 130px);
     left: 0;
     margin-left: 0;
     &.fix {
@@ -148,7 +148,7 @@ h3.title {
 }
 .header-box {
   display: flex;
-  height: 100px;
+  height: 130px;
   border-bottom: 1px solid #e1e1e1;
   align-items: center;
   justify-content: center;
@@ -156,7 +156,7 @@ h3.title {
     width: 180px;
   }
   @include mobile() {
-    height: 70px;
+    height: 80px;
     .top-logo {
       width: 120px;
     }
@@ -176,7 +176,7 @@ h3.title {
     }
     .btn-m-menu {
       position: fixed;
-      top: 18px;
+      top: 22px;
       animation: fade_down 0.2s both;
     }
   }
@@ -184,7 +184,7 @@ h3.title {
 .nav-top-box {
   background-color: #fff;
   position: relative;
-  z-index: 100;
+  z-index: 200;
   @include flex();
   border-bottom: 1px solid #e1e1e1;
   height: 50px;
@@ -213,8 +213,10 @@ h3.title {
       z-index: 100;
       background-color: #fff;
     }
-  }
+  };
+
 }
+
 .left-nav-menu > ul {
   height: calc(100% - 50px);
   background-color: #fff;
@@ -267,7 +269,7 @@ h3.title {
     display: inline-block;
     position: absolute;
     left: 15px;
-    top: -50px;
+    top: -59px;
   }
 }
 .order-btn {
@@ -413,6 +415,16 @@ h3.title {
   .ant-form-item-control{flex: 0;margin-right: 10px;flex-shrink: 0;min-width: 80px;}
 }
 
+// 주간 달력
+.week_list{
+  @include flex();
+  li{
+    flex:1;margin-left: -1px;
+    border: 1px solid $bd-color;
+    height: 80px;
+  }
+}
+
 
 // 시간설정 
 .time-seting{
@@ -448,6 +460,14 @@ h3.title {
     li{line-height: 1.9;color:#999;font-weight:400;
       &.cur{color: #333;font-weight: 700;}
     }
+  }
+}
+
+
+// 휴대전화 수정
+.call_modify{
+  @include mobile(){
+    top:170px !important;
   }
 }
 
