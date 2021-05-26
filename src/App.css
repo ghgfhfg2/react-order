@@ -5,24 +5,24 @@
 
 /* 인풋 */
 .p-color {
-  color: #ff8a9a; }
+  color: #30b46b; }
 
 .p-color-l {
-  color: #ffa4b0; }
+  color: #35c877; }
 
 .ant-layout-header {
   background: #fff; }
 
 .join-form p {
-  color: #ff8a9a; }
+  color: #30b46b; }
 
 .join-form button[type="submit"],
 .join-form input[type="submit"] {
-  background-color: #ff576e; }
+  background-color: #258c53; }
 
 .join-form button[type="submit"]:hover,
 i.join-form nput[type="submit"]:hover {
-  background: #ff8a9a; }
+  background: #30b46b; }
 
 .content-box {
   width: 100%;
@@ -76,6 +76,9 @@ i.join-form nput[type="submit"]:hover {
   width: 100%;
   display: flex; }
 
+.flex-box .tit {
+  flex-shrink: 0; }
+
 .flex-box.j-center {
   justify-content: center; }
 
@@ -105,7 +108,7 @@ h3.title::before {
   display: inline-block;
   width: 4px;
   height: 17px;
-  background-color: #ff8a9a;
+  background-color: #30b46b;
   position: absolute;
   left: 0;
   top: 5px; }
@@ -167,14 +170,17 @@ h3.title::before {
   align-items: center;
   justify-content: center; }
 
-.header-box .top-logo {
-  width: 180px; }
+.header-box .top-logo-m {
+  display: none; }
 
 @media (max-width: 760px) {
   .header-box {
     height: 80px; }
   .header-box .top-logo {
-    width: 120px; } }
+    display: none; }
+  .header-box .top-logo-m {
+    display: block;
+    height: 53px; } }
 
 @media (max-width: 760px) {
   .top-fix {
@@ -274,7 +280,7 @@ h3.title::before {
   width: 35px;
   height: 35px;
   cursor: pointer;
-  color: #ff8a9a;
+  color: #30b46b;
   display: none; }
 
 @media (max-width: 760px) {
@@ -336,8 +342,8 @@ h3.title::before {
 
 .order-form-box input[type="radio"]:checked + label {
   font-weight: bold;
-  background-color: #ff8a9a;
-  border-color: #ff8a9a;
+  background-color: #30b46b;
+  border-color: #30b46b;
   color: #fff; }
 
 .order-form-box input[type="radio"]:checked + .radio_hot {
@@ -350,9 +356,9 @@ h3.title::before {
 
 @keyframes neon_blue {
   from {
-    box-shadow: 0 0 1px #fff, 0 0 2px #fff, 0 0 4px #ff8a9a, 0 0 5px #ff8a9a, 0 0 8px #ff8a9a; }
+    box-shadow: 0 0 1px #fff, 0 0 2px #fff, 0 0 4px #30b46b, 0 0 5px #30b46b, 0 0 8px #30b46b; }
   to {
-    box-shadow: 0 0 1px #fff, 0 0 2px #ff8a9a, 0 0 2px #ff8a9a, 0 0 3px #ff8a9a; } }
+    box-shadow: 0 0 1px #fff, 0 0 2px #30b46b, 0 0 2px #30b46b, 0 0 3px #30b46b; } }
 
 /* 관리자 상품등록 */
 .admin-prod-form {
@@ -396,7 +402,7 @@ h3.title::before {
   cursor: pointer; }
 
 .admin-modify-form input[type="radio"]:checked + label {
-  border-color: #ff8a9a;
+  border-color: #30b46b;
   z-index: 1; }
 
 .admin-modify-form .btn-box {
@@ -429,8 +435,7 @@ h3.title::before {
 .week_list li {
   flex: 1;
   margin-left: -1px;
-  border: 1px solid #e2e2e2;
-  height: 80px; }
+  border: 1px solid #e2e2e2; }
 
 .time-seting {
   margin: 10px 0 10px 0;
@@ -469,7 +474,7 @@ h3.title::before {
   display: inline-block;
   width: 100%;
   height: 24px;
-  border: 2px solid #ff8a9a;
+  border: 2px solid #30b46b;
   border-width: 2px 0;
   position: absolute;
   left: 50%;
@@ -481,7 +486,7 @@ h3.title::before {
   left: 27px;
   top: 10px;
   font-size: 12px;
-  color: #ff8a9a; }
+  color: #30b46b; }
 
 .nav-time .current.state_1 {
   top: 14px; }
@@ -579,7 +584,7 @@ h3.title::before {
   margin-bottom: 20px; }
 
 .join-form-wrap input {
-  outline-color: #ff8a9a; }
+  outline-color: #30b46b; }
 
 .join-form-wrap input + .place-holder {
   line-height: 1;
@@ -594,7 +599,7 @@ h3.title::before {
 
 .join-form-wrap input:focus + .place-holder,
 .join-form-wrap input + .place-holder.on {
-  color: #ff8a9a;
+  color: #30b46b;
   font-size: 12px;
   top: -12px;
   padding-bottom: 2px;

@@ -11,8 +11,9 @@ import MyMenu from "./component/MyMenu";
 import AdminProd from "./component/Admin/AdminProd";
 import AdminOrder from "./component/Admin/AdminOrder";
 import AdminOrderList from "./component/Admin/AdminOrderList";
+import LunchAdmin from "./component/Admin/LunchAdmin";
 import Loading from "./component/Loading";
-import Test from "./component/Test";
+import LunchCheck from "./component/LunchCheck";
 import { Layout, Button, BackTop } from "antd";
 import firebase from "./firebase";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,7 +21,9 @@ import { setUser, clearUser } from "./redux/actions/user_action";
 import { getNotificationPermission } from "./component/CommonFunc";
 import * as antIcon from "react-icons/ai";
 //import Logo from "./img/logo.svg";
-import Logo from "./img/logo_2021_spring.png";
+//import Logo from "./img/logo_2021_spring.png";
+import Logo_PC from "./img/logo_2021_summer_pc.png";
+import Logo from "./img/logo_2021_summer.png";
 
 
 const { Sider, Content, Header } = Layout;
@@ -78,7 +81,8 @@ function App(props) {
         <Layout className={TopFix && "top-fix"}>
           <Header className="header-box">
             <a href="/">
-              <img className="top-logo" src={Logo} alt="" />
+              <img className="top-logo" src={Logo_PC} alt="" />
+              <img className="top-logo-m" src={Logo_PC} alt="" />
             </a>
           </Header>
           <Layout>
@@ -100,7 +104,8 @@ function App(props) {
         <Layout className={TopFix && "top-fix"}>
           <Header className="header-box">
             <a href="/">
-              <img className="top-logo" src={Logo} alt="" />
+              <img className="top-logo" src={Logo_PC} alt="" />
+              <img className="top-logo-m" src={Logo} alt="" />
             </a>
           </Header>
           <Layout>
@@ -115,9 +120,10 @@ function App(props) {
                   <Route exact path="/join" component={Join} />
                   <Route exact path="/myorder" component={MyOrder} />
                   <Route exact path="/mymenu" component={MyMenu} />
-                  <Route exact path="/test" component={Test} />
+                  <Route exact path="/lunch" component={LunchCheck} />
                   <Route exact path="/admin/prod" component={AdminProd} />
                   <Route exact path="/admin/order" component={AdminOrder} />
+                  <Route exact path="/admin/lunch" component={LunchAdmin} />
                   <Route
                     exact
                     path="/admin/order_list"

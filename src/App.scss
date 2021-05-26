@@ -61,6 +61,9 @@ i.join-form nput[type="submit"]:hover {
 .flex-box {
   width: 100%;
   display: flex;
+  .tit{
+    flex-shrink: 0;
+  }
   &.j-center {
     justify-content: center;
   }
@@ -152,13 +155,13 @@ h3.title {
   border-bottom: 1px solid #e1e1e1;
   align-items: center;
   justify-content: center;
-  .top-logo {
-    width: 180px;
-  }
+  .top-logo-m{display: none;}
   @include mobile() {
     height: 80px;
-    .top-logo {
-      width: 120px;
+    .top-logo{display: none;}
+    .top-logo-m {
+      display: block;
+      height: 53px;
     }
   }
 }
@@ -415,13 +418,12 @@ h3.title {
   .ant-form-item-control{flex: 0;margin-right: 10px;flex-shrink: 0;min-width: 80px;}
 }
 
-// 주간 달력
+// 주간 식단체크
 .week_list{
   @include flex();
   li{
     flex:1;margin-left: -1px;
     border: 1px solid $bd-color;
-    height: 80px;
   }
 }
 

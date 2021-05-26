@@ -257,9 +257,9 @@ function Nav() {
             </Menu.Item>
             {UserDb && UserDb.role > 1 &&
             <Menu.Item key="7">
-              <Link to="/test">
-                <antIcon.AiOutlineStar />
-                test
+              <Link to="/lunch">
+                <antIcon.AiOutlineDownSquare />
+                식단체크
               </Link>
             </Menu.Item>
             }
@@ -271,6 +271,14 @@ function Nav() {
                 title="관리자"
                 icon={<antIcon.AiOutlineSetting />}
               >
+                {UserDb.role > 1 &&
+                <Menu.Item key="8">
+                  <Link to="/admin/lunch">
+                    <antIcon.AiOutlineAppstoreAdd />
+                    식단관리
+                  </Link>
+                </Menu.Item>
+                }
                 <Menu.Item key="4">
                   <Link to="/admin/prod">
                     <antIcon.AiOutlineAppstoreAdd />
