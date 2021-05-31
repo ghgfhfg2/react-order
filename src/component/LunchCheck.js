@@ -170,7 +170,12 @@ function LunchCheck() {
           <li key={idx} data-date={el.full}>
             <input type="hidden" name="check" value={el.confirm ? el.confirm : ""} />
             {el.full}<br/>
-            {el.item}    
+            {el.item} <br/><br/>
+            {el.confirm &&
+              <>
+                <span>확인완료</span>
+              </>
+            }  
             <div>
               {ItemList && ModifyState && 
               ItemList.map((list,l_idx) => (
@@ -199,9 +204,9 @@ function LunchCheck() {
               </>
             }
             <div>
-              {ItemList && ModifyState &&  
+              {ItemList && ModifyState && 
               ItemList.map((list,l_idx) => (
-                <Checkbox value={list} disabled={el.full < curDate.full ? false : true} defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
+                <Checkbox value={list} disabled={el.full > curDate.full ? false : true} defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
               ))                  
               }
             </div>

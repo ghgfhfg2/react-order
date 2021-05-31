@@ -1,43 +1,63 @@
 import React, { useState, useEffect } from 'react';
-import { Input,Button } from 'antd';
+import { Input,Button,DatePicker } from 'antd';
 import firebase from "../../firebase";
 import { getFormatDate } from '../CommonFunc';
+import moment from 'moment';
 
 const curDate = getFormatDate(new Date());
 
 function LunchAdmin() {
 
   const [ItemList, setItemList] = useState();
+  const [TblItem, setTblItem] = useState();
+  const [CheckList, setCheckList] = useState();
+  const [ItemSum, setItemSum] = useState();
+
+  const [SearchDate, setSearchDate] = useState(curDate);
+
   useEffect(() => {
+    let itemArr = [];
+    let itemObj = {};
     firebase.database().ref('lunch/item')
-    .on('value', (snapshot) => {
-      let arr = [];
+    .once('value', (snapshot) => {
       snapshot.forEach(el => {
-        arr.push(el.val())
+        itemArr.push(el.val())
+      });
+      itemArr.map(el=>{
+        itemObj[el] = 0;
       })
-      arr = arr.join(',')
-      setItemList(arr)
+      setTblItem(itemArr);
+      itemArr = itemArr.join(',');      
+      setItemList(itemArr)
     })
-
     firebase.database().ref('lunch/user')
-    .on('value', (snapshot) => {
+    .once('value', (snapshot) => {
       let arr = [];
       snapshot.forEach(el => {
-        arr.push({
-          name: el.val().name,
-          item: el.val().checkList[curDate.full].item,
-          confirm: el.val().checkList[curDate.full].confirm,
-        })
+        let elItemArr;
+        if(el.val().checkList[SearchDate.full]){
+          elItemArr = el.val().checkList[SearchDate.full].item;
+        }
+        if(elItemArr){
+          elItemArr.map(el=>{
+          itemObj[el] += 1;
+          })       
+          arr.push({
+            name: el.val().name,
+            item: elItemArr,
+            confirm: el.val().checkList[SearchDate.full].confirm,
+          })
+        }
       })
-      console.log(arr)
+      setCheckList(arr);
+      console.log(itemObj)
+      setItemSum(itemObj);
     })
-
 
 
     return () => {
-      firebase.database().ref('lunch/item').off();
     }
-  }, [])
+  }, [SearchDate])
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -53,6 +73,21 @@ function LunchAdmin() {
       console.error(error);
     }
   }
+
+  const onSelectDate = (date, dateString) => {
+    setSearchDate(getFormatDate(date._d))
+  }
+  function range(start, end) {
+    const result = [];
+    for (let i = start; i < end; i++) {
+      result.push(i);
+    }
+    return result;
+  }
+  const disabledDate = (current) => {
+    return current && current > moment().endOf('day');
+  }
+
   return (
     <>
       {ItemList &&
@@ -74,15 +109,52 @@ function LunchAdmin() {
           </form>
         </>
       }
+      <h3 className="title" style={{ margin: "20px 0 5px 0" }}>
+        식단체크
+      </h3>
+      <div className="flex-box">
+        <DatePicker 
+          format="YYYY-MM-DD"
+          defaultValue={moment()}
+          disabledDate={disabledDate} onChange={onSelectDate} 
+        />
+      </div>
       <table className="fl-table" style={{marginTop:"12px"}}>
         <thead>
           <tr>
-            <th scope="col" rowSpan="2">이름</th>
-            <th scope="col">식단</th>
+            <th scope="col">날짜</th>
+            <th scope="col">이름</th>
+            {TblItem && TblItem.map(el => (
+              <th scope="col">{el}</th>
+            ))}
             <th scope="col">체크여부</th>
-          </tr>
+          </tr>          
         </thead>
         <tbody>
+          {CheckList && CheckList.map(el => (
+            <tr>
+              <td>{SearchDate.full_}</td>
+              <td>{el.name}</td>
+              {TblItem && TblItem.map((list,l_idx) => (
+                  <td>
+                    {el.item.includes(list) && 1}
+                  </td>
+              ))}
+              <td>
+              {el.confirm && 'O'}
+              </td>
+            </tr>
+          ))}
+          <tr>
+            <td>{SearchDate.full_}</td>
+            <td>합계</td>
+            {TblItem && TblItem.map((el,idx) => (
+              <td>
+                {ItemSum && ItemSum[el]}
+              </td>
+            ))}
+            <td></td>
+          </tr>
         </tbody>
       </table>
     </>
