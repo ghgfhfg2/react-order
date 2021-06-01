@@ -422,8 +422,9 @@ h3.title {
 .week_list{
   @include flex();
   li{
-    flex:1;margin-left: -1px;
+    flex:1;margin-left: -1px;padding:10px;
     border: 1px solid $bd-color;
+    &.today{border:1px solid $p-color;z-index: 1;}
   }
 }
 

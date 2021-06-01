@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import firebase from "../firebase";
 import { ProdList } from "./Admin/AdminProd";
 import OderModalPopup from "./OrderModal";
-import { commaNumber } from "./CommonFunc";
+import { commaNumber,getFormatDate } from "./CommonFunc";
 import Loading from "./Loading";
 import { Radio, Input, Empty } from "antd";
 import * as antIcon from "react-icons/ai";
@@ -11,10 +11,13 @@ import { useSelector } from "react-redux";
 const { Search } = Input;
 const _ = require("lodash");
 
+const curDate = getFormatDate(new Date());
 function Menu() {
   const userInfo = useSelector((state) => state.user.currentUser);
   const [ProdItem, setProdItem] = useState([]);
   const [ProdItemCopy, setProdItemCopy] = useState();
+
+
 
   //정렬 라디오버튼
   const [CateRadio, setCateRadio] = useState("all");
@@ -51,9 +54,27 @@ function Menu() {
   let b_soldout;
   let m_soldout;
   let m_soldout2;
+
+  const [TodayLunchCheck, setTodayLunchCheck] = useState();
+
   useEffect(() => {
     let mounted = true;
     if (mounted && userInfo) {
+      //식단체크
+      let lunchCheck = {};
+      firebase
+      .database()
+      .ref("lunch")
+      .child(`user/${userInfo.uid}/checkList/${curDate.full}`)
+      .once("value")
+      .then((snapshot) => {
+          lunchCheck.date = snapshot.val().date;
+          lunchCheck.confirm = snapshot.val().confirm;
+          lunchCheck.item = snapshot.val().item;
+          setTodayLunchCheck(lunchCheck)
+      });
+        
+
       //즐찾
       async function getProdItem() {
         let favorItem = [];
@@ -159,7 +180,6 @@ function Menu() {
       if (ProdItemCopy && searchInput !== "") {
       let array = _.cloneDeep(ProdItemCopy);
       array.forEach(function (item) {
-        console.log(typeof(item.name));
         var dis = Hangul.disassemble(item.name, true);
         var cho = dis.reduce(function (prev, elem) {
           elem = elem[0] ? elem[0] : elem;
@@ -186,6 +206,10 @@ function Menu() {
   const [OrderItem, setOrderItem] = useState();
   const orderHandler = (e, item) => {
     if (e.target.tagName !== "svg" && e.target.tagName !== "path") {
+      if(TodayLunchCheck && !TodayLunchCheck.confirm){
+        alert('식단체크를 먼저 해야 주문이 가능합니다.');
+        return;
+      }
       if (b_soldout === false) {
         item.add = "";
       }

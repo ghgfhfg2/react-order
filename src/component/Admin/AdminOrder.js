@@ -205,8 +205,6 @@ function AdminOrder() {
   const kakaoSend = (key) => { 
     let url = "https://metree.co.kr/_sys/_xml/order_kakao.php?order_tel="+ key.order_phone +"&goods_name="+ key.prod_name;
     window.open(url,'kakao',"height=1,width=1");
-    alert("카톡발송"); 
-
   }
   
   return (
@@ -278,7 +276,7 @@ function AdminOrder() {
               <Button
                 onClick={() => {
                   stateChange2(list.key);
-                  // kakaoSend(list);
+                  kakaoSend(list);
                 }}
               >
                 완료처리

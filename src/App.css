@@ -435,7 +435,12 @@ h3.title::before {
 .week_list li {
   flex: 1;
   margin-left: -1px;
+  padding: 10px;
   border: 1px solid #e2e2e2; }
+
+.week_list li.today {
+  border: 1px solid #30b46b;
+  z-index: 1; }
 
 .time-seting {
   margin: 10px 0 10px 0;

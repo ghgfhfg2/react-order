@@ -3,10 +3,11 @@ import firebase from "../firebase";
 import { ProdList } from "./Admin/AdminProd";
 import OderModalPopup from "./OrderModal";
 import * as antIcon from "react-icons/ai";
-import { commaNumber } from "./CommonFunc";
+import { commaNumber,getFormatDate } from "./CommonFunc";
 import { useSelector } from "react-redux";
 import Loading from "./Loading";
 
+const curDate = getFormatDate(new Date());
 function MyMenu() {
   const userInfo = useSelector((state) => state.user.currentUser);
 
@@ -30,9 +31,26 @@ function MyMenu() {
   let b_soldout;
   let m_soldout;
   let m_soldout2;
+
+  const [TodayLunchCheck, setTodayLunchCheck] = useState();
+
   useEffect(() => {
     let mounted = true;
     if (mounted) {
+      //식단체크
+      let lunchCheck = {};
+      firebase
+      .database()
+      .ref("lunch")
+      .child(`user/${userInfo.uid}/checkList/${curDate.full}`)
+      .once("value")
+      .then((snapshot) => {
+          lunchCheck.date = snapshot.val().date;
+          lunchCheck.confirm = snapshot.val().confirm;
+          lunchCheck.item = snapshot.val().item;
+          setTodayLunchCheck(lunchCheck)
+      });
+
       async function getProdItem() {
         let favor = [];
         let favorName = [];
@@ -174,7 +192,6 @@ function MyMenu() {
         setAddFavorItem(array);
       }
       getFavorItem();
-      console.log(AddFavorItem)
     }
     return function cleanup() {
       mounted = false;
@@ -186,6 +203,10 @@ function MyMenu() {
   const [OnModal, setOnModal] = useState(false);
   const [OrderItem, setOrderItem] = useState();
   const orderHandler = (e, item) => {
+    if(TodayLunchCheck && !TodayLunchCheck.confirm){
+      alert('식단체크를 먼저 해야 주문이 가능합니다.');
+      return;
+    }
     if (e.target.tagName !== "svg" && e.target.tagName !== "path") {
       if (b_soldout === false) {
         item.add = "";

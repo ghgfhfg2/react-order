@@ -169,13 +169,17 @@ function LunchCheck() {
         {PrevState && PrevState.map((el,idx) => (
           <li key={idx} data-date={el.full}>
             <input type="hidden" name="check" value={el.confirm ? el.confirm : ""} />
-            {el.full}<br/>
-            {el.item} <br/><br/>
-            {el.confirm &&
-              <>
-                <span>확인완료</span>
-              </>
-            }  
+              <span className="">{`${el.month}.${el.day}(${el.week})`}</span>
+              {!ModifyState &&
+                <>
+                {`식단: ${el.item}`} <br/><br/>
+                {el.confirm &&
+                  <>
+                    <span>확인완료</span>
+                  </>
+                } 
+                </> 
+              }
             <div>
               {ItemList && ModifyState && 
               ItemList.map((list,l_idx) => (
@@ -188,7 +192,7 @@ function LunchCheck() {
       </ul>
       <ul className="week_list" ref={weekList2}>
         {CurState && CurState.map((el,idx) => (
-          <li key={idx} data-date={el.full}>
+          <li key={idx} data-date={el.full} className={el.full == curDate.full ? 'today' : ''}>
             {el.full}<br/>
             {el.item}<br/><br/>
             {el.confirm &&
