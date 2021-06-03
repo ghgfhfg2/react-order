@@ -418,14 +418,37 @@ h3.title {
   .ant-form-item-control{flex: 0;margin-right: 10px;flex-shrink: 0;min-width: 80px;}
 }
 
+.tbl-lunch-check{
+  tr{transition: all 0.1s;}
+  tr:hover{background-color: lighten($p-color,45%)}
+}
+
 // 주간 식단체크
 .week_list{
   @include flex();
   li{
-    flex:1;margin-left: -1px;padding:10px;
-    border: 1px solid $bd-color;
-    &.today{border:1px solid $p-color;z-index: 1;}
+    flex:1;margin-left: -1px;padding:10px;position: relative;
+    border: 1px solid $bd-color;font-size: 13px;
+    
+    &.today{
+      border:2px solid $p-color;z-index: 1;font-weight: bold;
+    }
+    .date{display: block;padding-bottom: 4px;padding-left:5px;border-bottom: 1px solid #ddd;}
+    .check-list-box{
+      display: flex;flex-wrap: wrap;
+      &.modify{padding:7px 5px}
+    }
+    label.ant-checkbox-wrapper{width:50%;margin:2px 0;font-size: 12px;}
+    .item-info{min-height: 70px;display: flex;justify-content: center;align-items: center;}
+    .confirm-info{width: 100%;padding-top: 5px;border-top: 1px solid #ddd;text-align: center;
+    }
+    button{width: 100%;font-size: 12px;}
   }
+}
+
+.lunch-btn-box{
+  width: 100%;display: flex;justify-content: center;margin-top: 20px;
+  button{width: 100%;max-width: 150px;height: 40px;}
 }
 
 

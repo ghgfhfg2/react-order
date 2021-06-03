@@ -119,7 +119,7 @@ function LunchAdmin() {
           disabledDate={disabledDate} onChange={onSelectDate} 
         />
       </div>
-      <table className="fl-table" style={{marginTop:"12px"}}>
+      <table className="fl-table tbl-lunch-check" style={{marginTop:"12px"}}>
         <thead>
           <tr>
             <th scope="col">날짜</th>

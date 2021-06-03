@@ -57,7 +57,7 @@ function Nav() {
     return hour + min;
   }
 
-  const [UserDb, setUserDb] = useState()
+  const [UserDb, setUserDb] = useState();
   
   const [AbleTime, setAbleTime] = useState();
   const [CurAbleTime, setCurAbleTime] = useState(0);
@@ -114,6 +114,7 @@ function Nav() {
           setCurAbleTime(5)
         }    
       });
+
     }
     return function cleanup() {
       firebase.database().ref("users").off();
@@ -193,12 +194,13 @@ function Nav() {
                     <form className="order-form-box" onSubmit={onSubmitInfo}>
                       <div className="flex-box a-center" style={{marginBottom:"5px"}}>
                       <span className="tit" style={{width:"auto",flexShrink:"0"}}>휴대전화</span>
-                        <Input name="call_number" defaultValue={UserDb.call_number} style={{marginRight:"5px"}}></Input>
+                        <Input name="call_number" defaultValue={UserDb && UserDb.call_number} style={{marginRight:"5px"}}></Input>
                         <Button
                           disabled={submitLoading}
                           htmlType="submit"
                           type="primary"
                         >수정</Button>
+                        {UserDb && UserDb.role}
                       </div>
                       <span>'-'이나 공백없이 숫자만 입력해 주세요.</span>
                     </form>

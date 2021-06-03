@@ -68,10 +68,12 @@ function Menu() {
       .child(`user/${userInfo.uid}/checkList/${curDate.full}`)
       .once("value")
       .then((snapshot) => {
-          lunchCheck.date = snapshot.val().date;
-          lunchCheck.confirm = snapshot.val().confirm;
-          lunchCheck.item = snapshot.val().item;
-          setTodayLunchCheck(lunchCheck)
+          if(snapshot.val()){
+            lunchCheck.date = snapshot.val().date;
+            lunchCheck.confirm = snapshot.val().confirm;
+            lunchCheck.item = snapshot.val().item;
+            setTodayLunchCheck(lunchCheck)
+          }
       });
         
 
@@ -206,8 +208,12 @@ function Menu() {
   const [OrderItem, setOrderItem] = useState();
   const orderHandler = (e, item) => {
     if (e.target.tagName !== "svg" && e.target.tagName !== "path") {
-      if(TodayLunchCheck && !TodayLunchCheck.confirm){
+      if(!TodayLunchCheck){
         alert('식단체크를 먼저 해야 주문이 가능합니다.');
+        return;
+      }
+      if(TodayLunchCheck && !TodayLunchCheck.confirm){
+        alert('오늘의 식단을 확인 해야 주문이 가능합니다.');
         return;
       }
       if (b_soldout === false) {

@@ -5,56 +5,57 @@ import firebase from "../firebase";
 import { useSelector } from "react-redux";
 
 
-const curDate = getFormatDate(new Date());
-const weekNum = curDate.weekNum;
-let date = new Date();
-new Date(date.setDate(date.getDate() - weekNum + 7));
-let curWeekArr = [];
-let i = 0;
-while(i < 7){
-  curWeekArr.push(getFormatDate(new Date(date.setDate(date.getDate() - 1))));
-  i++;
-}
-curWeekArr = curWeekArr.sort((a,b) => {
-  if(a.full < b.full){
-    return -1;
-  }
-});
-curWeekArr.pop();
-curWeekArr.shift();
-
-date = new Date();
-new Date(date.setDate(date.getDate() - weekNum));
-let prevWeekArr = [];
-let n = 0;
-while(n < 7){
-  prevWeekArr.push(getFormatDate(new Date(date.setDate(date.getDate() - 1))));
-  n++;
-}
-prevWeekArr = prevWeekArr.sort((a,b) => {
-  if(a.full < b.full){
-    return -1;
-  }
-});
-prevWeekArr.pop();
-prevWeekArr.shift();
-
-date = new Date();
-new Date(date.setDate(date.getDate() + (6-weekNum)));
-let nextWeekArr = [];
-let j = 0;
-while(j < 7){
-  nextWeekArr.push(getFormatDate(new Date(date.setDate(date.getDate() + 1))));
-  j++;
-}
-nextWeekArr.pop();
-nextWeekArr.shift();
-
-let allWeekArr = [];
-allWeekArr.push(...prevWeekArr,...curWeekArr,...nextWeekArr);
 
 
 function LunchCheck() {
+  const curDate = getFormatDate(new Date());
+  const weekNum = curDate.weekNum;
+  let date = new Date();
+  new Date(date.setDate(date.getDate() - weekNum + 7));
+  let curWeekArr = [];
+  let i = 0;
+  while(i < 7){
+    curWeekArr.push(getFormatDate(new Date(date.setDate(date.getDate() - 1))));
+    i++;
+  }
+  curWeekArr = curWeekArr.sort((a,b) => {
+    if(a.full < b.full){
+      return -1;
+    }
+  });
+  curWeekArr.pop();
+  curWeekArr.shift();
+  
+  date = new Date();
+  new Date(date.setDate(date.getDate() - weekNum));
+  let prevWeekArr = [];
+  let n = 0;
+  while(n < 7){
+    prevWeekArr.push(getFormatDate(new Date(date.setDate(date.getDate() - 1))));
+    n++;
+  }
+  prevWeekArr = prevWeekArr.sort((a,b) => {
+    if(a.full < b.full){
+      return -1;
+    }
+  });
+  prevWeekArr.pop();
+  prevWeekArr.shift();
+  
+  date = new Date();
+  new Date(date.setDate(date.getDate() + (6-weekNum)));
+  let nextWeekArr = [];
+  let j = 0;
+  while(j < 7){
+    nextWeekArr.push(getFormatDate(new Date(date.setDate(date.getDate() + 1))));
+    j++;
+  }
+  nextWeekArr.pop();
+  nextWeekArr.shift();
+  
+  let allWeekArr = [];
+  allWeekArr.push(...prevWeekArr,...curWeekArr,...nextWeekArr);
+  
   const userInfo = useSelector((state) => state.user.currentUser);
   const weekList = useRef();
   const weekList2 = useRef();
@@ -169,18 +170,24 @@ function LunchCheck() {
         {PrevState && PrevState.map((el,idx) => (
           <li key={idx} data-date={el.full}>
             <input type="hidden" name="check" value={el.confirm ? el.confirm : ""} />
-              <span className="">{`${el.month}.${el.day}(${el.week})`}</span>
+              <span className="date">
+                {`${el.month}.${el.day}(${el.week})`}
+              </span>
               {!ModifyState &&
                 <>
-                {`식단: ${el.item}`} <br/><br/>
-                {el.confirm &&
-                  <>
-                    <span>확인완료</span>
-                  </>
-                } 
+                  <div className="item-info">
+                    {`${el.item ? el.item : ''}`}
+                  </div>
+                  <div className="confirm-info">
+                  {el.full != curDate.full &&
+                    <>
+                      {el.confirm ? <span>확인완료</span> : <span>미확인</span>} 
+                    </>
+                  }
+                  </div>
                 </> 
               }
-            <div>
+            <div className={`check-list-box ${ModifyState && 'modify'}`}>
               {ItemList && ModifyState && 
               ItemList.map((list,l_idx) => (
                 <Checkbox value={list} disabled defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
@@ -193,25 +200,40 @@ function LunchCheck() {
       <ul className="week_list" ref={weekList2}>
         {CurState && CurState.map((el,idx) => (
           <li key={idx} data-date={el.full} className={el.full == curDate.full ? 'today' : ''}>
-            {el.full}<br/>
-            {el.item}<br/><br/>
-            {el.confirm &&
+            <span className="date">
+                {`${el.month}.${el.day}(${el.week})`}
+            </span>
+            {!ModifyState &&
               <>
-                <span>확인완료</span>
-              </>
-            } 
-            {el.full == curDate.full &&
-              <>
-              {!el.confirm &&
-              <Button onClick={()=>{onTodayCheck(el.full)}}>식단확인</Button>
+              <div className="item-info">
+                    {`${el.item ? el.item : ''}`}
+                  </div>
+                
+              <div className="confirm-info">
+              {el.confirm && <span>확인완료</span>}
+              {el.full != curDate.full && !el.confirm &&
+                <span>미확인</span>
               }
-              </>
-            }
-            <div>
+              </div>
+                
+              {el.full == curDate.full &&
+                <>
+                {!el.confirm && 
+                <>
+                  <Button type="primary" disabled={!el.item && true}  onClick={()=>{onTodayCheck(el.full)}}>
+                    {el.item ? '식단확인' : '확인불가'}
+                  </Button>
+                </>
+                }
+                </>
+              }
+              </> 
+            } 
+            <div className={`check-list-box ${ModifyState && 'modify'}`}>
               {ItemList && ModifyState && 
               ItemList.map((list,l_idx) => (
                 <Checkbox value={list} disabled={el.full > curDate.full ? false : true} defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
-              ))                  
+              ))            
               }
             </div>
             <input type="hidden" name="check" value={el.confirm ? el.confirm : ""} />            
@@ -222,24 +244,42 @@ function LunchCheck() {
       <ul className="week_list" ref={weekList3}>
         {NextState && NextState.map((el,idx) => (
           <li key={idx} data-date={el.full}>
-              <input type="hidden" name="check" value={el.confirm ? el.confirm : ""} />
-              {el.full}<br/>
-              {el.item}<br/><br/>
-                
-              {ItemList && ModifyState && 
-                ItemList.map((list,l_idx) => (
-                  <Checkbox value={list} defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
-                ))
-              }
-          </li>
+          <input type="hidden" name="check" value={el.confirm ? el.confirm : ""} />
+            <span className="date">
+              {`${el.month}.${el.day}(${el.week})`}
+            </span>
+            {!ModifyState &&
+              <>
+                <div className="item-info">
+                    {`${el.item ? el.item : ''}`}
+                  </div>
+                <div className="confirm-info">
+                {el.full != curDate.full &&
+                  <>
+                    {el.confirm ? <span>확인완료</span> : <span>미확인</span>} 
+                  </>
+                }
+                </div>
+              </> 
+            }
+          <div className={`check-list-box ${ModifyState && 'modify'}`}>
+            {ItemList && ModifyState && 
+            ItemList.map((list,l_idx) => (
+              <Checkbox value={list} defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
+            ))                  
+            }
+          </div>  
+        </li>
         ))}
       </ul>  
-      {!ModifyState &&
-        <Button onClick={onModify}>수정</Button>
-      }
-      {ModifyState &&
-        <Button onClick={onsubmit}>적용</Button>
-      }
+      <div className="lunch-btn-box">
+        {!ModifyState &&
+          <Button type="primary" onClick={onModify}>수정하기</Button>
+        }
+        {ModifyState &&
+          <Button type="primary" onClick={onsubmit}>적용하기</Button>
+        }
+      </div>
 
       
     </>

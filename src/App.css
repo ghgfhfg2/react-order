@@ -426,6 +426,12 @@ h3.title::before {
   flex-shrink: 0;
   min-width: 80px; }
 
+.tbl-lunch-check tr {
+  transition: all 0.1s; }
+
+.tbl-lunch-check tr:hover {
+  background-color: #d6f4e3; }
+
 .week_list {
   display: flex;
   justify-content: flex-start;
@@ -436,11 +442,59 @@ h3.title::before {
   flex: 1;
   margin-left: -1px;
   padding: 10px;
-  border: 1px solid #e2e2e2; }
+  position: relative;
+  border: 1px solid #e2e2e2;
+  font-size: 13px; }
 
 .week_list li.today {
-  border: 1px solid #30b46b;
-  z-index: 1; }
+  border: 2px solid #30b46b;
+  z-index: 1;
+  font-weight: bold; }
+
+.week_list li .date {
+  display: block;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  border-bottom: 1px solid #ddd; }
+
+.week_list li .check-list-box {
+  display: flex;
+  flex-wrap: wrap; }
+
+.week_list li .check-list-box.modify {
+  padding: 7px 5px; }
+
+.week_list li label.ant-checkbox-wrapper {
+  width: 50%;
+  margin: 2px 0;
+  font-size: 12px; }
+
+.week_list li .item-info {
+  min-height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+
+.week_list li .confirm-info {
+  width: 100%;
+  padding-top: 5px;
+  border-top: 1px solid #ddd;
+  text-align: center; }
+
+.week_list li button {
+  width: 100%;
+  font-size: 12px; }
+
+.lunch-btn-box {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px; }
+
+.lunch-btn-box button {
+  width: 100%;
+  max-width: 150px;
+  height: 40px; }
 
 .time-seting {
   margin: 10px 0 10px 0;
