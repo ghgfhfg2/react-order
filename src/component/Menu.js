@@ -208,6 +208,7 @@ function Menu() {
   const [OrderItem, setOrderItem] = useState();
   const orderHandler = (e, item) => {
     if (e.target.tagName !== "svg" && e.target.tagName !== "path") {
+      /*
       if(!TodayLunchCheck){
         alert('식단체크를 먼저 해야 주문이 가능합니다.');
         return;
@@ -216,6 +217,8 @@ function Menu() {
         alert('오늘의 식단을 확인 해야 주문이 가능합니다.');
         return;
       }
+      */
+      
       if (b_soldout === false) {
         item.add = "";
       }

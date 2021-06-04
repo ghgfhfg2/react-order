@@ -426,10 +426,11 @@ h3.title {
 // 주간 식단체크
 .week_list{
   @include flex();
+  flex-wrap: wrap;margin:0;
   li{
-    flex:1;margin-left: -1px;padding:10px;position: relative;
+    margin-left: -1px;padding:10px;position: relative;
     border: 1px solid $bd-color;font-size: 13px;
-    
+    width: 20%;margin-bottom:10px;
     &.today{
       border:2px solid $p-color;z-index: 1;font-weight: bold;
     }
@@ -443,7 +444,15 @@ h3.title {
     .confirm-info{width: 100%;padding-top: 5px;border-top: 1px solid #ddd;text-align: center;
     }
     button{width: 100%;font-size: 12px;}
+    @include mobile(){
+      label.ant-checkbox-wrapper{width: 100%;font-size: 11px;display: flex;}
+      .ant-checkbox + span{white-space: nowrap;}
+    }
   }
+  &.next{
+    li{margin-bottom: 12px}
+  }
+
 }
 
 .lunch-btn-box{

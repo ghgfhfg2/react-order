@@ -436,15 +436,18 @@ h3.title::before {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  flex-direction: row; }
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0; }
 
 .week_list li {
-  flex: 1;
   margin-left: -1px;
   padding: 10px;
   position: relative;
   border: 1px solid #e2e2e2;
-  font-size: 13px; }
+  font-size: 13px;
+  width: 20%;
+  margin-bottom: 10px; }
 
 .week_list li.today {
   border: 2px solid #30b46b;
@@ -484,6 +487,17 @@ h3.title::before {
 .week_list li button {
   width: 100%;
   font-size: 12px; }
+
+@media (max-width: 760px) {
+  .week_list li label.ant-checkbox-wrapper {
+    width: 100%;
+    font-size: 11px;
+    display: flex; }
+  .week_list li .ant-checkbox + span {
+    white-space: nowrap; } }
+
+.week_list.next li {
+  margin-bottom: 12px; }
 
 .lunch-btn-box {
   width: 100%;

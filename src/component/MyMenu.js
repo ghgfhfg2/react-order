@@ -203,10 +203,12 @@ function MyMenu() {
   const [OnModal, setOnModal] = useState(false);
   const [OrderItem, setOrderItem] = useState();
   const orderHandler = (e, item) => {
+    /*
     if(TodayLunchCheck && !TodayLunchCheck.confirm){
       alert('식단체크를 먼저 해야 주문이 가능합니다.');
       return;
     }
+    */
     if (e.target.tagName !== "svg" && e.target.tagName !== "path") {
       if (b_soldout === false) {
         item.add = "";
@@ -217,6 +219,7 @@ function MyMenu() {
       setOnModal(true);
     }
   };
+  
   const onFinished = () => {
     setOnModal(false);
   };

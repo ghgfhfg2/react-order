@@ -200,7 +200,6 @@ function Nav() {
                           htmlType="submit"
                           type="primary"
                         >수정</Button>
-                        {UserDb && UserDb.role}
                       </div>
                       <span>'-'이나 공백없이 숫자만 입력해 주세요.</span>
                     </form>
@@ -257,14 +256,12 @@ function Nav() {
                 마이메뉴
               </Link>
             </Menu.Item>
-            {UserDb && UserDb.role > 1 &&
             <Menu.Item key="7">
               <Link to="/lunch">
                 <antIcon.AiOutlineDownSquare />
                 식단체크
               </Link>
             </Menu.Item>
-            }
            
             {UserDb && UserDb.role > 0 &&
             (

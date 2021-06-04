@@ -11,6 +11,7 @@ function LunchCheck() {
   const curDate = getFormatDate(new Date());
   const weekNum = curDate.weekNum;
   let date = new Date();
+  let hour = date.getHours();
   new Date(date.setDate(date.getDate() - weekNum + 7));
   let curWeekArr = [];
   let i = 0;
@@ -46,15 +47,20 @@ function LunchCheck() {
   new Date(date.setDate(date.getDate() + (6-weekNum)));
   let nextWeekArr = [];
   let j = 0;
-  while(j < 7){
-    nextWeekArr.push(getFormatDate(new Date(date.setDate(date.getDate() + 1))));
+  while(j < 14){
+    if(j==6){
+      nextWeekArr.push(getFormatDate(new Date(date.setDate(date.getDate() + 3))));
+    }else{
+      nextWeekArr.push(getFormatDate(new Date(date.setDate(date.getDate() + 1))));
+    }
+    
     j++;
   }
   nextWeekArr.pop();
+  nextWeekArr.pop();
+  nextWeekArr.pop();
   nextWeekArr.shift();
-  
-  let allWeekArr = [];
-  allWeekArr.push(...prevWeekArr,...curWeekArr,...nextWeekArr);
+
   
   const userInfo = useSelector((state) => state.user.currentUser);
   const weekList = useRef();
@@ -63,10 +69,11 @@ function LunchCheck() {
 
   const [ItemList, setItemList] = useState();
   const [UserList, setUserList] = useState();
-
+  const [ItemInfo, setItemInfo] = useState();
   const [PrevState, setPrevState] = useState()
   const [CurState, setCurState] = useState()
   const [NextState, setNextState] = useState()
+
   useEffect(() => {
       firebase.database().ref('lunch/item')
       .on('value', (snapshot) => {
@@ -75,6 +82,10 @@ function LunchCheck() {
           arr.push(el.val())
         })
         setItemList(arr)
+      });
+      firebase.database().ref('lunch/info')
+      .on('value', (snapshot) => {
+        setItemInfo(snapshot.val())        
       });
       firebase.database().ref(`lunch/user/${userInfo.uid}/checkList`)
       .on('value', (snapshot) => {
@@ -111,6 +122,8 @@ function LunchCheck() {
             }
           })
         })
+        
+        
         setPrevState(prevWeekArr);
         setCurState(curWeekArr);
         setNextState(nextWeekArr);
@@ -142,7 +155,8 @@ function LunchCheck() {
     
     firebase.database().ref(`lunch/user/${userInfo.uid}`)
     .set({
-      name : userInfo.displayName
+      name : userInfo.displayName,
+      part : userInfo.photoURL
     })
     firebase.database().ref(`lunch/user/${userInfo.uid}`)
     .update({
@@ -166,6 +180,9 @@ function LunchCheck() {
 
   return (
     <>
+      <div style={{marginBottom:"10px"}}>
+        {ItemInfo && ItemInfo}
+      </div>
       <ul className="week_list" ref={weekList}>
         {PrevState && PrevState.map((el,idx) => (
           <li key={idx} data-date={el.full}>
@@ -232,7 +249,10 @@ function LunchCheck() {
             <div className={`check-list-box ${ModifyState && 'modify'}`}>
               {ItemList && ModifyState && 
               ItemList.map((list,l_idx) => (
-                <Checkbox value={list} disabled={el.full > curDate.full ? false : true} defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
+                <Checkbox value={list} disabled={
+                  el.full > curDate.full ? 
+                  false : el.full == curDate.full && hour < 9 ? false : true
+                } defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
               ))            
               }
             </div>
@@ -241,7 +261,7 @@ function LunchCheck() {
         ))}
       </ul>  
 
-      <ul className="week_list" ref={weekList3}>
+      <ul className="week_list next" ref={weekList3}>
         {NextState && NextState.map((el,idx) => (
           <li key={idx} data-date={el.full}>
           <input type="hidden" name="check" value={el.confirm ? el.confirm : ""} />
@@ -272,6 +292,7 @@ function LunchCheck() {
         </li>
         ))}
       </ul>  
+     
       <div className="lunch-btn-box">
         {!ModifyState &&
           <Button type="primary" onClick={onModify}>수정하기</Button>

@@ -9,6 +9,7 @@ const curDate = getFormatDate(new Date());
 function LunchAdmin() {
 
   const [ItemList, setItemList] = useState();
+  const [CheckInfoTxt, setCheckInfoTxt] = useState();
   const [TblItem, setTblItem] = useState();
   const [CheckList, setCheckList] = useState();
   const [ItemSum, setItemSum] = useState();
@@ -30,6 +31,10 @@ function LunchAdmin() {
       itemArr = itemArr.join(',');      
       setItemList(itemArr)
     })
+    firebase.database().ref('lunch/info')
+      .on('value', (snapshot) => {
+        setCheckInfoTxt(snapshot.val())        
+    });
     firebase.database().ref('lunch/user')
     .once('value', (snapshot) => {
       let arr = [];
@@ -44,13 +49,13 @@ function LunchAdmin() {
           })       
           arr.push({
             name: el.val().name,
+            part: el.val().part,
             item: elItemArr,
             confirm: el.val().checkList[SearchDate.full].confirm,
           })
         }
       })
       setCheckList(arr);
-      console.log(itemObj)
       setItemSum(itemObj);
     })
 
@@ -66,7 +71,8 @@ function LunchAdmin() {
       arr = e.target.item.value.split(',');      
       firebase.database().ref('lunch')
       .update({
-        item:arr
+        item:arr,
+        info:e.target.check_info_txt.value
       })
 
     }catch (error) {
@@ -85,25 +91,34 @@ function LunchAdmin() {
     return result;
   }
   const disabledDate = (current) => {
-    return current && current > moment().endOf('day');
+    return current && current > moment().add(14, 'days');
   }
 
   return (
     <>
-      {ItemList &&
+      {ItemList && 
         <>
           <form onSubmit={onSubmit}>
             <h3 className="title" style={{ margin: "0 0 5px 0" }}>
-              식단항목
+              식단 항목
             </h3>
             <div className="flex-box">
               <Input name="item" defaultValue={ItemList} />
+            </div>
+            <h3 className="title" style={{ margin: "15px 0 5px 0" }}>
+              항목 설명글
+            </h3>
+            <div className="flex-box">
+              <Input name="check_info_txt" defaultValue={CheckInfoTxt} />              
+            </div>
+            <div style={{textAlign:"center"}}>
               <Button
-                    htmlType="submit"
-                    type="primary"
-                    size="large"                
-                  >
-                    설정
+                      htmlType="submit"
+                      type="primary"
+                      size="large" 
+                      style={{marginTop:"10px"}}               
+                    >
+                      설정저장
               </Button>
             </div>
           </form>
@@ -124,6 +139,7 @@ function LunchAdmin() {
           <tr>
             <th scope="col">날짜</th>
             <th scope="col">이름</th>
+            <th scope="col">부서</th>
             {TblItem && TblItem.map(el => (
               <th scope="col">{el}</th>
             ))}
@@ -135,6 +151,7 @@ function LunchAdmin() {
             <tr>
               <td>{SearchDate.full_}</td>
               <td>{el.name}</td>
+              <td>{el.part}</td>
               {TblItem && TblItem.map((list,l_idx) => (
                   <td>
                     {el.item.includes(list) && 1}
@@ -148,6 +165,7 @@ function LunchAdmin() {
           <tr>
             <td>{SearchDate.full_}</td>
             <td>합계</td>
+            <td></td>
             {TblItem && TblItem.map((el,idx) => (
               <td>
                 {ItemSum && ItemSum[el]}
