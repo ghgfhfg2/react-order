@@ -180,8 +180,10 @@ function LunchCheck() {
 
   return (
     <>
-      <div style={{marginBottom:"10px"}}>
-        {ItemInfo && ItemInfo}
+      <div className="item-info-box">
+        {ItemInfo && 
+          <pre>{ItemInfo}</pre>
+        }
       </div>
       <ul className="week_list" ref={weekList}>
         {PrevState && PrevState.map((el,idx) => (
@@ -237,7 +239,7 @@ function LunchCheck() {
                 <>
                 {!el.confirm && 
                 <>
-                  <Button type="primary" disabled={!el.item && true}  onClick={()=>{onTodayCheck(el.full)}}>
+                  <Button type="primary" disabled={!el.item ? true : hour < 9 ? false : true}  onClick={()=>{onTodayCheck(el.full)}}>
                     {el.item ? '식단확인' : '확인불가'}
                   </Button>
                 </>

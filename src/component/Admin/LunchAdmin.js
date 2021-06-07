@@ -3,7 +3,7 @@ import { Input,Button,DatePicker } from 'antd';
 import firebase from "../../firebase";
 import { getFormatDate } from '../CommonFunc';
 import moment from 'moment';
-
+const { TextArea } = Input;
 const curDate = getFormatDate(new Date());
 
 function LunchAdmin() {
@@ -15,8 +15,27 @@ function LunchAdmin() {
   const [ItemSum, setItemSum] = useState();
 
   const [SearchDate, setSearchDate] = useState(curDate);
+  const [CheckLength, setCheckLength] = useState();
+
+  const [Ruser, setRuser] = useState();
+  const [NonChecker, setNonChecker] = useState();
 
   useEffect(() => {
+    let r_user = []
+    firebase.database().ref('users')
+    .once('value', (snapshot) => {
+      snapshot.forEach(el => {
+        if(el.val().role == "0"){
+            r_user.push({
+            name: el.val().name,
+            part: el.val().part,
+            role: el.val().role,
+          })
+        }
+      });
+      
+      setRuser(r_user);
+    })
     let itemArr = [];
     let itemObj = {};
     firebase.database().ref('lunch/item')
@@ -55,14 +74,30 @@ function LunchAdmin() {
           })
         }
       })
+      setCheckLength(arr.length)
       setCheckList(arr);
       setItemSum(itemObj);
+      let checker = [];
+      let allName = [];
+      let nonChecker = [];
+      Ruser && Ruser.map(el => {
+        allName.push(el.name);
+        arr.map(list => {
+          if(list.name.includes(el.name) && list.part.includes(el.part)){
+            checker.push(list.name)
+          }
+        })
+      })
+      nonChecker = allName.filter(el => {
+        return !checker.includes(el);
+      })
+      setNonChecker(nonChecker);
     })
 
 
     return () => {
     }
-  }, [SearchDate])
+  }, [SearchDate,Ruser])
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -83,13 +118,7 @@ function LunchAdmin() {
   const onSelectDate = (date, dateString) => {
     setSearchDate(getFormatDate(date._d))
   }
-  function range(start, end) {
-    const result = [];
-    for (let i = start; i < end; i++) {
-      result.push(i);
-    }
-    return result;
-  }
+
   const disabledDate = (current) => {
     return current && current > moment().add(14, 'days');
   }
@@ -108,9 +137,11 @@ function LunchAdmin() {
             <h3 className="title" style={{ margin: "15px 0 5px 0" }}>
               항목 설명글
             </h3>
+            {CheckInfoTxt &&
             <div className="flex-box">
-              <Input name="check_info_txt" defaultValue={CheckInfoTxt} />              
+              <TextArea name="check_info_txt" defaultValue={CheckInfoTxt} />              
             </div>
+            }
             <div style={{textAlign:"center"}}>
               <Button
                       htmlType="submit"
@@ -165,7 +196,7 @@ function LunchAdmin() {
           <tr>
             <td>{SearchDate.full_}</td>
             <td>합계</td>
-            <td></td>
+            <td>{CheckLength}</td>
             {TblItem && TblItem.map((el,idx) => (
               <td>
                 {ItemSum && ItemSum[el]}
@@ -175,6 +206,16 @@ function LunchAdmin() {
           </tr>
         </tbody>
       </table>
+      {NonChecker &&
+        <> 
+          <div style={{marginTop:"15px",fontSize:"12px"}}>
+          <span>체크 안한 사람 : </span>
+          {NonChecker.map((el,idx) => (
+            parseInt(NonChecker.length-1) == idx ? el : el+', '
+          ))}
+          </div>
+        </>
+      }
     </>
   )
 }

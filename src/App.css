@@ -432,6 +432,16 @@ h3.title::before {
 .tbl-lunch-check tr:hover {
   background-color: #d6f4e3; }
 
+.item-info-box {
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: #555;
+  padding: 15px;
+  border: 1px solid #30b46b; }
+
+.item-info-box pre {
+  margin: 0; }
+
 .week_list {
   display: flex;
   justify-content: flex-start;

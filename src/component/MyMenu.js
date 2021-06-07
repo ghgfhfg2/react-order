@@ -37,19 +37,7 @@ function MyMenu() {
   useEffect(() => {
     let mounted = true;
     if (mounted) {
-      //식단체크
-      let lunchCheck = {};
-      firebase
-      .database()
-      .ref("lunch")
-      .child(`user/${userInfo.uid}/checkList/${curDate.full}`)
-      .once("value")
-      .then((snapshot) => {
-          lunchCheck.date = snapshot.val().date;
-          lunchCheck.confirm = snapshot.val().confirm;
-          lunchCheck.item = snapshot.val().item;
-          setTodayLunchCheck(lunchCheck)
-      });
+  
 
       async function getProdItem() {
         let favor = [];
