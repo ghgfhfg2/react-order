@@ -432,6 +432,49 @@ h3.title::before {
 .tbl-lunch-check tr:hover {
   background-color: #d6f4e3; }
 
+.lunch-check-popup {
+  width: auto;
+  text-align: center;
+  min-width: 290px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  position: fixed;
+  z-index: 150;
+  border-radius: 10px;
+  background: #fff;
+  transition: all 0.2s;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -60%);
+  box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.25); }
+
+.lunch-check-popup .modal-loading {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%); }
+
+.lunch-check-popup dl {
+  margin: 0; }
+
+.lunch-check-popup dd {
+  margin-top: 10px; }
+
+@media all and (max-width: 640px) {
+  .lunch-check-popup {
+    width: 80%;
+    max-width: 300px;
+    left: 50%;
+    transform: translate(-50%, -100%); } }
+
+.lunch-check-popup .btn-box {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center; }
+
+.lunch-check-popup .btn-box button {
+  min-width: 100px; }
+
 .item-info-box {
   margin-bottom: 10px;
   font-size: 12px;
@@ -519,6 +562,33 @@ h3.title::before {
   width: 100%;
   max-width: 150px;
   height: 40px; }
+
+.research-form .ant-space .ant-form-item {
+  margin-bottom: 0; }
+
+.research-form .ant-space-item {
+  width: 100%; }
+
+.research-form .ant-space-item:last-child {
+  width: auto; }
+
+.research-chart {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: row;
+  margin-top: 15px; }
+
+.research-chart li {
+  flex-shrink: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  color: #fff;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row; }
 
 .time-seting {
   margin: 10px 0 10px 0;

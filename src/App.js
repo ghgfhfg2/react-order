@@ -12,6 +12,9 @@ import AdminProd from "./component/Admin/AdminProd";
 import AdminOrder from "./component/Admin/AdminOrder";
 import AdminOrderList from "./component/Admin/AdminOrderList";
 import LunchAdmin from "./component/Admin/LunchAdmin";
+import Research from "./component/Research/Research";
+import ResearchWrite from "./component/Research/ResearchWrite";
+import ResearchView from "./component/Research/ResearchView";
 import Loading from "./component/Loading";
 import LunchCheck from "./component/LunchCheck";
 import { Layout, Button, BackTop } from "antd";
@@ -124,11 +127,10 @@ function App(props) {
                   <Route exact path="/admin/prod" component={AdminProd} />
                   <Route exact path="/admin/order" component={AdminOrder} />
                   <Route exact path="/admin/lunch" component={LunchAdmin} />
-                  <Route
-                    exact
-                    path="/admin/order_list"
-                    component={AdminOrderList}
-                  />
+                  <Route exact path="/admin/order_list" component={AdminOrderList}/>
+                  <Route exact path="/research" component={Research} />
+                  <Route exact path="/research_write" component={ResearchWrite} />
+                  <Route exact path="/research_view" component={ResearchView} />
                 </Switch>
               </Content>
               <BackTop>

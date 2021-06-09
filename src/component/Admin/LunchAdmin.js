@@ -20,6 +20,8 @@ function LunchAdmin() {
   const [Ruser, setRuser] = useState();
   const [NonChecker, setNonChecker] = useState();
 
+  const [Render, setRender] = useState(true)
+
   useEffect(() => {
     let r_user = []
     firebase.database().ref('users')
@@ -67,6 +69,7 @@ function LunchAdmin() {
           itemObj[el] += 1;
           })       
           arr.push({
+            uid: el.key,
             name: el.val().name,
             part: el.val().part,
             item: elItemArr,
@@ -97,7 +100,7 @@ function LunchAdmin() {
 
     return () => {
     }
-  }, [SearchDate,Ruser])
+  }, [SearchDate,Ruser,Render])
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -121,6 +124,19 @@ function LunchAdmin() {
 
   const disabledDate = (current) => {
     return current && current > moment().add(14, 'days');
+  }
+
+  const onConfrim =(user) => {
+    let date = SearchDate.full;
+    try {
+      firebase.database().ref(`lunch/user/${user.uid}/checkList/${date}`)
+      .update({
+        confirm: 1
+      })
+      setRender(!Render)
+    }catch (error) {
+      console.error(error);
+    }
   }
 
   return (
@@ -174,7 +190,7 @@ function LunchAdmin() {
             {TblItem && TblItem.map(el => (
               <th scope="col">{el}</th>
             ))}
-            <th scope="col">체크여부</th>
+            <th scope="col">확인여부</th>
           </tr>          
         </thead>
         <tbody>
@@ -189,7 +205,7 @@ function LunchAdmin() {
                   </td>
               ))}
               <td>
-              {el.confirm && 'O'}
+              {el.confirm ? 'O' : <Button onClick={()=>{onConfrim(el)}}>확인</Button>}
               </td>
             </tr>
           ))}
@@ -209,7 +225,7 @@ function LunchAdmin() {
       {NonChecker &&
         <> 
           <div style={{marginTop:"15px",fontSize:"12px"}}>
-          <span>체크 안한 사람 : </span>
+          <span>없는 사람 : </span>
           {NonChecker.map((el,idx) => (
             parseInt(NonChecker.length-1) == idx ? el : el+', '
           ))}

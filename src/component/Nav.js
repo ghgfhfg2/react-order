@@ -262,6 +262,14 @@ function Nav() {
                 식단체크
               </Link>
             </Menu.Item>
+            {UserDb && UserDb.role > 2 &&
+            <Menu.Item key="9">
+              <Link to="/research">
+                <antIcon.AiOutlineDownSquare />
+                설문조사
+              </Link>
+            </Menu.Item>
+            }
            
             {UserDb && UserDb.role > 0 &&
             (

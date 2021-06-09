@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import firebase from "../firebase";
+import { Link } from "react-router-dom";
 import { ProdList } from "./Admin/AdminProd";
 import OderModalPopup from "./OrderModal";
 import { commaNumber,getFormatDate } from "./CommonFunc";
 import Loading from "./Loading";
-import { Radio, Input, Empty } from "antd";
+import { Radio, Input, Empty, Button } from "antd";
 import * as antIcon from "react-icons/ai";
 import * as Hangul from "hangul-js";
 import { useSelector } from "react-redux";
@@ -265,9 +266,51 @@ function Menu() {
     </>
   );
 
+  const [LunchPop, setLunchPop] = useState(true)
+  const onConfrim =(uid) => {
+    let date = curDate.full;
+    try {
+      firebase.database().ref(`lunch/user/${uid}/checkList/${date}`)
+      .update({
+        confirm: 1
+      })
+      setLunchPop(false)
+    }catch (error) {
+      console.error(error);
+    }
+  }
+
   if (ProdItem.length) {
     return (
-      <>
+      <> 
+        {!TodayLunchCheck.confirm && curDate.hour < 9 && LunchPop &&
+          <div className="lunch-check-popup">
+            {TodayLunchCheck.item && 
+              <>
+                <dl>
+                  <dt>{userInfo.displayName}님의 오늘식단은</dt>
+                  <dd>
+                    {TodayLunchCheck.item.map((el,idx)=>(
+                      TodayLunchCheck.item.length == (idx+1) ? <span key={idx}>{el}</span> : <span key={idx}>{el},</span>
+                    ))}  
+                    입니다.            
+                  </dd>
+                </dl>
+                <div className="btn-box">
+                  <Button type="primary" onClick={()=>{onConfrim(userInfo.uid)}}>식단확인</Button>
+                </div>
+              </>
+            }
+            {!TodayLunchCheck.item && 
+              <dl>
+                <dt>오늘 식단을 아직 정하지 않았습니다.</dt>
+                <div className="btn-box">
+                  <Button type="primary"><Link to="/lunch">체크 하러가기</Link></Button>
+                </div>
+              </dl>
+            }
+          </div>
+        }
         {TopBox}
         <ProdList>
           {ProdItem.map((item, index) => (
