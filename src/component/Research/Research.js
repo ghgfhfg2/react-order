@@ -13,7 +13,6 @@ function Research() {
       snapshot.forEach(el=>{
         arr.push(el.val())
       })
-      console.log(arr)
       setResearchList(arr)
     })
     return () => {

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import firebase from "../firebase";
 import { Link } from "react-router-dom";
 import { ProdList } from "./Admin/AdminProd";
 import OderModalPopup from "./OrderModal";
 import { commaNumber,getFormatDate } from "./CommonFunc";
 import Loading from "./Loading";
-import { Radio, Input, Empty, Button } from "antd";
+import { Radio, Input, Empty, Button, Checkbox } from "antd";
 import * as antIcon from "react-icons/ai";
 import * as Hangul from "hangul-js";
 import { useSelector } from "react-redux";
@@ -17,7 +17,7 @@ function Menu() {
   const userInfo = useSelector((state) => state.user.currentUser);
   const [ProdItem, setProdItem] = useState([]);
   const [ProdItemCopy, setProdItemCopy] = useState();
-
+  const lunchCheckBox = useRef();
 
 
   //정렬 라디오버튼
@@ -57,11 +57,23 @@ function Menu() {
   let m_soldout2;
 
   const [TodayLunchCheck, setTodayLunchCheck] = useState();
-
+  const [ItemList, setItemList] = useState();
+  
+  const [ModifyState, setModifyState] = useState(false)
+  const onModify = () => {
+    setModifyState(true)
+  }
   useEffect(() => {
-    let mounted = true;
-    if (mounted && userInfo) {
+    if (userInfo) {
       //식단체크
+      firebase.database().ref('lunch/item')
+      .once('value', (snapshot) => {
+        let arr = [];
+        snapshot.forEach(el => {
+          arr.push(el.val())
+        })
+        setItemList(arr)
+      });
       let lunchCheck = {};
       firebase
       .database()
@@ -76,7 +88,14 @@ function Menu() {
             setTodayLunchCheck(lunchCheck)
           }
       });
-        
+    }
+    return () => {
+    }
+  }, [ModifyState])
+
+  useEffect(() => {
+    let mounted = true;
+    if (mounted && userInfo) {
 
       //즐찾
       async function getProdItem() {
@@ -280,24 +299,58 @@ function Menu() {
     }
   }
 
+
+  const onLunchSubmit = (e) => {
+    e.preventDefault();
+    let list = [...lunchCheckBox.current.querySelectorAll('input[type=checkbox]:checked')];
+    let arr = [];
+    list.map(el=>{
+      arr.push(el.dataset.value)
+    })
+    firebase.database().ref(`lunch/user/${userInfo.uid}/checkList/${curDate.full}`)
+    .update({
+      item: arr
+    })
+    setModifyState(false)
+  }
+
   if (ProdItem.length) {
     return (
       <> 
-        {!TodayLunchCheck.confirm && curDate.hour < 9 && LunchPop &&
+        {TodayLunchCheck && !TodayLunchCheck.confirm && curDate.hour < 12 && LunchPop &&
           <div className="lunch-check-popup">
             {TodayLunchCheck.item && 
               <>
                 <dl>
-                  <dt>{userInfo.displayName}님의 오늘식단은</dt>
-                  <dd>
-                    {TodayLunchCheck.item.map((el,idx)=>(
-                      TodayLunchCheck.item.length == (idx+1) ? <span key={idx}>{el}</span> : <span key={idx}>{el},</span>
-                    ))}  
-                    입니다.            
-                  </dd>
+                  {!ModifyState &&
+                    <>
+                      <dt>{userInfo.displayName}님의 오늘식단은</dt>
+                      <dd>
+                        {TodayLunchCheck.item.map((el,idx)=>(
+                          TodayLunchCheck.item.length == (idx+1) ? <span key={idx}>{el}</span> : <span key={idx}>{el},</span>
+                        ))}  
+                        입니다.
+                      </dd>
+                    </>
+                  }
                 </dl>
+                <div ref={lunchCheckBox} className={`check-list-box ${ModifyState && 'modify'}`}>
+                  {ItemList && ModifyState && 
+                  ItemList.map((list,l_idx) => (
+                    <Checkbox key={l_idx} data-value={list} defaultChecked={TodayLunchCheck.item && TodayLunchCheck.item.includes(list) ? true : false}>{list}</Checkbox>
+                  ))            
+                  }
+                </div>
                 <div className="btn-box">
-                  <Button type="primary" onClick={()=>{onConfrim(userInfo.uid)}}>식단확인</Button>
+                  {!ModifyState &&
+                    <>
+                      <Button style={{marginRight:"5px"}} type="primary" onClick={onModify}>수정하기</Button>
+                      <Button type="primary" onClick={()=>{onConfrim(userInfo.uid)}}>식단확인</Button>
+                    </>
+                  }
+                  {ModifyState &&
+                    <Button type="primary" onClick={onLunchSubmit}>적용하기</Button>
+                  }
                 </div>
               </>
             }

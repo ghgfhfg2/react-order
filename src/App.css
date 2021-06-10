@@ -434,8 +434,9 @@ h3.title::before {
 
 .lunch-check-popup {
   width: auto;
-  text-align: center;
+  text-align: left;
   min-width: 290px;
+  max-width: 350px;
   padding: 20px;
   border: 1px solid #ddd;
   position: fixed;
@@ -474,6 +475,19 @@ h3.title::before {
 
 .lunch-check-popup .btn-box button {
   min-width: 100px; }
+
+.lunch-check-popup .check-list-box {
+  margin: 10px 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap; }
+
+.lunch-check-popup .check-list-box label {
+  width: 50%;
+  margin: 0;
+  text-align: left; }
 
 .item-info-box {
   margin-bottom: 10px;

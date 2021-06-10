@@ -9,6 +9,7 @@ function ResearchView(props) {
   const [ResultList, setResultList] = useState();
   const [ResultSum, setResultSum] = useState();
   const [Ruser, setRuser] = useState();
+  const [Rerender, setRerender] = useState(true);
   useEffect(() => {
     let resultSum = {};
     async function getResearch(){
@@ -30,13 +31,13 @@ function ResearchView(props) {
     .child(props.location.state.uid)
     .once("value", (snapshot) => {
       setResearchViewInfo(snapshot.val())
-      snapshot.val().option.forEach(el => {
+      snapshot.val().option && snapshot.val().option.forEach(el => {
         resultSum[el.option] = 0;
       })
     });    
     let color = ['#373f92','#1a95ce','#10acb9','#49b963','#c5be26','#f8900b','#f1723b','#de2715','#a14198'];
     firebase.database().ref(`research/${props.location.state.uid}/result`)
-    .on("value", (snapshot) => {
+    .once("value", (snapshot) => {      
       let resultArr = [];
       let sumArr = [];
       for(let key in resultSum){
@@ -74,13 +75,12 @@ function ResearchView(props) {
           }
         })
       })
-      console.log(r_user)
       setResultList(r_user)
     })};
     getResearch();
     return () => {      
     }
-  }, [])
+  }, [Rerender])
 
   const onFinish = (values) => {
     let result = {
@@ -90,6 +90,7 @@ function ResearchView(props) {
     };
     firebase.database().ref(`research/${props.location.state.uid}/result/${userInfo.uid}`)
     .update({...result})
+    setRerender(!Rerender)
   }
   return (
     <>
@@ -101,15 +102,22 @@ function ResearchView(props) {
           <dl className="board-view-basic">
             <dt>{ResearchViewInfo.title}</dt>
             <dd>
-              <Form.Item name="select_op" label="선택항목">
-                <Radio.Group >
-                  {ResearchViewInfo.option.map((el,idx) => (
-                    <>
-                      <Radio key={idx} value={el.option}>{el.option}</Radio>
-                    </>
-                  ))}
-                </Radio.Group>
+              {ResearchViewInfo.type == 1 &&
+                <Form.Item name="select_op" label="선택항목">
+                  <Radio.Group >
+                    {ResearchViewInfo.option.map((el,idx) => (
+                      <>
+                        <Radio key={idx} value={el.option}>{el.option}</Radio>
+                      </>
+                    ))}
+                  </Radio.Group>
+                </Form.Item>
+              }
+              {ResearchViewInfo.type == 2 && 
+                <Form.Item name="select_op" label="답변">
+                  <Input />
               </Form.Item>
+              }
               <Button htmlType="submit">참여하기</Button>
             </dd>
           </dl>
@@ -135,14 +143,16 @@ function ResearchView(props) {
             ))}
           </tbody>
         </table>
-        <ul className="research-chart">
-          {ResultSum && ResultSum.map((el,idx) => (
-            <li key={idx} style={{width:`${(el.count/ResultList.length*100).toFixed(1)}%`,backgroundColor:`${el.color}`}}>
-              <span>{el.name} </span>
-              <span>{el.count}표({el.count ? (el.count/ResultList.length*100).toFixed(1): '0'}%)</span>
-            </li>
-          ))}
-        </ul>
+        {ResearchViewInfo.type == 1 &&
+          <ul className="research-chart">
+            {ResultSum && ResultSum.map((el,idx) => (
+              <li key={idx} style={{width:`${(el.count/ResultList.length*100).toFixed(1)}%`,backgroundColor:`${el.color}`}}>
+                <span>{el.name} </span>
+                <span>{el.count}표({el.count ? (el.count/ResultList.length*100).toFixed(1): '0'}%)</span>
+              </li>
+            ))}
+          </ul>
+        }
         </>
       }
       

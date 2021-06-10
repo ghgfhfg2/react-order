@@ -145,7 +145,7 @@ function LunchCheck() {
       let check = [...el.querySelectorAll('input[type=checkbox]:checked')];
       let confirm = el.querySelector('input[type=hidden]');
       
-      check = check.map(el=>el.value)
+      check = check.map(el=>el.dataset.value)
       checkList[el.dataset.date] = {
         item: check,
         date:el.dataset.date,
@@ -209,7 +209,7 @@ function LunchCheck() {
             <div className={`check-list-box ${ModifyState && 'modify'}`}>
               {ItemList && ModifyState && 
               ItemList.map((list,l_idx) => (
-                <Checkbox value={list} disabled defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
+                <Checkbox key={l_idx} data-value={list} disabled defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
               ))                  
               }
             </div>  
@@ -251,7 +251,7 @@ function LunchCheck() {
             <div className={`check-list-box ${ModifyState && 'modify'}`}>
               {ItemList && ModifyState && 
               ItemList.map((list,l_idx) => (
-                <Checkbox value={list} disabled={
+                <Checkbox key={l_idx} data-value={list} disabled={
                   el.full > curDate.full ? 
                   false : el.full == curDate.full && hour < 9 ? false : true
                 } defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
@@ -287,7 +287,7 @@ function LunchCheck() {
           <div className={`check-list-box ${ModifyState && 'modify'}`}>
             {ItemList && ModifyState && 
             ItemList.map((list,l_idx) => (
-              <Checkbox value={list} defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
+              <Checkbox key={l_idx} data-value={list} defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
             ))                  
             }
           </div>  

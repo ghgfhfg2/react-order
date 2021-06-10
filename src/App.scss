@@ -425,8 +425,9 @@ h3.title {
 
 // 주간 식단체크
 .lunch-check-popup{
-  width: auto;text-align: center;
+  width: auto;text-align: left;
   min-width:290px;
+  max-width:350px;
   padding: 20px;
   border: 1px solid #ddd;
   position: fixed;
@@ -458,6 +459,10 @@ h3.title {
     button {
       min-width: 100px;
     }
+  }
+  .check-list-box{margin:10px 0;
+    @include flex();flex-wrap:wrap;
+    label{width: 50%;margin:0;text-align: left;}
   }
 }
 
