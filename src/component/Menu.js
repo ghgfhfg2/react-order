@@ -5,6 +5,7 @@ import { ProdList } from "./Admin/AdminProd";
 import OderModalPopup from "./OrderModal";
 import { commaNumber,getFormatDate } from "./CommonFunc";
 import Loading from "./Loading";
+import Timer from "./Timer";
 import { Radio, Input, Empty, Button, Checkbox } from "antd";
 import * as antIcon from "react-icons/ai";
 import * as Hangul from "hangul-js";
@@ -13,13 +14,28 @@ const { Search } = Input;
 const _ = require("lodash");
 
 const curDate = getFormatDate(new Date());
+
+
+
 function Menu() {
   const userInfo = useSelector((state) => state.user.currentUser);
   const [ProdItem, setProdItem] = useState([]);
   const [ProdItemCopy, setProdItemCopy] = useState();
   const lunchCheckBox = useRef();
+  
 
+  const [TimeOut, setTimeOut] = useState(false)
+  const curSec = Math.floor(new Date().getTime()/1000);
+  const endSec = Math.floor(new Date(curDate.year,curDate.og_month,curDate.og_day,9).getTime()/1000);
+  const calcSec = endSec - curSec;
+  const restMin = Math.floor(calcSec/60);
+  const restSec = calcSec%60;
 
+  const onTimeOut = () => {
+    setTimeOut(true);
+  }
+
+  
   //정렬 라디오버튼
   const [CateRadio, setCateRadio] = useState("all");
   const itemSort = (e) => {
@@ -317,23 +333,28 @@ function Menu() {
   if (ProdItem.length) {
     return (
       <> 
-        {TodayLunchCheck && !TodayLunchCheck.confirm && curDate.hour < 12 && LunchPop &&
+        {TodayLunchCheck && !TodayLunchCheck.confirm && curDate.hour < 9 && LunchPop &&
           <div className="lunch-check-popup">
             {TodayLunchCheck.item && 
               <>
                 <dl>
                   {!ModifyState &&
                     <>
-                      <dt>{userInfo.displayName}님의 오늘식단은</dt>
-                      <dd>
+                      <dt>{userInfo.displayName}님의 오늘식단</dt>
+                      <dd className="item-list">
+                        <span>
                         {TodayLunchCheck.item.map((el,idx)=>(
                           TodayLunchCheck.item.length == (idx+1) ? <span key={idx}>{el}</span> : <span key={idx}>{el},</span>
                         ))}  
-                        입니다.
+                        </span>
                       </dd>
                     </>
                   }
                 </dl>
+                
+                <div className="rest-time">
+                  <antIcon.AiOutlineFieldTime />남은시간 : <Timer onTimeOut={onTimeOut} mm={restMin} ss={restSec}/>
+                </div>                
                 <div ref={lunchCheckBox} className={`check-list-box ${ModifyState && 'modify'}`}>
                   {ItemList && ModifyState && 
                   ItemList.map((list,l_idx) => (
@@ -344,8 +365,8 @@ function Menu() {
                 <div className="btn-box">
                   {!ModifyState &&
                     <>
-                      <Button style={{marginRight:"5px"}} type="primary" onClick={onModify}>수정하기</Button>
-                      <Button type="primary" onClick={()=>{onConfrim(userInfo.uid)}}>식단확인</Button>
+                      <Button disabled={TimeOut} style={{marginRight:"5px"}} onClick={onModify}>수정하기</Button>
+                      <Button disabled={TimeOut} type="primary" onClick={()=>{onConfrim(userInfo.uid)}}>식단확인</Button>
                     </>
                   }
                   {ModifyState &&

@@ -428,29 +428,44 @@ h3.title {
   width: auto;text-align: left;
   min-width:290px;
   max-width:350px;
-  padding: 20px;
-  border: 1px solid #ddd;
   position: fixed;
+  overflow: hidden;
   z-index: 150;
+  padding-bottom: 13px;
   border-radius: 10px;
   background: #fff;
   transition: all 0.2s;
-  left:50%;top:50%;
+  left:50%;top:50%;text-align: center;
   transform: translate(-50%, -60%);
-  box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 0px 7px 3px rgba(0, 0, 0, 0.3);
   .modal-loading {
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
   }
-  dl{margin:0}
-  dd{margin-top: 10px;}
+  dl{margin:0;
+    dt{padding:6px;text-align: center;
+      background-color: $p-color;color: #fff;
+    }
+  }
+  dd{margin-top: 13px;}
   @media all and (max-width: 640px) {
     width: 80%;
     max-width: 300px;
     left: 50%;
     transform: translate(-50%, -100%);
+  }
+  .rest-time{
+    @include flex($a:center,$j:center);
+    margin: 10px 0;font-size:13px;
+    svg{width:15px;height: 15px;margin-right: 3px;position: relative;top:1px}
+
+  }
+  .item-list{font-weight: bold;
+    &>span{
+      color: $p-color;
+    }
   }
   .btn-box {
     margin-top: 10px;
@@ -460,9 +475,12 @@ h3.title {
       min-width: 100px;
     }
   }
-  .check-list-box{margin:10px 0;
-    @include flex();flex-wrap:wrap;
-    label{width: 50%;margin:0;text-align: left;}
+  .check-list-box{
+    display: none;
+    label{max-width: 103px;width: 50%;margin:0;text-align: left;}
+    &.modify{display: block;
+      text-align: left;padding: 0 20px;
+    }
   }
 }
 

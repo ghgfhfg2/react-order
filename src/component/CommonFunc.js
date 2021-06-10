@@ -14,6 +14,7 @@ export const getFormatDate = (date) => {
     let weekArr = ['일','월','화','수','목','금','토'];
     let hour = date.getHours();
     let min = date.getMinutes();
+    let sec = date.getSeconds();
     let obj = {
         'year':year,
         'month':month,
@@ -24,6 +25,7 @@ export const getFormatDate = (date) => {
         'weekNum':weeek,
         'hour':hour,
         'min':min,
+        'sec':sec,
         'full': year + '' + month + '' + day,
         'full_': year + '-' + month + '-' + day
     }

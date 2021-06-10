@@ -437,17 +437,18 @@ h3.title::before {
   text-align: left;
   min-width: 290px;
   max-width: 350px;
-  padding: 20px;
-  border: 1px solid #ddd;
   position: fixed;
+  overflow: hidden;
   z-index: 150;
+  padding-bottom: 13px;
   border-radius: 10px;
   background: #fff;
   transition: all 0.2s;
   left: 50%;
   top: 50%;
+  text-align: center;
   transform: translate(-50%, -60%);
-  box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.25); }
+  box-shadow: 0px 0px 7px 3px rgba(0, 0, 0, 0.3); }
 
 .lunch-check-popup .modal-loading {
   position: absolute;
@@ -458,8 +459,14 @@ h3.title::before {
 .lunch-check-popup dl {
   margin: 0; }
 
+.lunch-check-popup dl dt {
+  padding: 6px;
+  text-align: center;
+  background-color: #30b46b;
+  color: #fff; }
+
 .lunch-check-popup dd {
-  margin-top: 10px; }
+  margin-top: 13px; }
 
 @media all and (max-width: 640px) {
   .lunch-check-popup {
@@ -467,6 +474,27 @@ h3.title::before {
     max-width: 300px;
     left: 50%;
     transform: translate(-50%, -100%); } }
+
+.lunch-check-popup .rest-time {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  margin: 10px 0;
+  font-size: 13px; }
+
+.lunch-check-popup .rest-time svg {
+  width: 15px;
+  height: 15px;
+  margin-right: 3px;
+  position: relative;
+  top: 1px; }
+
+.lunch-check-popup .item-list {
+  font-weight: bold; }
+
+.lunch-check-popup .item-list > span {
+  color: #30b46b; }
 
 .lunch-check-popup .btn-box {
   margin-top: 10px;
@@ -477,17 +505,18 @@ h3.title::before {
   min-width: 100px; }
 
 .lunch-check-popup .check-list-box {
-  margin: 10px 0;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  flex-direction: row;
-  flex-wrap: wrap; }
+  display: none; }
 
 .lunch-check-popup .check-list-box label {
+  max-width: 103px;
   width: 50%;
   margin: 0;
   text-align: left; }
+
+.lunch-check-popup .check-list-box.modify {
+  display: block;
+  text-align: left;
+  padding: 0 20px; }
 
 .item-info-box {
   margin-bottom: 10px;
