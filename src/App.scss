@@ -627,6 +627,13 @@ h3.title {
 }
 
 // 주문
+.order-list-box{
+  .list.state_0{border-color: $p-color !important;}
+  .order-prod-img.no-img{
+    @include flex($a:center,$j:center);
+    svg{width: 50%;height: 50%;color: #dbdbdb;}
+  }
+}
 .order-check-box {
   display: flex;
   .check {

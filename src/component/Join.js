@@ -12,6 +12,7 @@ function Join() {
   const password = useRef();
   password.current = watch("password");
   const onSubmit = async (data) => {
+    data.part == 1 && alert('부서를 선택해 주세요')
     try {
       setLoading(true);
       let createdUser = await firebase

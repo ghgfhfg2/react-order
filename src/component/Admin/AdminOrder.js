@@ -17,8 +17,23 @@ import src7 from "../../alert.mp3";
 export const OrderBox = styled.div`
   width: 100%;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap;  
   .list {
+    &.user{
+        position:relative;
+        padding-left:80px;
+        .order-prod-img{
+          width:55px;height:55px;border-radius:50%;overflow:hidden;
+          position:absolute;left:15px;top:50%;transform:translateY(-50%);
+          &.no-img{border:1px solid #ededed}
+          img{
+            height:100%;
+            position:absolute;left:50%;
+            transform:translateX(-50%);
+          }
+        }
+        .btn-cancel{margin-right:5px}
+    }
     .ic-hot,
     .ic-ice {
       display: inline-block;
@@ -44,7 +59,6 @@ export const OrderBox = styled.div`
       }
       color: #555;
       border-color: #e6f7ff;
-      animation: neon_blue 1.5s ease-in-out infinite alternate;
       .info {
         color: #111;
         font-weight: 500;
@@ -103,12 +117,20 @@ export const OrderBox = styled.div`
       width: 100%;
       padding: 0 4px;
     }
+    
   }
-
   @media all and (max-width: 1200px) {
     .list {
       width: 100%;
       margin: 5px 0;
+      &.user{
+        padding-left:76px;
+        .order-prod-img{
+          width:52px;height:52px;border-radius:50%;overflow:hidden;
+          position:absolute;left:13px;
+        }
+        .btn-cancel{height:28px;font-size:12px;padding:0 10px}
+      }
     }
   }
 `;
@@ -221,7 +243,7 @@ function AdminOrder() {
           <Radio.Button value={src7}>효과음3</Radio.Button>
         </Radio.Group>
       </div>
-      <OrderBox>
+      <OrderBox className="order-list-box">
         {OrderList.map((list, index) => (
           <div className={`list state_${list.order_state}`} key={index}>
             <span style={{ display: "none" }}>{list.key}</span>

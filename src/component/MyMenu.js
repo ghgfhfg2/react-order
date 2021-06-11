@@ -325,7 +325,7 @@ function MyMenu() {
                     left: "0",
                     top: "0",
                     zIndex: "10",
-                    width: "26px",
+                    padding:"0 7px",
                     height: "26px",
                     background: "#333",
                     textAlign: "center",
@@ -335,7 +335,8 @@ function MyMenu() {
                     color: "#fff",
                   }}
                 >
-                  {index + 1}
+                  {index + 1}위  
+                  <span style={{fontSize:"11px"}}> ({item.count}회 주문)</span>
                 </span>
                 <img src={item.image} alt="" />
               </div>

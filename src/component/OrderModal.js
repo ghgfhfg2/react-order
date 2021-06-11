@@ -27,6 +27,8 @@ export const OderModalPopup = styled.div`
     top: 50%;
     transform: translate(-50%, -50%);
   }
+
+  
   @media all and (max-width: 640px) {
     width: 80%;
     max-width: 300px;
@@ -200,6 +202,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
       order_state: 0,
       order_phone:UserPhone,
       prod_name: OrderItem.name,
+      prod_img: OrderItem.image,
       price: OrderItem.price * e.target.amount.value + addPrice,
       amount: parseInt(e.target.amount.value),
       kal: parseInt(OrderItem.kal),
@@ -210,6 +213,7 @@ function OrderModal({ posx, posy, onFinished, OrderItem }) {
       category: OrderItem.category,
       timestamp: timeStamp,
     };
+
     try {
       await firebase
         .database()

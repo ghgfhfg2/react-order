@@ -197,7 +197,7 @@ function AdminOrderList() {
             </tr>
           </tbody>
         </table>
-        <table className="fl-table" style={{marginTop:"12px",marginLeft:"2%",width:"49%"}}>
+        <table className="fl-table" style={{marginTop:"12px",marginLeft:"2%",width:"49%",height:"100px"}}>
         <thead>
           <tr>            
             <th scope="col">상품명</th>

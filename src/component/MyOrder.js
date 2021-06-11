@@ -5,6 +5,7 @@ import { Popover } from "antd";
 import { commaNumber,notify } from "./CommonFunc";
 import { useSelector } from "react-redux";
 import { OrderBox } from "./Admin/AdminOrder";
+import * as antIcon from "react-icons/ai";
 import Loading from "./Loading";
 import { Empty } from "antd";
 
@@ -53,7 +54,6 @@ function MyOrder() {
   }, []);
 
   const orderCancel = (key) => {
-    console.log(key)
     if (window.confirm("주문 취소 하시겠습니까?")) {
     firebase.database().ref("order").child(key).remove()
     }
@@ -65,9 +65,19 @@ function MyOrder() {
     return (
       <>
         <h3 className="title">주문내역</h3>
-        <OrderBox>
+        <OrderBox className="order-list-box">
           {OrderList.map((list, index) => (
-            <div className={`list state_${list.order_state}`} key={index}>
+            <div className={`user list state_${list.order_state}`} key={index}>
+              {list.prod_img ? (
+                <div className="order-prod-img">
+                  <img src={list.prod_img} /> 
+                </div>
+              ):(
+                <div className="order-prod-img no-img">
+                  <antIcon.AiOutlineCoffee />
+                </div>
+              )
+              }
               <div className="prod">
                 <div className="info-box">
                   <span className="info">{list.prod_name}</span>
@@ -78,7 +88,7 @@ function MyOrder() {
                   ) : (
                     ""
                   )}
-                  <span className="info shrink-0">{list.amount}개</span>
+                  {/* <span className="info shrink-0">{list.amount}개</span> */}
                   <div>
                     {list.add && (
                       <span className="info shrink-0">{list.add}</span>
@@ -100,13 +110,14 @@ function MyOrder() {
               </div>
               <div className="state">
                 <span className="date">
-                  {list.order_time.split("|")[0]}&nbsp; (
+                  {list.order_time.split("|")[0].substr(5,5)}&nbsp; (
                   {list.order_time.split("|")[1]})
                 </span>
-                <span>
+                <span class="setting">
                   {list.order_state === 0 &&
                   <>
                     <Button
+                      className="btn-cancel"
                       style={{marginRight:"5px"}}
                       onClick={() => {
                         orderCancel(list.key);

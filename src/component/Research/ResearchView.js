@@ -10,6 +10,23 @@ function ResearchView(props) {
   const [ResultSum, setResultSum] = useState();
   const [Ruser, setRuser] = useState();
   const [Rerender, setRerender] = useState(true);
+
+  const [UserDb, setUserDb] = useState();
+  useEffect(() => {
+    if(userInfo){
+      firebase
+      .database()
+      .ref("users")
+      .child(userInfo.uid)
+      .once("value", (snapshot) => {
+        console.log(snapshot.val())
+        setUserDb(snapshot.val());
+      });
+    }
+    return () => {
+    }
+  }, [Rerender])
+
   useEffect(() => {
     let resultSum = {};
     async function getResearch(){
@@ -78,9 +95,11 @@ function ResearchView(props) {
       setResultList(r_user)
     })};
     getResearch();
+
     return () => {      
     }
   }, [Rerender])
+
 
   const onFinish = (values) => {
     let result = {
@@ -92,6 +111,13 @@ function ResearchView(props) {
     .update({...result})
     setRerender(!Rerender)
   }
+
+  const onDelete = () => {
+    console.log(props.location.state.uid)
+    firebase.database().ref(`research/${props.location.state.uid}`)
+    .remove()
+  }
+
   return (
     <>
       {ResearchViewInfo && 
@@ -123,6 +149,7 @@ function ResearchView(props) {
           </dl>
         </Form>
       }
+      {UserDb && UserDb.role > 2 && <Button onClick={onDelete}>삭제</Button>}
       {Ruser && ResultList &&
         <>
         <table className="fl-table">

@@ -749,6 +749,20 @@ h3.title::before {
   cursor: pointer;
   opacity: 0.7; }
 
+.order-list-box .list.state_0 {
+  border-color: #30b46b !important; }
+
+.order-list-box .order-prod-img.no-img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row; }
+
+.order-list-box .order-prod-img.no-img svg {
+  width: 50%;
+  height: 50%;
+  color: #dbdbdb; }
+
 .order-check-box {
   display: flex; }
 
