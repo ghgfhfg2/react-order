@@ -2,17 +2,24 @@ import { Button } from "antd";
 import React, { useState, useEffect } from "react";
 import firebase from "../firebase";
 import { Popover } from "antd";
-import { commaNumber,notify } from "./CommonFunc";
+import { commaNumber,notify,getFormatDate } from "./CommonFunc";
 import { useSelector } from "react-redux";
 import { OrderBox } from "./Admin/AdminOrder";
 import * as antIcon from "react-icons/ai";
 import Loading from "./Loading";
-import { Empty } from "antd";
+import { Empty,DatePicker } from "antd";
+const { RangePicker } = DatePicker;
 
 function MyOrder() {
   const userInfo = useSelector((state) => state.user.currentUser);
   const [OrderList, setOrderList] = useState([]);
   const [Nodata, setNodata] = useState(false);
+
+  const [StartDate, setStartDate] = useState(20210101);
+  const [EndDate, setEndDate] = useState(21210101);
+
+  const [ReRender, setReRender] = useState(false);
+
 
   useEffect(() => {
     let mounted = true;
@@ -25,9 +32,12 @@ function MyOrder() {
         .on("value", (snapshot) => {
           let array = [];
           snapshot.forEach(function (item) {
+            let date =  item.val().order_time.split('-')
+            date = parseInt(date[0]+ '' + date[1] + date[2].split(' ')[0]);
             array.push({
               ...item.val(),
               key: item.key,
+              timestamp: date
             });
           });
           // eslint-disable-next-line array-callback-return
@@ -39,6 +49,9 @@ function MyOrder() {
               return -1;
             }
           });
+          array = array.filter(el => {
+            return StartDate <= el.timestamp && el.timestamp <= EndDate;
+          })
           array = array.slice(0,30)
           setOrderList(array);
           if (array.length === 0) {
@@ -51,11 +64,19 @@ function MyOrder() {
       firebase.database().ref("order").off();
       mounted = false;
     };
-  }, []);
+  }, [ReRender]);
 
   const orderCancel = (key) => {
     if (window.confirm("주문 취소 하시겠습니까?")) {
     firebase.database().ref("order").child(key).remove()
+    }
+  }
+
+  const onDateChange = (e) => {
+    if(e){
+      setStartDate(getFormatDate(e[0]._d).full)
+      setEndDate(getFormatDate(e[1]._d).full)
+      setReRender(!ReRender)
     }
   }
 
@@ -64,7 +85,7 @@ function MyOrder() {
   if (OrderList.length) {
     return (
       <>
-        <h3 className="title">주문내역</h3>
+        <RangePicker onChange={onDateChange} />
         <OrderBox className="order-list-box">
           {OrderList.map((list, index) => (
             <div className={`user list state_${list.order_state}`} key={index}>
@@ -113,7 +134,7 @@ function MyOrder() {
                   {list.order_time.split("|")[0].substr(5,5)}&nbsp; (
                   {list.order_time.split("|")[1]})
                 </span>
-                <span class="setting">
+                <span className="setting">
                   {list.order_state === 0 &&
                   <>
                     <Button

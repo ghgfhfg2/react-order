@@ -26,6 +26,18 @@ export const BlackBg = styled.div`
 `;
 function Nav() { 
 
+
+  const firebaseUserInfo = firebase.auth().currentUser;
+  let name, email, photoUrl, uid, emailVerified;
+  if (firebaseUserInfo != null) {
+    name = firebaseUserInfo.displayName;
+    email = firebaseUserInfo.email;
+    photoUrl = firebaseUserInfo.photoURL;
+    emailVerified = firebaseUserInfo.emailVerified;
+    uid = firebaseUserInfo.uid; 
+  }
+  const partSelect = useRef();
+
   const currentUser = useSelector((state) => state.user.currentUser);
 
   const [current, setCurrent] = useState("1");
@@ -126,6 +138,9 @@ function Nav() {
   const [submitLoading, setsubmitLoading] = useState(false);
   const onSubmitInfo = async (e) => {
     e.preventDefault();
+    firebaseUserInfo.updateProfile({
+      photoURL:e.target.part.value
+    })
     let call_num = e.target.call_number.value;
     if(isNaN(call_num)){
       alert('숫자만 입력해 주세요');
@@ -188,10 +203,27 @@ function Nav() {
                     left:"155px",
                     position:"absolute",
                   }}>
-                    <div className="flex-box a-center" style={{marginBottom:"5px"}}>
-                      <span>{currentUser.email} / {currentUser.photoURL}</span>
-                    </div>
                     <form className="order-form-box" onSubmit={onSubmitInfo}>
+                      <div className="flex-box a-center" style={{marginBottom:"5px"}}>
+                        <span>{currentUser.email}</span>
+                        <select
+                          name="part"
+                          ref={partSelect}
+                          style={{marginLeft:"5px"}}
+                          defaultValue={photoUrl}
+                        >
+                          <option value="1" disabled hidden>
+                            부서
+                          </option>
+                          <option value="R&D">R&D</option>
+                          <option value="전략기획부">전략기획부</option>
+                          <option value="영업지원부">영업지원부</option>
+                          <option value="인사재경부">인사재경부</option>
+                          <option value="IT개발부">IT개발부</option>
+                          <option value="푸드킹">푸드킹</option>
+                          <option value="물류부">물류부</option>
+                        </select>
+                      </div>
                       <div className="flex-box a-center" style={{marginBottom:"5px"}}>
                       <span className="tit" style={{width:"auto",flexShrink:"0"}}>휴대전화</span>
                         <Input name="call_number" defaultValue={UserDb && UserDb.call_number} style={{marginRight:"5px"}}></Input>
@@ -262,13 +294,15 @@ function Nav() {
                 식단체크
               </Link>
             </Menu.Item>
-            {UserDb && UserDb.role > 2 &&
+            {UserDb && UserDb.role > 2 && 
+            <>
             <Menu.Item key="9">
               <Link to="/research">
                 <antIcon.AiOutlineFileDone />
                 설문조사
               </Link>
             </Menu.Item>
+            </>
             }
            
             {UserDb && UserDb.role > 0 &&
@@ -334,7 +368,7 @@ function Nav() {
     );
   } else {
     return (
-      <>
+      <>        
         {!LeftMenu && (
           <bsIcon.BsList className="btn-m-menu" onClick={onMenuHandler} />
         )}
@@ -355,7 +389,7 @@ function Nav() {
             )}
             {currentUser && (
               <>
-                <div className="flex-box j-center">
+                <div className="flex-box j-center">                  
                   {currentUser.displayName}님 반갑습니다.
                   <span 
                     class="p-color-l"

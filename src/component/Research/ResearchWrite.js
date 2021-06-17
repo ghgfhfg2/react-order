@@ -80,11 +80,11 @@ function ResearchWrite() {
         >
           <Input.TextArea placeholder="설명" />
         </Form.Item>  
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Submit
+        <div style={{textAlign:"center",marginTop:"15px"}}>
+          <Button type="primary" htmlType="submit" style={{width:"100px"}}>
+            등록하기
           </Button>
-        </Form.Item>
+        </div>    
       </Form>
     </>
   )

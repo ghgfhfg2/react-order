@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import firebase from "../../firebase";
-import { Form, Radio, Input, Button } from 'antd';
+import { Form, Radio, Input, Button, Table } from 'antd';
 import { useSelector } from "react-redux";
+import Signature from "./Signature";
+import Loading from "../Loading";
+
+
 
 function ResearchView(props) {
   const userInfo = useSelector((state) => state.user.currentUser);
@@ -10,8 +14,14 @@ function ResearchView(props) {
   const [ResultSum, setResultSum] = useState();
   const [Ruser, setRuser] = useState();
   const [Rerender, setRerender] = useState(true);
-
   const [UserDb, setUserDb] = useState();
+
+  const [sigPadData, setSigPadData] = useState(null);
+
+  const onSigpad = (data) => {
+    setSigPadData(data);
+  }
+
   useEffect(() => {
     if(userInfo){
       firebase
@@ -19,15 +29,10 @@ function ResearchView(props) {
       .ref("users")
       .child(userInfo.uid)
       .once("value", (snapshot) => {
-        console.log(snapshot.val())
         setUserDb(snapshot.val());
       });
     }
-    return () => {
-    }
-  }, [Rerender])
 
-  useEffect(() => {
     let resultSum = {};
     async function getResearch(){
     let r_user = []
@@ -38,7 +43,7 @@ function ResearchView(props) {
             r_user.push({
             name: el.val().name,
             part: el.val().part,
-            role: el.val().role,
+            role: el.val().role
           })
         }
       });
@@ -89,38 +94,64 @@ function ResearchView(props) {
         resultArr.map(list => {
           if(el.name == list.name && el.part == list.part){
             el.option = list.option ? list.option : '';
+            el.sign = list.sign ? list.sign : '';
           }
         })
       })
       setResultList(r_user)
     })};
     getResearch();
-
     return () => {      
     }
   }, [Rerender])
 
 
   const onFinish = (values) => {
+    
     let result = {
       name:userInfo.displayName,
       part:userInfo.photoURL,
-      option:values.select_op
+      option:values.select_op ? values.select_op : '',
+      sign:sigPadData ? sigPadData : ''
     };
     firebase.database().ref(`research/${props.location.state.uid}/result/${userInfo.uid}`)
     .update({...result})
     setRerender(!Rerender)
   }
 
-  const onDelete = () => {
-    console.log(props.location.state.uid)
-    firebase.database().ref(`research/${props.location.state.uid}`)
-    .remove()
-  }
+  const columns = [
+    {
+      title: '이름',
+      dataIndex: 'name',
+      key: 'name',
+      align: 'center'
+    },
+    {
+      title: '부서',
+      dataIndex: 'part',
+      key: 'part',
+      align: 'center',
+    },
+    {
+      title: '선택',
+      dataIndex: 'select',
+      key: 'select',
+      align: 'center',
+    },
+    {
+      title: '서명',
+      dataIndex: 'sign',
+      key: 'sign',
+      align: 'center',
+      render: text => <img style={{height:"40px"}} src={text} />,
+    },
+  ]
+  
 
   return (
     <>
-      {ResearchViewInfo && 
+      {ResearchViewInfo &&
+        <>         
         <Form
         name="validate_other"
         onFinish={onFinish}
@@ -140,36 +171,29 @@ function ResearchView(props) {
                 </Form.Item>
               }
               {ResearchViewInfo.type == 2 && 
-                <Form.Item name="select_op" label="답변">
-                  <Input />
+                <Form.Item name="select_op">
+                  <div className="flex-box">
+                    <span className="tit">답변</span>
+                    <Input />
+                  </div>
               </Form.Item>
               }
-              <Button htmlType="submit">참여하기</Button>
+              <div className="flex-box">
+                <span className="tit">서명</span>
+                <Signature onSigpad={onSigpad} />
+              </div>
+              <div className="btn-box">
+                <Button htmlType="submit" type="primary">참여하기</Button>
+              </div>
             </dd>
           </dl>
         </Form>
-      }
-      {UserDb && UserDb.role > 2 && <Button onClick={onDelete}>삭제</Button>}
+        
+      
       {Ruser && ResultList &&
         <>
-        <table className="fl-table">
-          <thead>
-            <tr>
-              <th scope="col">이름</th>
-              <th scope="col">부서</th>
-              <th scope="col">선택</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ResultList.map((el,idx) => (
-            <tr key={idx}>
-              <td>{el.name}</td>
-              <td>{el.part}</td>
-              <td>{el.option}</td>
-            </tr>
-            ))}
-          </tbody>
-        </table>
+        <Table pagination={false} align="center" columns={columns} dataSource={ResultList} />
+        
         {ResearchViewInfo.type == 1 &&
           <ul className="research-chart">
             {ResultSum && ResultSum.map((el,idx) => (
@@ -182,7 +206,13 @@ function ResearchView(props) {
         }
         </>
       }
-      
+      </>
+      }
+      {!ResearchViewInfo && 
+        <>          
+          <Loading />
+        </>
+      }  
     </>
   )
 }

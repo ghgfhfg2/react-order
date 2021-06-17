@@ -27,6 +27,7 @@ import * as antIcon from "react-icons/ai";
 //import Logo from "./img/logo_2021_spring.png";
 import Logo_PC from "./img/logo_2021_summer_pc.png";
 import Logo from "./img/logo_2021_summer.png";
+import Test from "./component/Test";
 
 
 const { Sider, Content, Header } = Layout;
@@ -131,6 +132,7 @@ function App(props) {
                   <Route exact path="/research" component={Research} />
                   <Route exact path="/research_write" component={ResearchWrite} />
                   <Route exact path="/research_view" component={ResearchView} />
+                  <Route exact path="/test" component={Test} />
                 </Switch>
               </Content>
               <BackTop>

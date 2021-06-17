@@ -1,6 +1,10 @@
 @import "scss-common.scss";
 @import "form.css";
 
+@include mobile(){
+  body{font-size: 12px;}
+}
+
 .p-color{color:$p-color;}
 .p-color-l{color:lighten($p-color,5%);}
 
@@ -99,6 +103,8 @@ h3.title {
     top: 5px;
   }
 }
+
+
 
 .ant-layout {
   background: #fff;
@@ -524,7 +530,40 @@ h3.title {
   button{width: 100%;max-width: 150px;height: 40px;}
 }
 
-// 설문조사
+.btn-refresh{
+  position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+// 게시판 공통
+.board-basic{width: 100%;border-top: 2px solid $p-color;
+  li{padding: 12px 15px;border-bottom: 1px solid #ddd;
+    .subject a{color: #333;font-weight: 600;}
+  }
+
+  // 설문조사
+  &.research{
+    li{
+      @include flex($j:space-between)
+    }
+  }
+}
+.board-view-basic{
+  border-top: 2px solid $p-color;
+  dt{width: 100%;padding: 12px 15px;font-size: 17px;border-bottom: 1px solid $bd-color;}
+  dd{padding: 15px;
+    .tit{margin-right: 5px;font-weight: 600;font-size: 13px;margin-top: 5px;}
+  }
+  .btn-box{
+    width: 100%;margin-top: 15px;text-align: center;
+    .ant-btn{width:120px;height: 36px;}
+  }
+  @include mobile(){
+    dt,dd{padding:10px}
+    .flex-box{flex-direction: column;}
+  }
+}
 .research-form{
   .ant-space{
     .ant-form-item{margin-bottom: 0;}
@@ -541,6 +580,21 @@ h3.title {
     color:#fff;height: 30px;
     @include flex($j:center,$a:center)
   };
+}
+.research_tbl{
+  .sign{height: 40px;}
+}
+
+//싸인
+.signature-box{
+  position: relative;
+  @include flex($d:column,$a:flex-start);
+  .signature-pad{border:1px solid #ddd}
+  .clear{position: absolute;right: 0;top:0;
+    padding:0 7px;
+    @include flex($j:center,$a:center);
+  }
+  
 }
 
 
