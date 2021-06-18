@@ -610,12 +610,6 @@ h3.title::before {
   max-width: 150px;
   height: 40px; }
 
-.btn-refresh {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%); }
-
 .board-basic {
   width: 100%;
   border-top: 2px solid #30b46b; }

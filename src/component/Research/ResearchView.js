@@ -133,7 +133,7 @@ function ResearchView(props) {
       align: 'center',
     },
     {
-      title: '선택',
+      title: '답변',
       dataIndex: 'select',
       key: 'select',
       align: 'center',
@@ -143,7 +143,7 @@ function ResearchView(props) {
       dataIndex: 'sign',
       key: 'sign',
       align: 'center',
-      render: text => <img style={{height:"40px"}} src={text} />,
+      render: text => text ? <img style={{height:"40px"}} src={text} /> : '',
     },
   ]
   
