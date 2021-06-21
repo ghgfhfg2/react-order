@@ -52,6 +52,13 @@ i.join-form nput[type="submit"]:hover {
     position: fixed;left: 0;top:0;z-index: 100;
   };
 }
+.pos-center{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  z-index: 10;
+}
 .ic-loading {
   position: fixed;
   left: calc(50% - 20px);
@@ -540,7 +547,8 @@ h3.title {
   // 설문조사
   &.research{
     li{
-      @include flex($j:space-between)
+      @include flex($j:space-between);
+      &.none{display:none;}
     }
   }
 }

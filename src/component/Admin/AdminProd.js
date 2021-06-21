@@ -266,6 +266,7 @@ function AdminProd() {
 
   const [ImgFile, setImgFile] = useState();
   const onImgFile = (e) => {
+    console.log(e.target.files[0])
     setImgFile(e.target.files[0]);
   };
 

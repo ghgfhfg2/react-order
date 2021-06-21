@@ -26,7 +26,6 @@ function Research() {
       snapshot.forEach(el=>{
         arr.push(el.val())
       })
-      console.log(arr)
       setResearchList(arr)
     })
     return () => {
@@ -47,21 +46,21 @@ function Research() {
     <>
       <ul className="board-basic research">        
           {ResearchList && ResearchList.map((el,idx) => (
-          <li key={idx}>
-            <div className="info-box">
-              <span className="subject">
-                <Link to={{
-                  pathname: `/research_view`,
-                  state: {
-                    uid:el.uid
-                    }
-                  }}
-                  >{el.title}
-                </Link>
-              </span>
-            </div>
-            {UserDb && UserDb.auth == 'insa' && <Button onClick={()=>{onDelete(el.uid)}}>삭제</Button>}
-          </li>
+            <li key={idx} className={el.auth && UserDb && UserDb.role < 3 ? 'none' : ''}>
+              <div className="info-box">
+                <span className="subject">
+                  <Link to={{
+                    pathname: `/research_view`,
+                    state: {
+                      uid:el.uid
+                      }
+                    }}
+                    >{el.title}
+                  </Link>
+                </span>
+              </div>
+              {UserDb && UserDb.auth == 'insa' && <Button onClick={()=>{onDelete(el.uid)}}>삭제</Button>}
+            </li>
           ))}
       </ul>
       {UserDb && UserDb.auth === 'insa' &&

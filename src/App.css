@@ -66,6 +66,13 @@ i.join-form nput[type="submit"]:hover {
   top: 0;
   z-index: 100; }
 
+.pos-center {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10; }
+
 .ic-loading {
   position: fixed;
   left: calc(50% - 20px);
@@ -627,6 +634,9 @@ h3.title::before {
   justify-content: space-between;
   align-items: center;
   flex-direction: row; }
+
+.board-basic.research li.none {
+  display: none; }
 
 .board-view-basic {
   border-top: 2px solid #30b46b; }

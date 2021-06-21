@@ -105,6 +105,18 @@ function ResearchView(props) {
     }
   }, [Rerender])
 
+  useEffect(() => {
+    if(!ResultList){
+      setTimeout(() => {
+        setRerender()
+      },2000)
+    }
+    return () => {
+    }
+  }, [])
+
+
+
 
   const onFinish = (values) => {
     
@@ -134,23 +146,36 @@ function ResearchView(props) {
     },
     {
       title: '답변',
-      dataIndex: 'select',
-      key: 'select',
+      dataIndex: 'option',
+      key: 'option',
       align: 'center',
+      render: data => data ? <span>{data}</span> : '',
     },
     {
       title: '서명',
       dataIndex: 'sign',
       key: 'sign',
       align: 'center',
-      render: text => text ? <img style={{height:"40px"}} src={text} /> : '',
+      render: data => data ? <img style={{height:"40px"}} src={data} /> : '',
     },
   ]
+
+  const [Refesh, setRefesh] = useState(false)
+  useEffect(() => {
+    setTimeout(() => {
+      setRefesh(true)
+    },2000)
+    return () => {
+    }
+  }, [])
+  const onRerender = () => {
+    setRerender(!Rerender)
+  }
   
 
   return (
     <>
-      {ResearchViewInfo &&
+      {ResultList &&
         <>         
         <Form
         name="validate_other"
@@ -158,6 +183,9 @@ function ResearchView(props) {
         >
           <dl className="board-view-basic">
             <dt>{ResearchViewInfo.title}</dt>
+            <dd>
+              {ResearchViewInfo.etc}
+            </dd>
             <dd>
               {ResearchViewInfo.type == 1 &&
                 <Form.Item name="select_op" label="선택항목">
@@ -208,9 +236,14 @@ function ResearchView(props) {
       }
       </>
       }
-      {!ResearchViewInfo && 
-        <>          
+      {!ResultList && 
+        <>     
+          {!Refesh &&
           <Loading />
+          }
+          {Refesh &&
+            <Button className="pos-center" type="button" onClick={onRerender}>새로고침</Button>
+          }
         </>
       }  
     </>

@@ -1,14 +1,32 @@
-import React, { useState } from 'react'
-import { Form, Input, Button, Space, Radio } from 'antd';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import React, { useState, useRef } from 'react'
+import { Link } from "react-router-dom";
+import { Form, Input, Button, Space, Radio, Checkbox, Upload } from 'antd';
+import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import uuid from "react-uuid";
 import firebase from "../../firebase";
 
 
 function ResearchWrite() {
-  const onFinish = values => {
-    console.log('Received values of form:', values);
+  const btnToList = useRef();
+
+  const onFinish = async (values) => {
     const uid = uuid();
+    let uploadURL = [];
+    
+    values.upload.map(el => {
+      let getImg = async () => {
+      let uploadTaskSnapshot = await firebase
+          .storage()
+          .ref("research")
+          .child(`image/${uid}`)
+          .put(el.originFileObj, el.type);
+        let downloadURL = await uploadTaskSnapshot.ref.getDownloadURL();
+        uploadURL.push(downloadURL);
+      }
+      getImg();
+    })  
+    console.log(uploadURL);
+    return;
     firebase.database().ref('research')
     .child(uid)
     .update({
@@ -16,8 +34,11 @@ function ResearchWrite() {
       type:values.type,
       option:values.option_list ? values.option_list : '',
       etc:values.etc ? values.etc : '',
-      uid:uid
-    })
+      uid:uid,
+      auth:values.auth,
+      image: uploadURL
+    });
+    btnToList.current.click();
   };
 
   const [TypeState, setTypeState] = useState()
@@ -28,8 +49,17 @@ function ResearchWrite() {
   const onChangeType = (e) => {
     setTypeState(e.target.value)
   }
+
+  const normFile = (e) => {
+    console.log('Upload event:', e);
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
+  };
+
   return (
-    <>
+    <>     
       <Form name="dynamic_form_nest_item" className="research-form" onFinish={onFinish} autoComplete="off">
         <Form.Item
           name="title"
@@ -75,14 +105,34 @@ function ResearchWrite() {
           </Form.List>
         }        
         <Form.Item
-          name="etc"
+          name="upload"
+          label="Upload"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+        >
+          <Upload name="logo" action="/upload.do" listType="picture">
+            <Button icon={<UploadOutlined />}>Click to upload</Button>
+          </Upload>
+        </Form.Item>
+        <Form.Item
+          name="auth"
           rules={[{ required: false}]}
+          valuePropName="checked"
+        >
+          <Checkbox>비정규직 제외</Checkbox>
+        </Form.Item> 
+        <Form.Item
+          name="etc"
+          rules={[{ required: true}]}
         >
           <Input.TextArea placeholder="설명" />
         </Form.Item>  
-        <div style={{textAlign:"center",marginTop:"15px"}}>
+        <div className="flex-box j-center" style={{marginTop:"15px"}}>
           <Button type="primary" htmlType="submit" style={{width:"100px"}}>
             등록하기
+          </Button>
+          <Button style={{marginLeft:"5px"}}>
+            <Link ref={btnToList} to="/research">목록으로</Link>
           </Button>
         </div>    
       </Form>
