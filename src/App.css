@@ -635,8 +635,68 @@ h3.title::before {
   align-items: center;
   flex-direction: row; }
 
+.board-basic.research li > div {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: row; }
+
+.board-basic.research li > div span {
+  flex: none; }
+
+.board-basic.research li .right-box {
+  flex: none; }
+
+.board-basic.research li.tit span {
+  font-weight: bold;
+  color: #111;
+  font-size: 13px;
+  text-align: center;
+  display: block; }
+
+.board-basic.research li .date {
+  flex-shrink: 0;
+  width: 100px;
+  text-align: center; }
+
+.board-basic.research li .date.limit {
+  width: 140px; }
+
+.board-basic.research li .subject {
+  flex: 1; }
+
+.board-basic.research li .admin {
+  width: 60px; }
+
 .board-basic.research li.none {
   display: none; }
+
+.board-basic.research li .date {
+  font-size: 12px;
+  color: #888; }
+
+.board-basic.research li .state {
+  width: 80px;
+  text-align: center; }
+
+.board-basic.research li .state.con span {
+  display: inline-block;
+  width: auto;
+  padding: 2px 6px;
+  color: #fff;
+  background-color: #30b46b;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 3px; }
+
+.board-basic.research li .state.con.yet span, .board-basic.research li .state.con.end span {
+  background-color: #666; }
+
+.board-basic.research li .ant-btn {
+  height: 30px;
+  font-size: 12px;
+  width: 60px; }
 
 .board-view-basic {
   border-top: 2px solid #30b46b; }
@@ -648,7 +708,8 @@ h3.title::before {
   border-bottom: 1px solid #e2e2e2; }
 
 .board-view-basic dd {
-  padding: 15px; }
+  padding: 15px;
+  border-bottom: 1px solid #e2e2e2; }
 
 .board-view-basic dd .tit {
   margin-right: 5px;
@@ -665,11 +726,24 @@ h3.title::before {
   width: 120px;
   height: 36px; }
 
+.board-view-basic .img {
+  margin: 5px 0; }
+
 @media (max-width: 760px) {
   .board-view-basic dt, .board-view-basic dd {
     padding: 10px; }
   .board-view-basic .flex-box {
     flex-direction: column; } }
+
+.board-view-basic .my-answer {
+  border: 1px solid #30b46b;
+  padding: 15px;
+  margin: 10px 0;
+  text-align: center; }
+
+.board-view-basic .my-answer h4 {
+  font-weight: bold;
+  font-size: 1.1rem; }
 
 .research-form .ant-space .ant-form-item {
   margin-bottom: 0; }

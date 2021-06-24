@@ -194,8 +194,8 @@ function LunchAdmin() {
           </tr>          
         </thead>
         <tbody>
-          {CheckList && CheckList.map(el => (
-            <tr>
+          {CheckList && CheckList.map((el,idx) => (
+            <tr key={idx}>
               <td>{SearchDate.full_}</td>
               <td>{el.name}</td>
               <td>{el.part}</td>

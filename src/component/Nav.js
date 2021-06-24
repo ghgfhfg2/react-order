@@ -294,7 +294,7 @@ function Nav() {
                 식단체크
               </Link>
             </Menu.Item>
-            {UserDb && UserDb.role > 2 && 
+            {UserDb && UserDb.auth == 'insa' && 
             <>
             <Menu.Item key="9">
               <Link to="/research">
@@ -311,7 +311,7 @@ function Nav() {
                 key="sub1"
                 title="관리자"
                 icon={<antIcon.AiOutlineSetting />}
-              >
+              >                 
                 {UserDb.role > 1 &&
                 <Menu.Item key="8">
                   <Link to="/admin/lunch">
@@ -336,6 +336,12 @@ function Nav() {
                   <Link to="/admin/order_list">
                     <antIcon.AiOutlineFileDone />
                     완료내역
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="0">
+                  <Link to="/admin/user_admin">
+                    <antIcon.AiOutlineTeam />
+                    회원관리
                   </Link>
                 </Menu.Item>
               </SubMenu>

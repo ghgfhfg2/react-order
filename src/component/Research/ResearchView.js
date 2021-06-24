@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import firebase from "../../firebase";
-import { Form, Radio, Input, Button, Table } from 'antd';
+import { Form, Radio, Input, Button, Table, Space } from 'antd';
 import { useSelector } from "react-redux";
 import Signature from "./Signature";
 import Loading from "../Loading";
@@ -15,6 +16,7 @@ function ResearchView(props) {
   const [Ruser, setRuser] = useState();
   const [Rerender, setRerender] = useState(true);
   const [UserDb, setUserDb] = useState();
+  const [MyResearch, setMyResearch] = useState();
 
   const [sigPadData, setSigPadData] = useState(null);
 
@@ -30,6 +32,14 @@ function ResearchView(props) {
       .child(userInfo.uid)
       .once("value", (snapshot) => {
         setUserDb(snapshot.val());
+      });
+
+      firebase
+      .database()
+      .ref("research")
+      .child(`${props.location.state.uid}/result/${userInfo.uid}`)
+      .once("value", (snapshot) => {
+        setMyResearch(snapshot.val());
       });
     }
 
@@ -52,6 +62,7 @@ function ResearchView(props) {
     await firebase.database().ref('research')
     .child(props.location.state.uid)
     .once("value", (snapshot) => {
+      console.log(snapshot.val())
       setResearchViewInfo(snapshot.val())
       snapshot.val().option && snapshot.val().option.forEach(el => {
         resultSum[el.option] = 0;
@@ -109,14 +120,23 @@ function ResearchView(props) {
     if(!ResultList){
       setTimeout(() => {
         setRerender()
-      },2000)
+      },1000)
     }
     return () => {
     }
   }, [])
 
 
+  const [ResultOpen, setResultOpen] = useState(false);
+  const onResultOpen = () => {
+    setResultOpen(true);
+  }
 
+  const [Again, setAgain] = useState(false);
+  const onResearchAgain = () => {
+    setAgain(true)
+  }
+  
 
   const onFinish = (values) => {
     
@@ -129,6 +149,7 @@ function ResearchView(props) {
     firebase.database().ref(`research/${props.location.state.uid}/result/${userInfo.uid}`)
     .update({...result})
     setRerender(!Rerender)
+    setAgain(false)
   }
 
   const columns = [
@@ -171,12 +192,12 @@ function ResearchView(props) {
   const onRerender = () => {
     setRerender(!Rerender)
   }
-  
+
 
   return (
     <>
-      {ResultList &&
-        <>         
+      {ResultList && 
+        <>
         <Form
         name="validate_other"
         onFinish={onFinish}
@@ -185,7 +206,21 @@ function ResearchView(props) {
             <dt>{ResearchViewInfo.title}</dt>
             <dd>
               {ResearchViewInfo.etc}
-            </dd>
+              <div style={{marginTop:"10px"}}>
+                {ResearchViewInfo.image && ResearchViewInfo.image.map((el,idx) => (
+                  <div className="img">
+                    <img key={idx} src={el} />
+                  </div>
+                ))}
+              </div>
+            </dd>            
+            {MyResearch && !Again ? (
+              <div className="my-answer">
+                <h4>참여완료</h4>
+                <div>내 답변 : <span>{MyResearch.option}</span></div>
+                <Button style={{marginTop:"10px"}} onClick={onResearchAgain}>다시 참여하기</Button>
+              </div>
+            ):(
             <dd>
               {ResearchViewInfo.type == 1 &&
                 <Form.Item name="select_op" label="선택항목">
@@ -210,18 +245,36 @@ function ResearchView(props) {
                 <span className="tit">서명</span>
                 <Signature onSigpad={onSigpad} />
               </div>
-              <div className="btn-box">
-                <Button htmlType="submit" type="primary">참여하기</Button>
-              </div>
-            </dd>
+            </dd>            
+            )
+            }
+              
+             
+            
+            <div className="btn-box">
+              <Space align="center">
+                {!Again && MyResearch ? (
+                  <></>
+                ):(
+                  <Button htmlType="submit" type="primary">참여하기</Button>
+                )}
+                {ResearchViewInfo && UserDb && UserDb.auth != 'insa' ? (
+                  <></>
+                  ):(
+                  <Button onClick={onResultOpen}>결과보기</Button>
+                )}
+                <Button>
+                  <Link to="/research">목록으로</Link>
+                </Button>
+              </Space>
+            </div>
           </dl>
         </Form>
         
       
-      {Ruser && ResultList &&
+      {Ruser && ResultList && ResultOpen &&
         <>
-        <Table pagination={false} align="center" columns={columns} dataSource={ResultList} />
-        
+        <Table pagination={false} align="center" columns={columns} dataSource={ResultList} />        
         {ResearchViewInfo.type == 1 &&
           <ul className="research-chart">
             {ResultSum && ResultSum.map((el,idx) => (

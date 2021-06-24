@@ -1,32 +1,53 @@
 import React, { useState, useRef } from 'react'
 import { Link } from "react-router-dom";
-import { Form, Input, Button, Space, Radio, Checkbox, Upload } from 'antd';
+import { Form, Input, Button, Space, Radio, Checkbox, Upload, Switch, DatePicker } from 'antd';
 import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import uuid from "react-uuid";
 import firebase from "../../firebase";
-
-
+import { getFormatDate } from "../CommonFunc";
+import moment from 'moment';
+const { RangePicker } = DatePicker;
 function ResearchWrite() {
   const btnToList = useRef();
 
+
+  const uid = uuid();
+
+
+  const disabledDate = (current) => {
+    return current && current < moment().subtract(1, 'days');
+  }
+
+  const [DateLimitState, setDateLimitState] = useState(false)
+  const dateLimit = () => {
+    setDateLimitState(!DateLimitState)
+  }  
+  
   const onFinish = async (values) => {
-    const uid = uuid();
-    let uploadURL = [];
-    
-    values.upload.map(el => {
-      let getImg = async () => {
-      let uploadTaskSnapshot = await firebase
-          .storage()
-          .ref("research")
-          .child(`image/${uid}`)
-          .put(el.originFileObj, el.type);
-        let downloadURL = await uploadTaskSnapshot.ref.getDownloadURL();
-        uploadURL.push(downloadURL);
-      }
-      getImg();
-    })  
-    console.log(uploadURL);
-    return;
+    let uploadURL = [];            
+    const getImgUrl = () => {
+    values.upload && values.upload.map(el=>{
+    let getImg = async () => {
+    let uploadTask = await firebase
+        .storage()
+        .ref("research")
+        .child(`image/${uid}/${uuid()}`)          
+        .put(el.originFileObj, el.type);
+          uploadTask.ref.getDownloadURL()
+          .then(url => {
+            uploadURL.push(url);
+            firebase.database().ref('research')
+            .child(uid)
+            .update({
+              image: uploadURL
+            });
+          });
+        }
+        getImg();
+      })
+    }
+    getImgUrl();
+
     firebase.database().ref('research')
     .child(uid)
     .update({
@@ -35,9 +56,14 @@ function ResearchWrite() {
       option:values.option_list ? values.option_list : '',
       etc:values.etc ? values.etc : '',
       uid:uid,
-      auth:values.auth,
-      image: uploadURL
+      auth:values.auth ? values.auth : false,
+      secret:values.secret ? values.secret : false,
+      date:getFormatDate(new Date()).full_,
+      timestamp:new Date().getTime(),
+      limit_start:values.time_limit ? values.time_limit[0]._d.getTime() : 0,
+      limit_end:values.time_limit ? values.time_limit[1]._d.getTime() : 99999999999999,
     });
+
     btnToList.current.click();
   };
 
@@ -58,6 +84,8 @@ function ResearchWrite() {
     return e && e.fileList;
   };
 
+
+
   return (
     <>     
       <Form name="dynamic_form_nest_item" className="research-form" onFinish={onFinish} autoComplete="off">
@@ -69,6 +97,7 @@ function ResearchWrite() {
         </Form.Item> 
         <Form.Item 
           name="type"
+          label="유형 선택"
           rules={[{ required: true, message: '타입을 선택해 주세요.'}]}
         >
           <Radio.Group
@@ -106,27 +135,52 @@ function ResearchWrite() {
         }        
         <Form.Item
           name="upload"
-          label="Upload"
+          label="이미지 업로드"
           valuePropName="fileList"
           getValueFromEvent={normFile}
         >
-          <Upload name="logo" action="/upload.do" listType="picture">
+          <Upload name="logo" listType="picture">
             <Button icon={<UploadOutlined />}>Click to upload</Button>
           </Upload>
         </Form.Item>
+        <div className="flex-box">
+          <Form.Item
+            name="auth"
+            valuePropName="checked"
+            style={{marginRight:"13px"}}
+          >
+            <Checkbox>비정규직 제외</Checkbox>
+          </Form.Item> 
+          <Form.Item
+            name="secret"
+            valuePropName="checked"
+          >
+            <Checkbox>결과 비공개</Checkbox>
+          </Form.Item> 
+        </div>
         <Form.Item
-          name="auth"
-          rules={[{ required: false}]}
-          valuePropName="checked"
-        >
-          <Checkbox>비정규직 제외</Checkbox>
-        </Form.Item> 
-        <Form.Item
-          name="etc"
+          name="etc"          
           rules={[{ required: true}]}
         >
           <Input.TextArea placeholder="설명" />
         </Form.Item>  
+        <Form.Item
+          label="날짜설정" style={{marginBottom:"7px"}}
+        >
+          <Switch onChange={dateLimit} />
+        </Form.Item>
+        {DateLimitState &&
+          <Form.Item
+            
+            name="time_limit"
+          >
+            <RangePicker  
+              format="YYYY-MM-DD"
+              disabledDate={disabledDate} 
+            />
+          </Form.Item>
+        }
+
         <div className="flex-box j-center" style={{marginTop:"15px"}}>
           <Button type="primary" htmlType="submit" style={{width:"100px"}}>
             등록하기

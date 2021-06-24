@@ -18,7 +18,6 @@ function Signature({onSigpad}) {
       backgroundColor: "rgb(255, 255, 255)",
       onEnd: () => {
         onSigpad(sigPad.toDataURL("image/svg+xml")); 
-        console.log(sigPad.toDataURL("image/svg+xml"))
       }
     });
     
