@@ -179,6 +179,8 @@ h3.title {
   }
 }
 
+.ant-btn.sm{height: 28px;line-height: 28px;padding: 0 10px;}
+
 @include mobile() {
   .top-fix {
     padding-top: 70px;

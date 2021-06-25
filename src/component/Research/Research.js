@@ -45,14 +45,12 @@ function Research() {
       const ref = firebase.storage().ref(`research/image/${uid}`);
       ref.listAll()
       .then(dir => {
-        console.log(`research/image/${uid}`)
         const images = dir._delegate.items;
         images.map(el=>{
           let path = el._location.path_;
           firebase.storage().ref(`${path}`).delete()
           .then(()=>{
           }).catch(error=>console.error(error))
-          console.log(el._location.path_)
         })
       })
       firebase.database().ref(`research/${uid}`)

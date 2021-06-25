@@ -193,6 +193,11 @@ h3.title::before {
     display: block;
     height: 53px; } }
 
+.ant-btn.sm {
+  height: 28px;
+  line-height: 28px;
+  padding: 0 10px; }
+
 @media (max-width: 760px) {
   .top-fix {
     padding-top: 70px; }

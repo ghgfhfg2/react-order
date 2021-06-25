@@ -1,11 +1,23 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect } from 'react'
 import firebase from "../../firebase";
-import { Table, Button } from 'antd';
+import { Table, Button, Space, Form } from 'antd';
+import { OderModalPopup } from "../OrderModal";
 
 function UserAdmin() {
   const [TotalUser, setTotalUser] = useState();
-  const [ReRender, setReRender] = useState(false)
+  const [ReRender, setReRender] = useState(false);
+
   useEffect(() => {
+    window.addEventListener('click',(e)=>{
+      if(e.target.id == 'btnModify' || e.target.parentElement.id == 'btnModify'){        
+        
+      }else{
+
+        e.stopPropagation();
+      }
+    },true)
+
+
     let userArr = [];
     firebase
     .database()
@@ -29,7 +41,6 @@ function UserAdmin() {
   }, []);
 
   const deleteUser = (uid) => {
-    console.log(uid)
     const confirm = window.confirm('해당 유저를 DB에서 삭제하시겠습니까?');
     if(confirm){
       firebase.database().ref(`users/${uid}`)
@@ -42,7 +53,6 @@ function UserAdmin() {
   }
 
   
-
   const columns = [    
     {
       title: '이름',
@@ -74,31 +84,79 @@ function UserAdmin() {
     },
     {
       title: '관리',
+      align:'center',
       dataIndex: 'uid',
-      render: uid => <Button onClick={()=>{deleteUser(uid)}}>삭제</Button>
+      render: uid => (
+        <>
+          <Space>
+            <Button className="sm" id="btnModify" onClick={(e)=>{modifyUser(e,uid)}}>수정</Button>
+            <Button className="sm" onClick={()=>{deleteUser(uid)}}>삭제</Button>
+          </Space>
+        </>
+      )
     }
     
   ]
   
   const data = TotalUser;
 
-  function onChange(pagination, filters, sorter, extra) {
-    fetch({
-      sortField: sorter.field,
-      sortOrder: sorter.order
+
+  const [ModifyPop, setModifyPop] = useState(false);
+  const [ModifyData, setModifyData] = useState();
+  const [PosX, setPosX] = useState(0);
+  const [PosY, setPosY] = useState(0);
+
+  const onClosePop = () => {
+    console.log(2);
+  }
+
+  const modifyUser = (e,uid) => {
+    setPosX(e.clientX);
+    setPosY(e.clientY);
+    setModifyPop(true);
+    firebase.database().ref(`users/${uid}`)
+    .once("value", (snapshot)=>{
+      setModifyData(snapshot.val())
     })
-    console.log('params', pagination, filters, sorter, extra);
+  }
+
+  const onSubmitInfo = () => {
+    console.log(1)
+  }
+
+  const onTest = ()=>{
+    console.log(1)
   }
 
 
   return (
     <> 
+     <Button type="primary" onClick={onTest}>닫기</Button>
       <Table 
         columns={columns} 
         dataSource={data} 
-        onChange={onChange} 
         pagination={{ pageSize: 100 }}
       />
+      {ModifyPop &&
+        <OderModalPopup className="call_modify" style={{
+          top:`${PosY}px`,
+          left:`${PosX}px`,
+          transform:"translate(-110%,-50%)",
+          position:"fixed"
+        }}>
+          <Form name="dynamic_form_nest_item" className="research-form" onFinish={onSubmitInfo} autoComplete="off">
+            {ModifyData && (
+              <>
+                {ModifyData.name}
+              </>
+            )
+          }
+          </Form>
+          <div className="flex-box j-center">
+            <Button type="primary" onClick={onClosePop}>닫기</Button>
+          </div>
+        </OderModalPopup>
+      }
     </>
   )
 }

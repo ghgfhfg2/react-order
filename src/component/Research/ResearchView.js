@@ -62,7 +62,6 @@ function ResearchView(props) {
     await firebase.database().ref('research')
     .child(props.location.state.uid)
     .once("value", (snapshot) => {
-      console.log(snapshot.val())
       setResearchViewInfo(snapshot.val())
       snapshot.val().option && snapshot.val().option.forEach(el => {
         resultSum[el.option] = 0;
