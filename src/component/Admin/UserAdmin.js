@@ -22,7 +22,7 @@ function UserAdmin() {
     firebase
     .database()
     .ref("users")
-    .on("value", (snapshot) => {
+    .once("value", (snapshot) => {
       snapshot.forEach(el=>{
         userArr.push({
           uid:el.key,
@@ -57,14 +57,17 @@ function UserAdmin() {
     {
       title: '이름',
       dataIndex: 'name',
+      key: 'name'
     },
     {
       title: '부서',
-      dataIndex: 'part'
+      dataIndex: 'part',
+      key: 'part'
     },
     {
       title: 'uid',
       dataIndex: 'uid',
+      key: 'uid',
     },
     {
       title: '이메일',
@@ -72,24 +75,28 @@ function UserAdmin() {
     },
     {
       title: '전화번호',
-      dataIndex: 'call_number'
+      dataIndex: 'call_number',
+      key: 'call_number'
     },
     {
       title: 'role',
-      dataIndex: 'role'
+      dataIndex: 'role',
+      key: 'role',
     },
     {
       title: 'auth',
-      dataIndex: 'auth'
+      dataIndex: 'auth',
+      key: 'auth',
     },
     {
       title: '관리',
       align:'center',
       dataIndex: 'uid',
+      key: 'uid',
       render: uid => (
         <>
           <Space>
-            <Button className="sm" id="btnModify" onClick={(e)=>{modifyUser(e,uid)}}>수정</Button>
+            {/* <Button className="sm" id="btnModify" onClick={(e)=>{modifyUser(e,uid)}}>수정</Button> */}
             <Button className="sm" onClick={()=>{deleteUser(uid)}}>삭제</Button>
           </Space>
         </>
@@ -114,28 +121,23 @@ function UserAdmin() {
     setPosX(e.clientX);
     setPosY(e.clientY);
     setModifyPop(true);
-    firebase.database().ref(`users/${uid}`)
-    .once("value", (snapshot)=>{
-      setModifyData(snapshot.val())
-    })
+
   }
 
   const onSubmitInfo = () => {
     console.log(1)
   }
 
-  const onTest = ()=>{
-    console.log(1)
-  }
+
 
 
   return (
     <> 
-     <Button type="primary" onClick={onTest}>닫기</Button>
       <Table 
         columns={columns} 
         dataSource={data} 
         pagination={{ pageSize: 100 }}
+        rowKey={ item => { return item.uid } }
       />
       {ModifyPop &&
         <OderModalPopup className="call_modify" style={{
@@ -144,14 +146,15 @@ function UserAdmin() {
           transform:"translate(-110%,-50%)",
           position:"fixed"
         }}>
-          <Form name="dynamic_form_nest_item" className="research-form" onFinish={onSubmitInfo} autoComplete="off">
+          <form className="order-form-box" onSubmit={onSubmitInfo}>
             {ModifyData && (
               <>
                 {ModifyData.name}
               </>
-            )
-          }
-          </Form>
+              )
+            }
+            <Button>확인</Button>
+          </form>
           <div className="flex-box j-center">
             <Button type="primary" onClick={onClosePop}>닫기</Button>
           </div>

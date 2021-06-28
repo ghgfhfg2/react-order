@@ -338,12 +338,14 @@ function Nav() {
                     완료내역
                   </Link>
                 </Menu.Item>
+                {UserDb.role > 2 &&
                 <Menu.Item key="0">
                   <Link to="/admin/user_admin">
                     <antIcon.AiOutlineTeam />
                     회원관리
                   </Link>
                 </Menu.Item>
+                }
               </SubMenu>
             )}
             {AbleTime && CurAbleTime && (

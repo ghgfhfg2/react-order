@@ -183,7 +183,7 @@ function LunchAdmin() {
       </div>
       <table className="fl-table tbl-lunch-check" style={{marginTop:"12px"}}>
         <thead>
-          <tr>
+          <tr key="0">
             <th scope="col">날짜</th>
             <th scope="col">이름</th>
             <th scope="col">부서</th>
@@ -195,7 +195,7 @@ function LunchAdmin() {
         </thead>
         <tbody>
           {CheckList && CheckList.map((el,idx) => (
-            <tr key={idx}>
+            <tr key={idx+1}>
               <td>{SearchDate.full_}</td>
               <td>{el.name}</td>
               <td>{el.part}</td>
