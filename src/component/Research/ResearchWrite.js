@@ -70,7 +70,8 @@ function ResearchWrite() {
   const [TypeState, setTypeState] = useState()
   const typeOptions = [
     {label: '문항선택형', value: 1},
-    {label: '답변작성형', value: 2}
+    {label: '답변작성형', value: 2},
+    {label: '문항답변형', value: 3}
   ]
   const onChangeType = (e) => {
     setTypeState(e.target.value)
@@ -120,6 +121,40 @@ function ResearchWrite() {
                     >
                       <Input placeholder="항목" />
                     </Form.Item>                  
+                    <MinusCircleOutlined onClick={() => remove(name)} />
+                  </Space>
+                ))}
+                <Form.Item>
+                  <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                    Add field
+                  </Button>
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
+        }
+        {TypeState && TypeState == 3 &&
+          <Form.List name="option_list">
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, fieldKey, ...restField }) => (
+                  <Space key={key} style={{ display: 'flex', marginBottom: 5 }} align="baseline">
+                    <Form.Item
+                      {...restField}
+                      name={[name, 'option']}
+                      fieldKey={[fieldKey, 'option']}
+                      rules={[{ required: true, message: '항목을 입력해 주세요.' }]}
+                    >
+                      <Input placeholder="항목" />
+                    </Form.Item>     
+                    <Form.Item
+                      {...restField}
+                      name={[name, 'answer']}
+                      fieldKey={[fieldKey, 'answer']}
+                      rules={[{ required: true, message: '항목을 입력해 주세요.' }]}
+                    >
+                      <Input placeholder="답변" />
+                    </Form.Item>                
                     <MinusCircleOutlined onClick={() => remove(name)} />
                   </Space>
                 ))}
