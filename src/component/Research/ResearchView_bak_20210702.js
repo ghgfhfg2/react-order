@@ -12,6 +12,7 @@ function ResearchView(props) {
   const userInfo = useSelector((state) => state.user.currentUser);
   const [ResearchViewInfo, setResearchViewInfo] = useState();
   const [ResultList, setResultList] = useState();
+  const [ResultSum, setResultSum] = useState();
   const [Ruser, setRuser] = useState();
   const [Rerender, setRerender] = useState(true);
   const [UserDb, setUserDb] = useState();
@@ -42,6 +43,7 @@ function ResearchView(props) {
       });
     }
 
+    let resultSum = {};
     async function getResearch(){
     let r_user = []
     await firebase.database().ref('users')
@@ -60,27 +62,54 @@ function ResearchView(props) {
     await firebase.database().ref('research')
     .child(props.location.state.uid)
     .once("value", (snapshot) => {
-      console.log(snapshot.val())
       setResearchViewInfo(snapshot.val())      
+      typeof snapshot.val().option != 'object' && snapshot.val().option.forEach(el => {
+        resultSum[el.option] = 0;
+      })
     });    
-
+    let color = ['#373f92','#1a95ce','#10acb9','#49b963','#c5be26','#f8900b','#f1723b','#de2715','#a14198'];
     firebase.database().ref(`research/${props.location.state.uid}/result`)
     .once("value", (snapshot) => {      
       let resultArr = [];
+      let sumArr = [];
+      for(let key in resultSum){
+        resultSum[key] = 0;
+      }
       snapshot.forEach(el => {
+        resultSum[el.val().option] += 1;
         resultArr.push(el.val())
       })
-
+      let colNum = 9;
+      for(let key in resultSum){        
+        let colSel = Math.floor(Math.random() * colNum);
+        sumArr.push({
+          name: key,
+          count: resultSum[key],
+          color:color[colSel]
+        })
+        color = color.filter((el) => el !== color[colSel]);
+        colNum -= 1;
+      }
+      sumArr = sumArr.sort((a,b) => {
+        if(a.count < b.count){
+          return 1;
+        }
+        if(a.count > b.count){
+          return -1;
+        }
+        return 0;
+      })
+      setResultSum(sumArr)
       r_user.map(el => {
         resultArr.map(list => {
           if(el.name == list.name && el.part == list.part){
             const optionValues = Object.values(list.option);
             el.option = optionValues ? optionValues : '';
             el.sign = list.sign ? list.sign : '';
+            console.log(el.option)
           }
         })
       })
-      console.log(r_user)
       setResultList(r_user)
     })};
     getResearch();
@@ -111,12 +140,11 @@ function ResearchView(props) {
   
 
   const onFinish = (values) => {
-    const optionValues = Object.values(values);
-    console.log(optionValues)
+    console.log(values)
     let result = {
       name:userInfo.displayName,
       part:userInfo.photoURL,
-      option:optionValues,
+      option:values,
       sign:sigPadData ? sigPadData : ''
     };
     firebase.database().ref(`research/${props.location.state.uid}/result/${userInfo.uid}`)
@@ -145,9 +173,7 @@ function ResearchView(props) {
       align: 'center',
       render: data => data ? 
       data.map((el,idx)=>(
-        <>
-        <p style={{textAlign:"left",lineHeight:"1"}} key={idx}>{idx+1}. {el} </p>
-        </>
+        <span key={idx}>{el}</span>
       )) : ''       
       ,
     },
@@ -279,6 +305,16 @@ function ResearchView(props) {
       {Ruser && ResultList && ResultOpen &&
         <>
         <Table pagination={false} align="center" columns={columns} dataSource={ResultList} />        
+        {ResearchViewInfo.type == 1 &&
+          <ul className="research-chart">
+            {ResultSum && ResultSum.map((el,idx) => (
+              <li key={idx} style={{width:`${(el.count/ResultList.length*100).toFixed(1)}%`,backgroundColor:`${el.color}`}}>
+                <span>{el.name} </span>
+                <span>{el.count}표({el.count ? (el.count/ResultList.length*100).toFixed(1): '0'}%)</span>
+              </li>
+            ))}
+          </ul>
+        }
         </>
       }
       </>

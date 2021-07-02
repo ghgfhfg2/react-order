@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import { Link } from "react-router-dom";
-import { Form, Input, Button, Space, Radio, Checkbox, Upload, Switch, DatePicker } from 'antd';
+import { Form, Input, Button, Space, Radio, Checkbox, Upload, Switch, DatePicker, Select } from 'antd';
 import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import uuid from "react-uuid";
 import firebase from "../../firebase";
@@ -24,6 +24,9 @@ function ResearchWrite() {
   }  
   
   const onFinish = async (values) => {
+    values.option_list.map(el=>{
+      el.option_a = el.option_a ? el.option_a : "";
+    })
     let uploadURL = [];            
     const getImgUrl = () => {
     values.upload && values.upload.map(el=>{
@@ -69,9 +72,9 @@ function ResearchWrite() {
 
   const [TypeState, setTypeState] = useState()
   const typeOptions = [
-    {label: '문항선택형', value: 1},
-    {label: '답변작성형', value: 2},
-    {label: '문항답변형', value: 3}
+    {label: '선다형', value: 1},
+    {label: '서술형', value: 2},
+    {label: '복합형', value: 3}
   ]
   const onChangeType = (e) => {
     setTypeState(e.target.value)
@@ -141,20 +144,19 @@ function ResearchWrite() {
                   <Space key={key} style={{ display: 'flex', marginBottom: 5 }} align="baseline">
                     <Form.Item
                       {...restField}
-                      name={[name, 'option']}
-                      fieldKey={[fieldKey, 'option']}
-                      rules={[{ required: true, message: '항목을 입력해 주세요.' }]}
+                      name={[name, 'option_q']}
+                      fieldKey={[fieldKey, 'option_q']}
+                      rules={[{ required: true, message: '질문을 입력해 주세요.' }]}
                     >
-                      <Input placeholder="항목" />
+                      <Input placeholder="질문" />
                     </Form.Item>     
+                    
                     <Form.Item
-                      {...restField}
-                      name={[name, 'answer']}
-                      fieldKey={[fieldKey, 'answer']}
-                      rules={[{ required: true, message: '항목을 입력해 주세요.' }]}
+                      name={[name, 'option_a']}
+                      fieldKey={[fieldKey, 'option_a']}
                     >
-                      <Input placeholder="답변" />
-                    </Form.Item>                
+                      <Input placeholder="항목이 있을때만 ,로 구분 하여 작성" />
+                    </Form.Item> 
                     <MinusCircleOutlined onClick={() => remove(name)} />
                   </Space>
                 ))}
