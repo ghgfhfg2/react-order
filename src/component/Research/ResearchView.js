@@ -146,7 +146,7 @@ function ResearchView(props) {
       render: data => data ? 
       data.map((el,idx)=>(
         <>
-        <p style={{textAlign:"left",lineHeight:"1"}} key={idx}>{idx+1}. {el} </p>
+        <p style={{textAlign:"left",lineHeight:"1.6",marginBottom:"0"}} key={idx}>{idx+1}. {el} </p>
         </>
       )) : ''       
       ,

@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 
 
 function LunchCheck() {
+  const userInfo = useSelector((state) => state.user.currentUser);
   const curDate = getFormatDate(new Date());
   const weekNum = curDate.weekNum;
   let date = new Date();
@@ -62,11 +63,11 @@ function LunchCheck() {
   nextWeekArr.shift();
 
   
-  const userInfo = useSelector((state) => state.user.currentUser);
   const weekList = useRef();
   const weekList2 = useRef();
   const weekList3 = useRef();
-
+  
+  const [UserDb, setUserDb] = useState();
   const [ItemList, setItemList] = useState();
   const [UserList, setUserList] = useState();
   const [ItemInfo, setItemInfo] = useState();
@@ -75,6 +76,15 @@ function LunchCheck() {
   const [NextState, setNextState] = useState()
 
   useEffect(() => {
+      if(userInfo){
+        firebase
+        .database()
+        .ref("users")
+        .child(userInfo.uid)
+        .once("value", (snapshot) => {
+          setUserDb(snapshot.val());
+        });
+      }
       firebase.database().ref('lunch/item')
       .on('value', (snapshot) => {
         let arr = [];
@@ -209,7 +219,11 @@ function LunchCheck() {
             <div className={`check-list-box ${ModifyState && 'modify'}`}>
               {ItemList && ModifyState && 
               ItemList.map((list,l_idx) => (
-                <Checkbox key={l_idx} data-value={list} disabled defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
+                <>
+                {UserDb.auth == 'alba' && ItemList.length != l_idx+1 &&
+                  <Checkbox key={l_idx} data-value={list} disabled defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
+                }
+                </>
               ))                  
               }
             </div>  
@@ -251,10 +265,14 @@ function LunchCheck() {
             <div className={`check-list-box ${ModifyState && 'modify'}`}>
               {ItemList && ModifyState && 
               ItemList.map((list,l_idx) => (
-                <Checkbox key={l_idx} data-value={list} disabled={
-                  el.full > curDate.full ? 
-                  false : el.full == curDate.full && hour < 9 ? false : true
-                } defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
+                <>
+                  {UserDb.auth == 'alba' && ItemList.length != l_idx+1 &&
+                  <Checkbox key={l_idx} data-value={list} disabled={
+                    el.full > curDate.full ? 
+                    false : el.full == curDate.full && hour < 9 ? false : true
+                  } defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
+                }
+              </>
               ))            
               }
             </div>
@@ -287,7 +305,11 @@ function LunchCheck() {
           <div className={`check-list-box ${ModifyState && 'modify'}`}>
             {ItemList && ModifyState && 
             ItemList.map((list,l_idx) => (
-              <Checkbox key={l_idx} data-value={list} defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
+              <>
+                {UserDb.auth == 'alba' && ItemList.length != l_idx+1 &&
+                <Checkbox key={l_idx} data-value={list} defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
+                }
+              </>
             ))                  
             }
           </div>  
