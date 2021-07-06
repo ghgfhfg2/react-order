@@ -24,9 +24,40 @@ function ResearchWrite() {
   }  
   
   const onFinish = async (values) => {
+    console.log(values);
+
+          
     values.option_list.map(el=>{
       el.option_a = el.option_a ? el.option_a : "";
+      el.option_type = el.option_type ? el.option_type : "";
+      let urlArr;
+      const getOptionImgUrl = (photo) => {
+        photo && photo.map((list,idx)=>{
+        let getImg = async () => {
+        let uploadTask = await firebase
+            .storage()
+            .ref("research")
+            .child(`image/${uid}/${uuid()}`)          
+            .put(list.originFileObj, list.type);
+              uploadTask.ref.getDownloadURL()
+              .then(url => {
+                firebase.database().ref('research')
+                .child(`${uid}/option/${idx}`)
+                .update({
+                  option_photo: url
+                });                
+                urlArr = url;
+                console.log(el);
+                el.option_photo = urlArr;
+              });
+            }
+            getImg()
+          })
+        }
+      getOptionImgUrl(el.option_photo);
+      
     })
+ 
     let uploadURL = [];            
     const getImgUrl = () => {
     values.upload && values.upload.map(el=>{
@@ -43,14 +74,13 @@ function ResearchWrite() {
             .child(uid)
             .update({
               image: uploadURL
-            });
+            });            
           });
         }
         getImg();
       })
     }
     getImgUrl();
-
     firebase.database().ref('research')
     .child(uid)
     .update({
@@ -86,6 +116,10 @@ function ResearchWrite() {
     }
     return e && e.fileList;
   };
+
+  const onSelectChange = (e) => {
+    console.log(e)
+  }
 
 
 
@@ -150,13 +184,35 @@ function ResearchWrite() {
                     >
                       <Input placeholder="질문" />
                     </Form.Item>     
-                    
+                    <Form.Item 
+                      label="유형선택"
+                      {...restField}
+                      name={[name, 'option_type']}
+                      fieldKey={[fieldKey, 'option_type']}
+                    >
+                      <Select onChange={onSelectChange}>
+                        <Select.Option value="1">체크형</Select.Option>
+                        <Select.Option value="2">선택형</Select.Option>
+                      </Select>
+                    </Form.Item> 
                     <Form.Item
+                      {...restField}
                       name={[name, 'option_a']}
                       fieldKey={[fieldKey, 'option_a']}
                     >
                       <Input placeholder="항목이 있을때만 ,로 구분 하여 작성" />
                     </Form.Item> 
+                    <Form.Item
+                      {...restField}
+                      name={[name, 'option_photo']}
+                      label="이미지 업로드"
+                      fieldKey={[fieldKey, 'option_photo']}
+                      getValueFromEvent={normFile}                      
+                    >
+                      <Upload name="logo" listType="picture" maxCount={1}>
+                        <Button icon={<UploadOutlined />}>Click to upload</Button>
+                      </Upload>
+                    </Form.Item>
                     <MinusCircleOutlined onClick={() => remove(name)} />
                   </Space>
                 ))}

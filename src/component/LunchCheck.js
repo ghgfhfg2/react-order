@@ -220,9 +220,11 @@ function LunchCheck() {
               {ItemList && ModifyState && 
               ItemList.map((list,l_idx) => (
                 <>
-                {UserDb.auth == 'alba' && ItemList.length != l_idx+1 &&
+                {UserDb.auth == 'alba' && ItemList.length == l_idx+1 ? (
+                  <></>
+                ) : (
                   <Checkbox key={l_idx} data-value={list} disabled defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
-                }
+                )}
                 </>
               ))                  
               }
@@ -266,12 +268,14 @@ function LunchCheck() {
               {ItemList && ModifyState && 
               ItemList.map((list,l_idx) => (
                 <>
-                  {UserDb.auth == 'alba' && ItemList.length != l_idx+1 &&
+                  {UserDb.auth == 'alba' && ItemList.length == l_idx+1 ? (
+                  <></>
+                ) : (
                   <Checkbox key={l_idx} data-value={list} disabled={
                     el.full > curDate.full ? 
                     false : el.full == curDate.full && hour < 9 ? false : true
                   } defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
-                }
+                )}
               </>
               ))            
               }
@@ -306,9 +310,11 @@ function LunchCheck() {
             {ItemList && ModifyState && 
             ItemList.map((list,l_idx) => (
               <>
-                {UserDb.auth == 'alba' && ItemList.length != l_idx+1 &&
-                <Checkbox key={l_idx} data-value={list} defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>
-                }
+                {UserDb.auth == 'alba' && ItemList.length == l_idx+1 ? (
+                  <></>
+                ) : (
+                <Checkbox key={l_idx} data-value={list} defaultChecked={el.item && el.item.includes(list) ? true : false}>{list}</Checkbox>    
+                )}
               </>
             ))                  
             }

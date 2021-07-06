@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import firebase from "../../firebase";
-import { Form, Radio, Input, Button, Table, Space } from 'antd';
+import { Form, Radio, Input, Button, Table, Space, Checkbox } from 'antd';
 import { useSelector } from "react-redux";
 import Signature from "./Signature";
 import Loading from "../Loading";
@@ -227,6 +227,17 @@ function ResearchView(props) {
                       <span className="tit">{idx+1}. {el.option_q}</span>
                     </div>
                     {el.option_a != '' ? (
+                      <>
+                      {el.option_type == '1' &&
+                      <Form.Item name={`select_op_${idx}`} label="선택항목" style={{marginBottom:"20px"}}>
+                        <Checkbox.Group >
+                          {el.option_a.split(',').map((list,_idx)=>(
+                            <Checkbox key={_idx} value={list}>{list}</Checkbox>
+                          ))}
+                        </Checkbox.Group>
+                      </Form.Item>
+                      }
+                      {el.option_type == '2' &&
                       <Form.Item name={`select_op_${idx}`} label="선택항목" style={{marginBottom:"20px"}}>
                         <Radio.Group >
                           {el.option_a.split(',').map((list,_idx)=>(
@@ -234,6 +245,8 @@ function ResearchView(props) {
                           ))}
                         </Radio.Group>
                       </Form.Item>
+                      }
+                      </>
                     ):(
                       <Form.Item name={`select_op_${idx}`} style={{marginBottom:"20px"}}>
                           <div className="flex-box">
