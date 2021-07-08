@@ -223,8 +223,13 @@ function ResearchView(props) {
               {ResearchViewInfo.type == 3 && 
                 ResearchViewInfo.option.map((el,idx)=>(
                   <>
-                    <div className="flex-box">
+                    <div className="flex-box" style={{marginBottom:"10px"}}>
                       <span className="tit">{idx+1}. {el.option_q}</span>
+                      {el.option_photo && el.option_photo.map((img,_idx) => (
+                        <div>
+                          <img src={img} />
+                        </div>
+                      ))}
                     </div>
                     {el.option_a != '' ? (
                       <>
@@ -275,7 +280,7 @@ function ResearchView(props) {
                 ):(
                   <Button htmlType="submit" type="primary">참여하기</Button>
                 )}
-                {ResearchViewInfo && UserDb && UserDb.auth != 'insa' ? (
+                {ResearchViewInfo && UserDb && !UserDb.auth.includes('insa') ? (
                   <></>
                   ):(
                   <Button onClick={onResultOpen}>결과보기</Button>

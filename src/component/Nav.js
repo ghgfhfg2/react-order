@@ -294,7 +294,7 @@ function Nav() {
                 식단체크
               </Link>
             </Menu.Item>
-            {UserDb && UserDb.auth == 'insa' && 
+            {UserDb && UserDb.auth.includes('insa') && 
             <>
             <Menu.Item key="9">
               <Link to="/research">

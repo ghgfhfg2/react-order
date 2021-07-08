@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Link } from "react-router-dom";
 import { Form, Input, Button, Space, Radio, Checkbox, Upload, Switch, DatePicker, Select } from 'antd';
 import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
@@ -22,44 +22,10 @@ function ResearchWrite() {
   const dateLimit = () => {
     setDateLimitState(!DateLimitState)
   }  
-  
-  const onFinish = async (values) => {
-    console.log(values);
 
-          
-    values.option_list.map(el=>{
-      el.option_a = el.option_a ? el.option_a : "";
-      el.option_type = el.option_type ? el.option_type : "";
-      let urlArr;
-      const getOptionImgUrl = (photo) => {
-        photo && photo.map((list,idx)=>{
-        let getImg = async () => {
-        let uploadTask = await firebase
-            .storage()
-            .ref("research")
-            .child(`image/${uid}/${uuid()}`)          
-            .put(list.originFileObj, list.type);
-              uploadTask.ref.getDownloadURL()
-              .then(url => {
-                firebase.database().ref('research')
-                .child(`${uid}/option/${idx}`)
-                .update({
-                  option_photo: url
-                });                
-                urlArr = url;
-                console.log(el);
-                el.option_photo = urlArr;
-              });
-            }
-            getImg()
-          })
-        }
-      getOptionImgUrl(el.option_photo);
-      
-    })
- 
+  const finishDataSave = (values) => {
     let uploadURL = [];            
-    const getImgUrl = () => {
+    const getImgUrl = async () => {
     values.upload && values.upload.map(el=>{
     let getImg = async () => {
     let uploadTask = await firebase
@@ -74,31 +40,90 @@ function ResearchWrite() {
             .child(uid)
             .update({
               image: uploadURL
-            });            
+            });                       
           });
         }
         getImg();
       })
     }
-    getImgUrl();
-    firebase.database().ref('research')
-    .child(uid)
-    .update({
-      title:values.title,
-      type:values.type,
-      option:values.option_list ? values.option_list : '',
-      etc:values.etc ? values.etc : '',
-      uid:uid,
-      auth:values.auth ? values.auth : false,
-      secret:values.secret ? values.secret : false,
-      date:getFormatDate(new Date()).full_,
-      timestamp:new Date().getTime(),
-      limit_start:values.time_limit ? values.time_limit[0]._d.getTime() : 0,
-      limit_end:values.time_limit ? values.time_limit[1]._d.getTime() : 99999999999999,
-    });
+    getImgUrl(); 
+    console.log(values)
+      console.log('데이터저장 시작');
+      firebase.database().ref('research')
+      .child(uid)
+      .update({
+        title:values.title,
+        type:values.type,
+        option:values.option_list ? values.option_list : '',
+        etc:values.etc ? values.etc : '',
+        uid:uid,
+        auth:values.auth ? values.auth : false,
+        secret:values.secret ? values.secret : false,
+        date:getFormatDate(new Date()).full_,
+        timestamp:new Date().getTime(),
+        limit_start:values.time_limit ? values.time_limit[0]._d.getTime() : 0,
+        limit_end:values.time_limit ? values.time_limit[1]._d.getTime() : 99999999999999,
+      });
+      console.log('데이터저장 끝');      
+    }      
 
-    btnToList.current.click();
+ 
+  
+  const onFinish = async (values) => {
+    console.log(values)
+    let listLength = values.option_list.length;
+    let count = 0;
+    console.log(listLength)
+
+    values.option_list.map(el=>{
+      el.option_photo = el.option_photo ? el.option_photo : "";
+      el.option_a = el.option_a ? el.option_a : "";
+      el.option_type = el.option_type ? el.option_type : "";
+      let urlArr = [];  
+      count++;    
+      const getOptionImgUrl = (photo) => {
+        console.log(count)
+          if(!photo){
+            if(count == listLength){
+              console.log('끝',values);
+              finishDataSave(values);
+              btnToList.current && btnToList.current.click();
+            }
+          }else{
+          photo.map((list,idx)=>{
+          let getImg = async () => {
+          let uploadTask = await firebase
+              .storage()
+              .ref("research")
+              .child(`image/${uid}/${uuid()}`)          
+              .put(list.originFileObj, list.type);
+                uploadTask.ref.getDownloadURL()
+                .then(url => {
+                  firebase.database().ref('research')
+                  .child(`${uid}/option/${idx}`)
+                  .update({
+                    option_photo: url
+                  });                
+                  urlArr.push(url);
+                  el.option_photo = urlArr ? urlArr : '';                
+                  if(count == listLength){
+                    console.log('끝:',values);
+                    finishDataSave(values);
+                    btnToList.current && btnToList.current.click();
+                  }
+                });
+              }
+              getImg();              
+            })
+          }          
+        }
+      getOptionImgUrl(el.option_photo);
+      el.option_photo = el.option_photo ? el.option_photo : '';
+    })
+      
   };
+
+
 
   const [TypeState, setTypeState] = useState()
   const typeOptions = [
@@ -190,7 +215,8 @@ function ResearchWrite() {
                       name={[name, 'option_type']}
                       fieldKey={[fieldKey, 'option_type']}
                     >
-                      <Select onChange={onSelectChange}>
+                      <Select defaultValue="0" onChange={onSelectChange}>
+                        <Select.Option value="0">서술형</Select.Option>
                         <Select.Option value="1">체크형</Select.Option>
                         <Select.Option value="2">선택형</Select.Option>
                       </Select>
@@ -209,7 +235,7 @@ function ResearchWrite() {
                       fieldKey={[fieldKey, 'option_photo']}
                       getValueFromEvent={normFile}                      
                     >
-                      <Upload name="logo" listType="picture" maxCount={1}>
+                      <Upload name="logo" listType="picture">
                         <Button icon={<UploadOutlined />}>Click to upload</Button>
                       </Upload>
                     </Form.Item>
