@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import firebase from "../../firebase";
 import { Form, Radio, Input, Button, Table, Space, Checkbox } from 'antd';
 import { useSelector } from "react-redux";
-import Signature from "./Signature";
+import Signature from "../Signature";
 import Loading from "../Loading";
 
 

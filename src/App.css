@@ -998,6 +998,15 @@ h3.title::before {
   left: 0;
   bottom: 0; }
 
+.ant-form-horizontal.hiar-form .ant-form-item-label {
+  width: 75px; }
+
+.ant-form-horizontal.hiar-form .signature .ant-form-item-control-input-content {
+  flex: none; }
+
+.ant-form-horizontal.hiar-form .btn-box {
+  text-align: center; }
+
 @media (max-width: 760px) {
   .ant-layout-sider.nav-wrap {
     min-width: 0 !important; }

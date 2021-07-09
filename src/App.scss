@@ -793,6 +793,14 @@ h3.title {
   }
 }
 
+.ant-form-horizontal.hiar-form{
+  .ant-form-item-label{width:75px}
+  .signature{
+    .ant-form-item-control-input-content{flex:none}
+  }
+  .btn-box{text-align: center;}
+}
+
 // 모바일 //
 @include mobile() {
   .ant-layout-sider.nav-wrap {

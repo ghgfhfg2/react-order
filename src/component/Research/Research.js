@@ -70,7 +70,7 @@ function Research() {
             </div>
             <div className="right-box">
               <span className="date">날짜</span>
-              {UserDb && UserDb.auth.includes('insa') &&
+              {UserDb && UserDb.auth && UserDb.auth.includes('insa') &&
                 <span className="admin"></span>
               }
             </div>
@@ -113,7 +113,7 @@ function Research() {
               </div>
               <div className="right-box">
                 <span className="date">{el.date}</span>
-                {UserDb && UserDb.auth.includes('insa') && 
+                {UserDb && UserDb.auth && UserDb.auth.includes('insa') && 
                   <span className="admin">
                     <Button onClick={()=>{onDelete(el.uid)}}>삭제</Button>
                   </span>
@@ -122,7 +122,7 @@ function Research() {
             </li>
           ))}
       </ul>
-      {UserDb && UserDb.auth.includes('insa') &&
+      {UserDb && UserDb.auth && UserDb.auth.includes('insa') &&
       <div style={{textAlign:"right",marginTop:"15px"}}>
         <Button style={{width:"100px"}} type="primary">
           <Link to="/research_write">게시물 등록</Link>

@@ -294,15 +294,21 @@ function Nav() {
                 식단체크
               </Link>
             </Menu.Item>
-            {UserDb && UserDb.auth.includes('insa') && 
-            <>
+            {UserDb && UserDb.auth && UserDb.auth.includes('insa') && 
             <Menu.Item key="9">
               <Link to="/research">
                 <antIcon.AiOutlineFileDone />
                 설문조사
               </Link>
             </Menu.Item>
-            </>
+            }
+            {UserDb && UserDb.auth && UserDb.auth.includes('root') && 
+            <Menu.Item key="10">
+              <Link to="/hair">
+                <antIcon.AiOutlineFileDone />
+                헤어
+              </Link>
+            </Menu.Item>
             }
            
             {UserDb && UserDb.role > 0 &&
