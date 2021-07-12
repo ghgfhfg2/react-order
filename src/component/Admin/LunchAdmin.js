@@ -209,7 +209,7 @@ function LunchAdmin() {
               </td>
             </tr>
           ))}
-          <tr>
+          {/* <tr>
             <td>{SearchDate.full_}</td>
             <td>합계</td>
             <td>{CheckLength}</td>
@@ -219,6 +219,28 @@ function LunchAdmin() {
               </td>
             ))}
             <td></td>
+          </tr> */}
+        </tbody>
+      </table>
+      <table className="fl-table tbl-lunch-check" style={{marginTop:"10px"}}>
+        <thead>
+          <tr key="0">
+            <th scope="col">날짜</th>
+            <th scope="col">인원</th>
+            {TblItem && TblItem.map(el => (
+              <th scope="col">{el}</th>
+            ))}
+          </tr>          
+        </thead>
+        <tbody>
+        <tr>
+            <td>{SearchDate.full_}</td>
+            <td>{CheckLength}</td>
+            {TblItem && TblItem.map((el,idx) => (
+              <td>
+                {ItemSum && ItemSum[el]}
+              </td>
+            ))}
           </tr>
         </tbody>
       </table>
