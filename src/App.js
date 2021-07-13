@@ -30,6 +30,7 @@ import Logo from "./img/logo_2021_summer.png";
 import Test from "./component/Test";
 import UserAdmin from "./component/Admin/UserAdmin";
 import Hair from "./component/hair/Hair";
+import HairAdmin from "./component/Admin/HairAdmin";
 
 
 const { Sider, Content, Header } = Layout;
@@ -136,6 +137,7 @@ function App(props) {
                   <Route exact path="/research_view" component={ResearchView} />
                   <Route exact path="/hair" component={Hair} />
                   <Route exact path="/admin/user_admin" component={UserAdmin} />
+                  <Route exact path="/admin/hair" component={HairAdmin} />
                   <Route exact path="/test" component={Test} />
                 </Switch>
               </Content>

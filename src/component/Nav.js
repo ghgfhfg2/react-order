@@ -305,7 +305,7 @@ function Nav() {
             {UserDb && UserDb.auth && UserDb.auth.includes('root') && 
             <Menu.Item key="10">
               <Link to="/hair">
-                <antIcon.AiOutlineFileDone />
+                <antIcon.AiOutlineScissor />
                 헤어
               </Link>
             </Menu.Item>
@@ -317,33 +317,44 @@ function Nav() {
                 key="sub1"
                 title="관리자"
                 icon={<antIcon.AiOutlineSetting />}
-              >                 
+              >       
+                {
+                  UserDb.auth.includes('insa') &&
+                  <Menu.Item key="11">
+                    <Link to="/admin/hair">
+                      <antIcon.AiOutlineAppstoreAdd />
+                      헤어관리
+                    </Link>
+                  </Menu.Item>  
+                }          
                 {UserDb.role > 1 &&
-                <Menu.Item key="8">
-                  <Link to="/admin/lunch">
-                    <antIcon.AiOutlineAppstoreAdd />
-                    식단관리
-                  </Link>
-                </Menu.Item>
+                  <>
+                    <Menu.Item key="8">
+                      <Link to="/admin/lunch">
+                        <antIcon.AiOutlineAppstoreAdd />
+                        식단관리
+                      </Link>
+                    </Menu.Item>                
+                    <Menu.Item key="4">
+                      <Link to="/admin/prod">
+                        <antIcon.AiOutlineAppstoreAdd />
+                        상품관리
+                      </Link>
+                    </Menu.Item>
+                    <Menu.Item key="5">
+                      <Link to="/admin/order">
+                        <antIcon.AiOutlineAlert />
+                        주문관리
+                      </Link>
+                    </Menu.Item>
+                    <Menu.Item key="6">
+                      <Link to="/admin/order_list">
+                        <antIcon.AiOutlineFileDone />
+                        완료내역
+                      </Link>
+                    </Menu.Item>
+                  </>
                 }
-                <Menu.Item key="4">
-                  <Link to="/admin/prod">
-                    <antIcon.AiOutlineAppstoreAdd />
-                    상품관리
-                  </Link>
-                </Menu.Item>
-                <Menu.Item key="5">
-                  <Link to="/admin/order">
-                    <antIcon.AiOutlineAlert />
-                    주문관리
-                  </Link>
-                </Menu.Item>
-                <Menu.Item key="6">
-                  <Link to="/admin/order_list">
-                    <antIcon.AiOutlineFileDone />
-                    완료내역
-                  </Link>
-                </Menu.Item>
                 {UserDb.role > 2 &&
                 <Menu.Item key="0">
                   <Link to="/admin/user_admin">

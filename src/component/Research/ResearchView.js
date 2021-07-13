@@ -223,13 +223,15 @@ function ResearchView(props) {
               {ResearchViewInfo.type == 3 && 
                 ResearchViewInfo.option.map((el,idx)=>(
                   <>
-                    <div className="flex-box" style={{marginBottom:"10px"}}>
+                    <div style={{marginBottom:"10px"}}>
                       <span className="tit">{idx+1}. {el.option_q}</span>
+                      <div className="flex-box" style={{marginBottom:"10px"}}>
                       {el.option_photo && el.option_photo.map((img,_idx) => (
-                        <div>
+                        <div style={{margin:"0 5px"}}>
                           <img src={img} />
                         </div>
                       ))}
+                      </div>
                     </div>
                     {el.option_a != '' ? (
                       <>
