@@ -36,7 +36,6 @@ function Nav() {
     emailVerified = firebaseUserInfo.emailVerified;
     uid = firebaseUserInfo.uid; 
   }
-  const partSelect = useRef();
 
   const currentUser = useSelector((state) => state.user.currentUser);
 
@@ -137,7 +136,11 @@ function Nav() {
 
   const [submitLoading, setsubmitLoading] = useState(false);
   const onSubmitInfo = async (e) => {
+    
     e.preventDefault();
+    let sosok = e.target.sosok.value;
+    let part = e.target.part.value;
+
     firebaseUserInfo.updateProfile({
       photoURL:e.target.part.value
     })
@@ -165,7 +168,9 @@ function Nav() {
       .ref("users")
       .child(currentUser.uid)
       .update({
-        call_number: call_num
+        call_number: call_num,
+        part: part,
+        sosok: sosok
       })
       setInfoPop(false)
     }catch (error) {
@@ -197,22 +202,38 @@ function Nav() {
             )}
             {currentUser && (
               <>
-                {InfoPop &&
+                {InfoPop && UserDb &&
                   <OderModalPopup className="call_modify" style={{
-                    top:"130px",
+                    top:"180px",
                     left:"155px",
                     position:"absolute",
                   }}>
                     <form className="order-form-box" onSubmit={onSubmitInfo}>
-                      <div className="flex-box a-center" style={{marginBottom:"5px"}}>
+                      <div className="input-box" style={{marginBottom:"5px"}}>
+                        <span className="tit">이메일</span>
                         <span>{currentUser.email}</span>
+                      </div>
+                      <div className="input-box" style={{marginBottom:"5px"}}>
+                        <span className="tit">소속</span>
+                        <select
+                          name="sosok"
+                          defaultValue={UserDb.sosok}
+                        >
+                          <option value="">
+                            소속선택
+                          </option>
+                          <option value="1">미트리</option>
+                          <option value="2">푸드킹</option>
+                          <option value="3">계약직</option>
+                        </select>
+                      </div>
+                      <div className="input-box" style={{marginBottom:"5px"}}>
+                        <span className="tit">부서</span>
                         <select
                           name="part"
-                          ref={partSelect}
-                          style={{marginLeft:"5px"}}
                           defaultValue={photoUrl}
                         >
-                          <option value="1" disabled hidden>
+                          <option value="photoUrl" disabled hidden>
                             부서
                           </option>
                           <option value="R&D">R&D</option>
@@ -224,9 +245,9 @@ function Nav() {
                           <option value="물류부">물류부</option>
                         </select>
                       </div>
-                      <div className="flex-box a-center" style={{marginBottom:"5px"}}>
-                      <span className="tit" style={{width:"auto",flexShrink:"0"}}>휴대전화</span>
-                        <Input name="call_number" defaultValue={UserDb && UserDb.call_number} style={{marginRight:"5px"}}></Input>
+                      <div className="input-box" style={{marginBottom:"5px"}}>
+                      <span className="tit">휴대전화</span>
+                        <Input name="call_number" defaultValue={UserDb.call_number} style={{marginRight:"5px"}}></Input>
                         <Button
                           disabled={submitLoading}
                           htmlType="submit"
@@ -302,7 +323,7 @@ function Nav() {
               </Link>
             </Menu.Item>
             }
-            {UserDb && UserDb.auth && UserDb.auth.includes('root') && 
+            {UserDb && UserDb.auth && UserDb.auth.includes('insa') && 
             <Menu.Item key="10">
               <Link to="/hair">
                 <antIcon.AiOutlineScissor />
@@ -319,7 +340,7 @@ function Nav() {
                 icon={<antIcon.AiOutlineSetting />}
               >       
                 {
-                  UserDb.auth.includes('insa') &&
+                  UserDb && UserDb.auth && UserDb.auth.includes('insa') &&
                   <Menu.Item key="11">
                     <Link to="/admin/hair">
                       <antIcon.AiOutlineAppstoreAdd />

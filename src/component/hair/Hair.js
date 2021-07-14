@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import firebase from "../../firebase";
 import { useSelector } from "react-redux";
-import { Form, DatePicker, Input, Button, Table, Space } from 'antd';
+import { Form, DatePicker, Input, Button, Table, Select } from 'antd';
 import Signature from "../Signature";
 import { getFormatDate, commaNumber } from '../CommonFunc';
 import uuid from "react-uuid";
 import moment from 'moment';
 const curDate = getFormatDate(new Date());
+const { Option } = Select;
 
 function Hair() {
   const userInfo = useSelector((state) => state.user.currentUser);
@@ -59,7 +60,9 @@ function Hair() {
     const uid = uuid();
     values.date = getFormatDate(values.date._d)
     values.signature = sigPadData;
-    console.log(values)
+    if(!values.signature){
+      window.alert('서명은 필수입니다.')
+    }
     firebase
     .database()
     .ref("hair")
@@ -67,6 +70,8 @@ function Hair() {
     .update({
       ...values,
       part: UserDb.part,
+      name: UserDb.name,
+      sosok: UserDb.sosok,
       timestamp: new Date().getTime(),
       uid:uid
     })
@@ -131,36 +136,60 @@ function Hair() {
       }
       
     ]
+
+
     
   return (
     <>
+      <div className="item-info-box" style={{marginBottom:"20px"}}>
+        주의사항
+      </div>
       <Form name="dynamic_form_nest_item" className="hiar-form" onFinish={onFinish} autoComplete="off">
         <div className="flex-box">
           <Form.Item 
           name="date"
-          label="이용날짜">
+          label="이용날짜"
+          rules={[{ 
+            required: true,
+            message: "필수항목 입니다."
+          }]}
+          >
             <DatePicker />
           </Form.Item>
           <Form.Item 
-          name="name"
-          label="이름">
-            <Input style={{maxWidth:"100px"}}/>
-          </Form.Item>
-          <Form.Item 
           name="relation"
-          label="관계">
-            <Input style={{maxWidth:"100px"}}/>
+          label="관계"
+          rules={[{ 
+            required: true,
+            message: "필수항목 입니다."
+          }]}
+          >
+            <Select defaultValue="선택" style={{ width: 120 }}>
+              <Option value="본인">본인</Option>
+              <Option value="배우자">배우자</Option>
+              <Option value="자녀">자녀</Option>
+            </Select>
           </Form.Item>
         </div>
         <div className="flex-box">
           <Form.Item 
           name="service"
-          label="서비스명">
+          label="서비스명"
+          rules={[{ 
+            required: true,
+            message: "필수항목 입니다."
+          }]}
+          >
             <Input />
           </Form.Item>
           <Form.Item 
           name="price"
-          label="가격">
+          label="가격"
+          rules={[{ 
+            required: true,
+            message: "필수항목 입니다."
+          }]}
+          >
             <Input 
               prefix="￦" 
               type="number"
@@ -171,7 +200,8 @@ function Hair() {
         <Form.Item 
         className="signature"
         name="signature"
-        label="서명">
+        label="서명"
+        >
           <Signature onSigpad={onSigpad} />
         </Form.Item>
         <div className="btn-box">

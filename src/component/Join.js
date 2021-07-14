@@ -12,6 +12,8 @@ function Join() {
   const password = useRef();
   password.current = watch("password");
   const onSubmit = async (data) => {
+    console.log(data)
+    return;
     data.part == 1 && alert('부서를 선택해 주세요')
     try {
       setLoading(true);
@@ -137,6 +139,17 @@ function Join() {
             {errors.call_number && errors.call_number.type === "maxLength" && (
               <p>자리수를 확인해 주세요</p>
             )}
+          </div>
+          <div className="input-box radio">
+            <div className="flex-box">
+              <input type="radio" className="custom-radio" name="sosok" id="sosok1" value="1" ref={register({ required: true })} />
+              <label for="sosok1">미트리</label>
+              <input type="radio" className="custom-radio" name="sosok" id="sosok2" value="2" ref={register({ required: true })} />
+              <label for="sosok2">푸드킹</label>
+              <input type="radio" className="custom-radio" name="sosok" id="sosok3" value="3" ref={register({ required: true })} />
+              <label for="sosok3">계약직</label>
+            </div>
+            {errors.sosok && <p>소속을 선택해 주세요</p>}
           </div>
           <div className="input-box">
             <select

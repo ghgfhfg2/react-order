@@ -672,6 +672,11 @@ h3.title {
 
 // 휴대전화 수정
 .call_modify{
+  .input-box{
+    @include flex($a:center);
+    .tit{min-width: 55px;flex-shrink: 0;text-align: right;margin-right: 10px;}
+  }
+  select{border:1px solid $bd-color;height: 30px;flex:1}
   @include mobile(){
     top:170px !important;
   }
@@ -789,6 +794,16 @@ h3.title {
       background: #fff;
       left: 0;
       bottom: 0;
+    }
+  }
+  .radio{
+    .custom-radio{
+      width: 0;height:0;
+      &+label{color:$fon-color;height:44px;border:1px solid $bd-color;border-radius: 4px;flex:1;cursor: pointer;margin: 0;
+      @include flex($j:center,$a:center);
+      @include lastMr0($margin:5px);
+      }
+      &:checked+label{background-color: $p-color;color: #fff;border-color: $p-color;font-weight: 600;}
     }
   }
 }

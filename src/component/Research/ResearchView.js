@@ -5,6 +5,7 @@ import { Form, Radio, Input, Button, Table, Space, Checkbox } from 'antd';
 import { useSelector } from "react-redux";
 import Signature from "../Signature";
 import Loading from "../Loading";
+import { getFormatDate } from "../CommonFunc";
 
 
 
@@ -183,6 +184,20 @@ function ResearchView(props) {
         >
           <dl className="board-view-basic">
             <dt>{ResearchViewInfo.title}</dt>
+            <dd className="flex-box">
+              기한 :&nbsp; 
+              <div>
+                {getFormatDate(new Date(ResearchViewInfo.limit_start)).full_}&nbsp; 
+                {getFormatDate(new Date(ResearchViewInfo.limit_start)).hour}: 
+                {getFormatDate(new Date(ResearchViewInfo.limit_start)).min}
+              </div>
+              &nbsp;~&nbsp;
+              <div>
+                {getFormatDate(new Date(ResearchViewInfo.limit_end)).full_}&nbsp; 
+                {getFormatDate(new Date(ResearchViewInfo.limit_end)).hour}: 
+                {getFormatDate(new Date(ResearchViewInfo.limit_end)).min}
+              </div>
+            </dd>
             <dd>
               {ResearchViewInfo.etc}
               <div style={{marginTop:"10px"}}>

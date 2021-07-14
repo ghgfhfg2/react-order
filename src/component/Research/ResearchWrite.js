@@ -73,7 +73,6 @@ function ResearchWrite() {
     console.log(values)
     let listLength = values.option_list.length;
     let count = 0;
-    console.log(listLength)
 
     values.option_list.map(el=>{
       el.option_photo = el.option_photo ? el.option_photo : "";
@@ -293,7 +292,7 @@ function ResearchWrite() {
             name="time_limit"
           >
             <RangePicker  
-              format="YYYY-MM-DD"
+              showTime 
               disabledDate={disabledDate} 
             />
           </Form.Item>

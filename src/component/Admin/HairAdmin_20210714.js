@@ -12,8 +12,7 @@ function HairAdmin() {
   const [MyHairData, setMyHairData] = useState();
   const [Rerender, setRerender] = useState(false);
   const [SearchDate, setSearchDate] = useState(curDate);
-  const [TotalPrice, setTotalPrice] = useState(0);
-  const [PersnalData, setPersnalData] = useState();
+  const [TotalPrice, setTotalPrice] = useState(0)
 
   useEffect(() => {
     if(userInfo){
@@ -27,32 +26,20 @@ function HairAdmin() {
     }
 
     let hairArr = [];
-    let totalPrice = 0;    
-    let personalObj = {};
+    let totalPrice = 0;
     firebase
     .database()
     .ref(`hair`)
     .once("value", (snapshot) => {
       snapshot.forEach(el=>{
         let obj = el.val();
-        let personalArr = [];
-        console.log("obj",obj)
-        let personalPrice = 0;
         for (let key in obj) {
-          console.log("obj[key]",obj[key])
-          let name = obj[key].name;
           let str = obj[key].date.full.toString().substr(0,6);
           if(str == SearchDate.full.substr(0,6)){
-            personalPrice += parseInt(obj[key].price)
-            personalArr.push(obj[key])
+            totalPrice += parseInt(obj[key].price);
             hairArr.push(obj[key])
+            setTotalPrice(totalPrice)
           }
-          personalObj[name] = personalArr;
-          personalObj[name].total_price = personalPrice;
-          totalPrice += parseInt(obj[key].price);
-          console.log(personalObj);
-          setPersnalData(personalObj)
-          setTotalPrice(totalPrice)
         }
       })      
       hairArr.sort((a,b)=>{
@@ -154,11 +141,6 @@ function HairAdmin() {
     
   return (
     <>
-      {PersnalData &&
-        <>
-          
-        </>
-      }
       
       {MyHairData &&
         <>

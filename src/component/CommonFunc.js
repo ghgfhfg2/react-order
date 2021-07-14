@@ -13,7 +13,9 @@ export const getFormatDate = (date) => {
     let weeek = date.getDay();
     let weekArr = ['일','월','화','수','목','금','토'];
     let hour = date.getHours();
+    hour = hour >= 10 ? hour : '0' + hour; 
     let min = date.getMinutes();
+    min = min >= 10 ? min : '0' + min; 
     let sec = date.getSeconds();
     let obj = {
         'year':year,
