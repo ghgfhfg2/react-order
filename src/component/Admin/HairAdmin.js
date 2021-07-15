@@ -28,32 +28,47 @@ function HairAdmin() {
 
     let hairArr = [];
     let totalPrice = 0;    
-    let personalObj = {};
+    let personalArr = [];
     firebase
     .database()
     .ref(`hair`)
     .once("value", (snapshot) => {
       snapshot.forEach(el=>{
         let obj = el.val();
-        let personalArr = [];
-        console.log("obj",obj)
+        let personalObj = {};
         let personalPrice = 0;
+        let dateArr = [];
+        let relArr = [];
+        let serArr = [];
+        let priceArr = [];
         for (let key in obj) {
           console.log("obj[key]",obj[key])
           let name = obj[key].name;
           let str = obj[key].date.full.toString().substr(0,6);
           if(str == SearchDate.full.substr(0,6)){
-            personalPrice += parseInt(obj[key].price)
-            personalArr.push(obj[key])
-            hairArr.push(obj[key])
+            personalPrice += parseInt(obj[key].price);
+            dateArr.push(obj[key].date)
+            relArr.push(obj[key].relation)
+            serArr.push(obj[key].service)
+            priceArr.push(obj[key].price)
+            personalObj = {
+              date : dateArr,
+              name : name,
+              part : obj[key].part,
+              sosok : obj[key].sosok,
+              timestamp : obj[key].timestamp,
+              relation : relArr, 
+              service : serArr, 
+              price : priceArr, 
+              total_price: personalPrice
+            }
+            hairArr.push(obj[key]);
           }
-          personalObj[name] = personalArr;
-          personalObj[name].total_price = personalPrice;
-          totalPrice += parseInt(obj[key].price);
-          console.log(personalObj);
-          setPersnalData(personalObj)
-          setTotalPrice(totalPrice)
         }
+        personalArr.push(personalObj);
+        console.log(personalArr);
+        setPersnalData(personalArr);
+        setTotalPrice(totalPrice);
       })      
       hairArr.sort((a,b)=>{
         return b.timestamp - a.timestamp
@@ -83,6 +98,10 @@ function HairAdmin() {
         dataIndex: 'date',
         key: 'date',
         align: 'center',
+        sorter: {
+          compare: (a, b) => a.date - b.date,
+          multiple: 3,
+        },
         render: data => data ? data.full_ : '',
       },
       {
@@ -90,6 +109,10 @@ function HairAdmin() {
         dataIndex: 'timestamp',
         key: 'timestamp',
         align: 'center',
+        sorter: {
+          compare: (a, b) => a.timestamp - b.timestamp,
+          multiple: 2,
+        },
         render: data => data ? getFormatDate(new Date(data)).full_ : '',
       },
       {
@@ -97,6 +120,10 @@ function HairAdmin() {
         dataIndex: 'sosok',
         key: 'sosok',
         align: 'center',
+        sorter: {
+          compare: (a, b) => a.sosok - b.sosok,
+          multiple: 1,
+        },
         render: data => {
           let txt
           if(data == 1){
@@ -140,7 +167,7 @@ function HairAdmin() {
         dataIndex: 'price',
         key: 'price',
         align: 'center',
-        render: data => data ? `${commaNumber(data)}` : ''
+        render: data => data ? `${commaNumber(data)}원` : ''
       },
       {
         title: '서명',
@@ -151,23 +178,68 @@ function HairAdmin() {
       }
       
     ]
+
+
+    
     
   return (
     <>
+      <DatePicker 
+        picker="month"
+        defaultValue={moment()}
+        disabledDate={disabledDate} onChange={onSelectDate} 
+        style={{marginTop:"20px",marginBottom:"10px"}}
+      />
+      <h3 className="title">개인별내역</h3>
       {PersnalData &&
-        <>
-          
-        </>
+        <table className="fl-table" style={{marginBottom:"20px"}}>
+          <thead>
+            <tr style={{borderBottom:'1px solid #ddd',borderTop:'2px solid #555'}}>
+              <th scope="col">이름(소속/부서)</th>
+              <th scope="col">이용일</th>
+              <th scope="col">관계</th>
+              <th scope="col">서비스</th>
+              <th scope="col">가격</th>
+              <th scope="col">총 이용횟수</th>
+              <th scope="col">합계</th>
+            </tr>
+          </thead>
+          <tbody>
+          {PersnalData && PersnalData.map((el) => (
+            <>
+              {el.date && el.date.map((list,_idx) => (
+                <>                      
+                  <tr key={_idx} style={{borderBottom:'1px solid #ddd'}}>
+                    {_idx == 0 &&
+                    <th scope="row" rowSpan={el.date.length} style={{background:'#f1f1f1'}}>
+                      {el.name}
+                    </th>
+                    }
+                    <td>{list.full_}</td>
+                    <td>{el.relation[_idx]}</td>
+                    <td> {el.service[_idx]}</td>
+                    <td>{commaNumber(el.price[_idx])}원</td>
+                    {_idx == 0 &&
+                    <>
+                      <td rowSpan={el.date.length}>{el.date.length}회</td>
+                      <th scope="row" rowSpan={el.date.length}>
+                        {commaNumber(el.total_price)}원
+                      </th>
+                    </>
+                    }
+                  </tr>
+                </>
+              ))}     
+            </>
+          ))
+          }
+          </tbody>
+        </table>
       }
       
+      <h3 className="title">전체내역</h3>
       {MyHairData &&
-        <>
-          <DatePicker 
-            picker="month"
-            defaultValue={moment()}
-            disabledDate={disabledDate} onChange={onSelectDate} 
-            style={{marginTop:"20px",marginBottom:"10px"}}
-          />
+        <>          
           <Table 
           pagination={{
             pageSize:10
