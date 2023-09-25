@@ -99,8 +99,10 @@ function Menu() {
           );
           let endTime = snapshot.val().orderTimeEnd;
           endTime = endTime.split(":");
+
           setOrderTimeStart(startTime);
           setOrderTimeEnd(Number(endTime.join("")));
+
           const endSecond = Math.floor(
             new Date(
               curDate.year,
@@ -113,6 +115,7 @@ function Menu() {
 
           const curSec = Math.floor(new Date().getTime() / 1000);
           const calcSec = endSecond - curSec;
+          console.log("endSecond", Math.floor(calcSec / 60), calcSec % 60);
           setRestMin(Math.floor(calcSec / 60));
           setRestSec(calcSec % 60);
           snapshot.val().item.forEach((el) => {
