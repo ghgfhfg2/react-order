@@ -309,157 +309,177 @@ function Nav() {
             selectedKeys={[current]}
             mode="inline"
           >
-            <Menu.Item key="1">
-              <Link to="/">
-                <antIcon.AiOutlineCoffee />
-                메뉴판
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="2">
-              <Link to="/myorder">
-                <antIcon.AiOutlineOrderedList />
-                주문내역
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="3">
-              <Link to="/mymenu">
-                <antIcon.AiOutlineStar />
-                마이메뉴
-              </Link>
-            </Menu.Item>
-            {currentUser && currentUser.role >= 0 && (
-              <Menu.Item key="7">
-                <Link to="/lunch">
-                  <antIcon.AiOutlineDownSquare />
-                  식단체크
-                </Link>
-              </Menu.Item>
-            )}
-            {((currentUser?.auth && currentUser.auth.includes("insa")) ||
-              currentUser.uid === "HWC2atFlYZfThocHHF7SH4a6MAt2") && (
-              <Menu.Item key="9">
-                <Link to="/research">
-                  <antIcon.AiOutlineFileDone />
-                  설문조사
-                </Link>
-              </Menu.Item>
-            )}
-            {(currentUser?.auth && currentUser.auth.includes("intern")) || (
-              <Menu.Item key="10">
-                <Link to="/hair">
-                  <antIcon.AiOutlineScissor />
-                  헤어
-                </Link>
-              </Menu.Item>
-            )}
-            {currentUser && currentUser.role >= 0 && (
-              <Menu.Item key="13">
-                <Link to="/chair">
-                  <mdIcon.MdOutlineChair />
-                  안마의자
-                </Link>
-              </Menu.Item>
-            )}
-            {((currentUser?.auth && currentUser.auth.includes("wel")) ||
-              (currentUser && currentUser.role > 2)) && (
-              <Menu.Item key="15">
-                <Link to="/styler">
-                  <rmIcon.RiTShirtAirLine />
-                  스타일러
-                </Link>
-              </Menu.Item>
-            )}
-            {currentUser && currentUser.role >= 0 && (
-              <Menu.Item key="17">
-                <Link to="/inventory">
-                  <mdIcon.MdOutlineInventory />
-                  재고체크
-                </Link>
-              </Menu.Item>
-            )}
-            {currentUser.role > 0 && (
-              <SubMenu
-                key="sub1"
-                title="관리자"
-                icon={<antIcon.AiOutlineSetting />}
-              >
-                {currentUser.auth && currentUser.auth.includes("hair") && (
-                  <Menu.Item key="11">
-                    <Link to="/admin/hair">
+            {currentUser?.auth && currentUser.auth.includes("visit") ? (
+              <>
+                <Menu.Item key="1">
+                  <Link to="/">
+                    <antIcon.AiOutlineCoffee />
+                    메뉴판
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="7">
+                  <Link to="/lunch">
+                    <antIcon.AiOutlineDownSquare />
+                    식단체크
+                  </Link>
+                </Menu.Item>
+              </>
+            ) : (
+              <>
+                <Menu.Item key="1">
+                  <Link to="/">
+                    <antIcon.AiOutlineCoffee />
+                    메뉴판
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="2">
+                  <Link to="/myorder">
+                    <antIcon.AiOutlineOrderedList />
+                    주문내역
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="3">
+                  <Link to="/mymenu">
+                    <antIcon.AiOutlineStar />
+                    마이메뉴
+                  </Link>
+                </Menu.Item>
+                {currentUser && currentUser.role >= 0 && (
+                  <Menu.Item key="7">
+                    <Link to="/lunch">
+                      <antIcon.AiOutlineDownSquare />
+                      식단체크
+                    </Link>
+                  </Menu.Item>
+                )}
+                {((currentUser?.auth && currentUser.auth.includes("insa")) ||
+                  currentUser.uid === "HWC2atFlYZfThocHHF7SH4a6MAt2") && (
+                  <Menu.Item key="9">
+                    <Link to="/research">
+                      <antIcon.AiOutlineFileDone />
+                      설문조사
+                    </Link>
+                  </Menu.Item>
+                )}
+                {(currentUser?.auth && currentUser.auth.includes("intern")) || (
+                  <Menu.Item key="10">
+                    <Link to="/hair">
                       <antIcon.AiOutlineScissor />
-                      헤어관리
+                      헤어
+                    </Link>
+                  </Menu.Item>
+                )}
+                {currentUser && currentUser.role >= 0 && (
+                  <Menu.Item key="13">
+                    <Link to="/chair">
+                      <mdIcon.MdOutlineChair />
+                      안마의자
                     </Link>
                   </Menu.Item>
                 )}
                 {((currentUser?.auth && currentUser.auth.includes("wel")) ||
                   (currentUser && currentUser.role > 2)) && (
-                  <>
-                    <Menu.Item key="14">
-                      <Link to="/chair_admin">
-                        <mdIcon.MdOutlineChair />
-                        안마의자관리
-                      </Link>
-                    </Menu.Item>
-                    <Menu.Item key="16">
-                      <Link to="/styler_admin">
-                        <rmIcon.RiTShirtAirLine />
-                        스타일러관리
-                      </Link>
-                    </Menu.Item>
-                  </>
+                  <Menu.Item key="15">
+                    <Link to="/styler">
+                      <rmIcon.RiTShirtAirLine />
+                      스타일러
+                    </Link>
+                  </Menu.Item>
                 )}
-                {currentUser.role > 1 && (
-                  <>
-                    <Menu.Item key="8">
-                      <Link to="/admin/lunch">
-                        <antIcon.AiOutlineAppstoreAdd />
-                        식단관리
-                      </Link>
-                    </Menu.Item>
-                    <Menu.Item key="4">
-                      <Link to="/admin/prod">
-                        <antIcon.AiOutlineAppstoreAdd />
-                        상품관리
-                      </Link>
-                    </Menu.Item>
-                    <Menu.Item key="12">
-                      <Link to="/admin/prod_count">
-                        <antIcon.AiOutlineAppstoreAdd />
-                        카페 재고관리
-                      </Link>
-                    </Menu.Item>
-                    <Menu.Item key="5">
-                      <Link to="/admin/order">
-                        <antIcon.AiOutlineAlert />
-                        주문관리
-                      </Link>
-                    </Menu.Item>
-                    <Menu.Item key="6">
-                      <Link to="/admin/order_list">
-                        <antIcon.AiOutlineFileDone />
-                        완료내역
-                      </Link>
-                    </Menu.Item>
-                  </>
+                {currentUser && currentUser.role >= 0 && (
+                  <Menu.Item key="17">
+                    <Link to="/inventory">
+                      <mdIcon.MdOutlineInventory />
+                      재고체크
+                    </Link>
+                  </Menu.Item>
                 )}
-                {((currentUser?.auth && currentUser.auth.includes("insa")) ||
-                  (currentUser?.auth && currentUser.role > 2)) && (
-                  <>
-                    <Menu.Item key="18">
-                      <Link to="/admin/inventory">
-                        <mdIcon.MdOutlineInventory2 />
-                        비품관리
-                      </Link>
-                    </Menu.Item>
-                    <Menu.Item key="0">
-                      <Link to="/admin/user_admin">
-                        <antIcon.AiOutlineTeam />
-                        회원관리
-                      </Link>
-                    </Menu.Item>
-                  </>
+                {currentUser.role > 0 && (
+                  <SubMenu
+                    key="sub1"
+                    title="관리자"
+                    icon={<antIcon.AiOutlineSetting />}
+                  >
+                    {currentUser.auth && currentUser.auth.includes("hair") && (
+                      <Menu.Item key="11">
+                        <Link to="/admin/hair">
+                          <antIcon.AiOutlineScissor />
+                          헤어관리
+                        </Link>
+                      </Menu.Item>
+                    )}
+                    {((currentUser?.auth && currentUser.auth.includes("wel")) ||
+                      (currentUser && currentUser.role > 2)) && (
+                      <>
+                        <Menu.Item key="14">
+                          <Link to="/chair_admin">
+                            <mdIcon.MdOutlineChair />
+                            안마의자관리
+                          </Link>
+                        </Menu.Item>
+                        <Menu.Item key="16">
+                          <Link to="/styler_admin">
+                            <rmIcon.RiTShirtAirLine />
+                            스타일러관리
+                          </Link>
+                        </Menu.Item>
+                      </>
+                    )}
+                    {currentUser.role > 1 && (
+                      <>
+                        <Menu.Item key="8">
+                          <Link to="/admin/lunch">
+                            <antIcon.AiOutlineAppstoreAdd />
+                            식단관리
+                          </Link>
+                        </Menu.Item>
+                        <Menu.Item key="4">
+                          <Link to="/admin/prod">
+                            <antIcon.AiOutlineAppstoreAdd />
+                            상품관리
+                          </Link>
+                        </Menu.Item>
+                        <Menu.Item key="12">
+                          <Link to="/admin/prod_count">
+                            <antIcon.AiOutlineAppstoreAdd />
+                            카페 재고관리
+                          </Link>
+                        </Menu.Item>
+                        <Menu.Item key="5">
+                          <Link to="/admin/order">
+                            <antIcon.AiOutlineAlert />
+                            주문관리
+                          </Link>
+                        </Menu.Item>
+                        <Menu.Item key="6">
+                          <Link to="/admin/order_list">
+                            <antIcon.AiOutlineFileDone />
+                            완료내역
+                          </Link>
+                        </Menu.Item>
+                      </>
+                    )}
+                    {((currentUser?.auth &&
+                      currentUser.auth.includes("insa")) ||
+                      (currentUser?.auth && currentUser.role > 2)) && (
+                      <>
+                        <Menu.Item key="18">
+                          <Link to="/admin/inventory">
+                            <mdIcon.MdOutlineInventory2 />
+                            비품관리
+                          </Link>
+                        </Menu.Item>
+                        <Menu.Item key="0">
+                          <Link to="/admin/user_admin">
+                            <antIcon.AiOutlineTeam />
+                            회원관리
+                          </Link>
+                        </Menu.Item>
+                      </>
+                    )}
+                  </SubMenu>
                 )}
-              </SubMenu>
+              </>
             )}
           </Menu>
           {AbleTime && CurAbleTime && (
