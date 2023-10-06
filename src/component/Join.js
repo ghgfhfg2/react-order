@@ -1,5 +1,5 @@
 import { message } from "antd";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import firebase from "../firebase";
 
@@ -10,11 +10,23 @@ function Join() {
   const [errorFromSubmit, setErrorFromSubmit] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [partSelect, setPartSelect] = useState();
+  useEffect(() => {
+    firebase
+      .database()
+      .ref(`part_setting`)
+      .on("value", (snapshot) => {
+        setPartSelect(snapshot.val());
+      });
+    return () => {
+      firebase.database().ref("part_setting").off();
+    };
+  }, []);
+
   const password = useRef();
   password.current = watch("password");
   const onSubmit = async (data) => {
-    
-    data.part == 1 && alert('부서를 선택해 주세요')
+    data.part == 1 && alert("부서를 선택해 주세요");
     try {
       setLoading(true);
       let createdUser = await firebase
@@ -31,12 +43,13 @@ function Join() {
         name: createdUser.user.displayName,
         part: createdUser.user.photoURL,
         call_number: data.call_number,
+        sosok: data.sosok,
         email: data.email,
         role: 0,
         auth: "intern",
       });
       setLoading(false);
-      
+
       window.location.reload();
     } catch (error) {
       setErrorFromSubmit(error.message);
@@ -111,7 +124,17 @@ function Join() {
             >
               <span>이메일</span>
             </label>
-            <span style={{color:"#888",fontSize:"12px",display:"block",paddingLeft:"10px",marginTop:"3px"}}>※ 실제 사용중인 이메일로 가입 바랍니다(비밀번호 재설정 시 필요)</span>
+            <span
+              style={{
+                color: "#888",
+                fontSize: "12px",
+                display: "block",
+                paddingLeft: "10px",
+                marginTop: "3px",
+              }}
+            >
+              ※ 실제 사용중인 이메일로 가입 바랍니다(비밀번호 재설정 시 필요)
+            </span>
             {errors.email && errors.email.type === "required" && (
               <p>이메일을 입력해 주세요</p>
             )}
@@ -125,7 +148,7 @@ function Join() {
               type="number"
               id="call_number"
               onChange={onInputPhone}
-              ref={register({ required: true, minLength: 11, maxLength:11 })}
+              ref={register({ required: true, minLength: 11, maxLength: 11 })}
             />
             <label
               htmlFor="call_number"
@@ -133,7 +156,18 @@ function Join() {
             >
               <span>휴대전화</span>
             </label>
-            <span style={{color:"#888",fontSize:"12px",display:"block",paddingLeft:"10px",marginTop:"3px"}}>※ 실제 사용중인 휴대전화로 가입 바랍니다.(카카오톡 연동기능에 필요)</span>
+            <span
+              style={{
+                color: "#888",
+                fontSize: "12px",
+                display: "block",
+                paddingLeft: "10px",
+                marginTop: "3px",
+              }}
+            >
+              ※ 실제 사용중인 휴대전화로 가입 바랍니다.(카카오톡 연동기능에
+              필요)
+            </span>
             {errors.call_number && errors.call_number.type === "required" && (
               <p>휴대전화 번호를 입력해 주세요</p>
             )}
@@ -146,12 +180,16 @@ function Join() {
           </div>
           <div className="input-box radio">
             <div className="flex-box">
-              <input type="radio" className="custom-radio" name="sosok" id="sosok1" value="1" ref={register({ required: true })} />
+              <input
+                type="radio"
+                className="custom-radio"
+                name="sosok"
+                id="sosok1"
+                checked
+                value="1"
+                ref={register({ required: true })}
+              />
               <label for="sosok1">미트리</label>
-              <input type="radio" className="custom-radio" name="sosok" id="sosok2" value="2" ref={register({ required: true })} />
-              <label for="sosok2">푸드킹</label>
-              <input type="radio" className="custom-radio" name="sosok" id="sosok3" value="3" ref={register({ required: true })} />
-              <label for="sosok3">미에르</label>
             </div>
             {errors.sosok && <p>소속을 선택해 주세요</p>}
           </div>
@@ -161,7 +199,16 @@ function Join() {
               defaultValue="1"
               ref={register({ required: true })}
             >
-              <option value="1" disabled hidden>
+              <option value="photoUrl" disabled hidden>
+                부서
+              </option>
+              {partSelect &&
+                partSelect.map((el, idx) => (
+                  <option key={idx} value={el}>
+                    {el}
+                  </option>
+                ))}
+              {/* <option value="1" disabled hidden>
                 부서
               </option>
               <option value="총괄">총괄</option>
@@ -173,7 +220,7 @@ function Join() {
               <option value="경영관리본부">경영관리본부</option>
               <option value="문화사업본부">문화사업본부</option>
               <option value="푸드킹">푸드킹</option>
-              <option value="미에르">미에르</option>
+              <option value="미에르">미에르</option> */}
             </select>
             {errors.part && <p>부서를 선택해 주세요</p>}
           </div>
