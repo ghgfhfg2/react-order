@@ -50,6 +50,7 @@ function LunchAdmin() {
   };
 
   const [DefaultImg, setDefaultImg] = useState();
+  const [noConfirm, setNoConfirm] = useState();
   useEffect(() => {
     let r_user = [];
     firebase
@@ -96,15 +97,24 @@ function LunchAdmin() {
           .once("value", (snapshot) => {
             let arr = [];
             let listDate = SearchDate.full ? SearchDate.full : curDate.full;
+            let noConfirmCount = 0;
             snapshot.forEach((el) => {
               let elItemArr;
+              let confirm;
               if (el.val().checkList && el.val().checkList[listDate]) {
                 elItemArr = el.val().checkList[listDate].item;
+                confirm = el.val().checkList[listDate].confirm;
               }
               if (elItemArr) {
+                if (!confirm) {
+                  noConfirmCount++;
+                }
                 elItemArr.map((el) => {
-                  itemObj[el] += 1;
+                  if (confirm) {
+                    itemObj[el] += 1;
+                  }
                 });
+
                 arr.push({
                   uid: el.key,
                   name: el.val().name,
@@ -115,6 +125,8 @@ function LunchAdmin() {
                 });
               }
             });
+            console.log("noConfirmCount", noConfirmCount);
+            setNoConfirm(noConfirmCount);
             if (Filter && Filter.length > 0) {
               arr = arr.filter((el) => {
                 let res;
@@ -484,6 +496,7 @@ function LunchAdmin() {
             <th scope="col">날짜</th>
             <th scope="col">인원</th>
             {TblItem && TblItem.map((el) => <th scope="col">{el}</th>)}
+            <th scope="col">확인X</th>
           </tr>
         </thead>
         <tbody>
@@ -492,6 +505,7 @@ function LunchAdmin() {
             <td>{CheckLength}</td>
             {TblItem &&
               TblItem.map((el, idx) => <td>{ItemSum && ItemSum[el]}</td>)}
+            <td>{noConfirm}</td>
           </tr>
         </tbody>
       </table>
